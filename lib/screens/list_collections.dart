@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/screens/created_lists.dart';
 
-const _titleAppBar = 'Minhas listas';
+const _titleAppBar = 'Lista Fácil';
 
 class listCollections extends StatelessWidget {
   @override
