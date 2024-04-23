@@ -43,9 +43,7 @@ class _listCreateFormState extends State<listCreateForm> {
                     foregroundColor: Colors.white,
                   ),
                   onPressed: () {
-                    final String nameList = _newListController.text;
-                    final NewLists newLists = NewLists(nameList);
-                    Navigator.pop(context, newLists);
+                    _createNewList(context);
                   },
                   child: const Text('Criar'),
                 ),
@@ -55,5 +53,13 @@ class _listCreateFormState extends State<listCreateForm> {
         ),
       ),
     );
+  }
+
+  void _createNewList(BuildContext context) {
+    final String nameList = _newListController.text;
+    if(nameList != '') {
+      final NewLists newLists = NewLists(nameList);
+      Navigator.pop(context, newLists);
+    }
   }
 }
