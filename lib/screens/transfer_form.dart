@@ -46,7 +46,7 @@ class transferForm extends StatelessWidget {
     final purchaseItem = _purchaseItemController.text;
     final int? quantityOfItem = int.tryParse(_quantityOfItemController.text);
     if (quantityOfItem != null) {
-      final createTransferences = Transference(purchaseItem, quantityOfItem!);
+      final createTransferences = Transference(purchaseItem, quantityOfItem);
       Navigator.pop(context, createTransferences);
     }
   }
