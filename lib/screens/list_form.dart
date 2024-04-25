@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/database/dao/create_list_dao.dart';
-import 'package:my_app/models/new_lists.dart';
-import 'package:my_app/screens/created_lists.dart';
+
+import '../controllers/list_controller.dart';
 
 class listCreateForm extends StatefulWidget {
+  final ListController controller;
+  const listCreateForm(this.controller);
   @override
   State<listCreateForm> createState() => _listCreateFormState();
 }
 
 class _listCreateFormState extends State<listCreateForm> {
   final TextEditingController _newListController = TextEditingController();
-  final ListsDao _listsDao = ListsDao();
 
   @override
   Widget build(BuildContext context) {
@@ -56,20 +56,12 @@ class _listCreateFormState extends State<listCreateForm> {
     );
   }
 
-  void _createNewList(BuildContext context) {
+  Future<void> _createNewList(BuildContext context) async {
     final String nameList = _newListController.text;
-    if (nameList != '') {
-      final NewLists newLists = NewLists(0, nameList);
-      _listsDao.save(newLists).then((id) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => createdLists(),
-          ),
-        );
-      });
-
+    if (nameList.isNotEmpty) {
+      await widget.controller.saveList(nameList);
       // remove a tela de criação da pilha
+      if (!context.mounted) return;
       Navigator.pop(context);
     }
   }
