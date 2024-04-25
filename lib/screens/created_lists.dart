@@ -1,57 +1,52 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/database/dao/create_list_dao.dart';
+import 'package:my_app/controllers/list_controller.dart';
+
 import 'package:my_app/models/new_lists.dart';
 import 'package:my_app/screens/list_form.dart';
 
 class createdLists extends StatelessWidget {
-  final ListsDao _listsDao = ListsDao();
+  final ListController controller = ListController();
+  final String _title = 'Listas de compras';
 
   @override
   Widget build(BuildContext context) {
+    controller.findAll();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 21, 92, 24),
         foregroundColor: Colors.white,
-        title: const Text('Listas de compras'),
+        title: Text(_title),
       ),
-      body: FutureBuilder<List<NewLists>>(
-        initialData: [],
-        future: _listsDao.findAll(),
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.none:
-              break;
-            case ConnectionState.waiting:
-              return const Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    CircularProgressIndicator(),
-                    Text('Carregando'),
-                  ],
-                ),
-              );
-            case ConnectionState.active:
-              break;
-            case ConnectionState.done:
-              final List<NewLists> list = snapshot.data!;
-              return ListView.builder(
-                itemBuilder: (context, index) {
-                  final NewLists lists = list[index];
-                  return _collectionsLists(lists);
-                },
-                itemCount: list.length,
-              );
+      body: ValueListenableBuilder<List<NewLists>>(
+        valueListenable: controller.listaValores,
+        builder: (context, snapshot, _) {
+          if (snapshot.isEmpty) {
+            return const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(),
+                  Text('Carregando'),
+                ],
+              ),
+            );
           }
-          return const Text('Erro desconhecido');
+
+          return ListView.builder(
+            itemBuilder: (context, index) {
+              final NewLists lists = snapshot[index];
+              return _collectionsLists(lists);
+            },
+            itemCount: snapshot.length,
+          );
         },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          Navigator.of(context).push(
+          await Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => listCreateForm(),
+              builder: (context) => listCreateForm(controller),
             ),
           );
         },
