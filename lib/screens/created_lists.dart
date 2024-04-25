@@ -1,34 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/database/list_database.dart';
+import 'package:my_app/database/dao/create_list_dao.dart';
 import 'package:my_app/models/new_lists.dart';
 import 'package:my_app/screens/list_form.dart';
 
 class createdLists extends StatelessWidget {
-  //final List<NewLists> list = [];
+  final ListsDao _listsDao = ListsDao();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 21, 92, 24),
         foregroundColor: Colors.white,
-        title: Text('Listas de compras'),
+        title: const Text('Listas de compras'),
       ),
       body: FutureBuilder<List<NewLists>>(
-        initialData: List.empty(),
+        initialData: [],
+        future: _listsDao.findAll(),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
               break;
             case ConnectionState.waiting:
-              return Center(
+              return const Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [CircularProgressIndicator(), Text('Carregando')],
+                  children: [
+                    CircularProgressIndicator(),
+                    Text('Carregando'),
+                  ],
                 ),
               );
+            case ConnectionState.active:
+              break;
             case ConnectionState.done:
-              final List<NewLists> list = snapshot.data ?? [];
+              final List<NewLists> list = snapshot.data!;
               return ListView.builder(
                 itemBuilder: (context, index) {
                   final NewLists lists = list[index];
@@ -36,29 +43,22 @@ class createdLists extends StatelessWidget {
                 },
                 itemCount: list.length,
               );
-            case ConnectionState.active:
-              break;
           }
-          return Text('Erro desconhecido');
+          return const Text('Erro desconhecido');
         },
-        future: findAll(),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context)
-              .push(
-                MaterialPageRoute(
-                  builder: (context) => listCreateForm(),
-                ),
-              )
-              .then(
-                (newLists) => debugPrint(newLists.toString()),
-              );
+        onPressed: () async {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => listCreateForm(),
+            ),
+          );
         },
-        backgroundColor: Color.fromARGB(255, 21, 92, 24),
+        backgroundColor: const Color.fromARGB(255, 21, 92, 24),
         foregroundColor: Colors.white,
         hoverColor: Colors.lightGreen,
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }
@@ -75,7 +75,7 @@ class _collectionsLists extends StatelessWidget {
       child: ListTile(
         title: Text(
           list.nameList,
-          style: TextStyle(fontSize: 24.0),
+          style: const TextStyle(fontSize: 24.0),
         ),
       ),
     );
