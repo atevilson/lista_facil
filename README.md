@@ -1,16 +1,21 @@
-# my_app
+# Lista facil
+
+## About
 
 A new Flutter project.
 
-## Getting Started
+# Project Structure
 
-This project is a starting point for a Flutter application.
+## The project is organized as follows:
 
-A few resources to get you started if this is your first Flutter project:
+- `lib/`: Application source code.
+- `main.dart`: Application entry point.
+- `components/`: Data entry module.
+- `screens/`: Application screens.
+- `models/`: Stores reusable widgets.
+- `datatbase`: Database for the application.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Author
+---
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+ <sub><b>Atevilson Freitas</b></sub></a> <a href="">🧑‍💻</a>
