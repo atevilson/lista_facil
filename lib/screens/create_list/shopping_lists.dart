@@ -5,12 +5,12 @@ import 'package:my_app/models/new_lists.dart';
 import 'package:my_app/screens/create_list/list_create_form.dart';
 
 class createdLists extends StatelessWidget {
-  final ListController controller = ListController();
+  final ListController _controller = ListController();
   final String _title = 'Listas de compras';
 
   @override
   Widget build(BuildContext context) {
-    controller.findAll();
+    _controller.findAll();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 21, 92, 24),
@@ -18,18 +18,15 @@ class createdLists extends StatelessWidget {
         title: Text(_title),
       ),
       body: ValueListenableBuilder<List<NewLists>>(
-        valueListenable: controller.listaValores,
+        valueListenable: _controller.listaValores,
         builder: (context, snapshot, _) {
           if (snapshot.isEmpty) {
-            return const Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  CircularProgressIndicator(),
-                  Text('Carregando'),
-                ],
-              ),
+            return ListView.builder(
+              itemBuilder: (context, index) {
+                final NewLists lists = snapshot[index];
+                return _collectionsLists(lists);
+              },
+              itemCount: snapshot.length,
             );
           }
 
@@ -46,7 +43,7 @@ class createdLists extends StatelessWidget {
         onPressed: () async {
           await Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => listCreateForm(controller),
+              builder: (context) => listCreateForm(_controller),
             ),
           );
         },
