@@ -3,6 +3,7 @@ import 'package:my_app/controllers/list_controller.dart';
 
 import 'package:my_app/models/new_lists.dart';
 import 'package:my_app/screens/create_list/list_create_form.dart';
+import 'package:my_app/screens/itens_list/list_transference.dart';
 
 class createdLists extends StatelessWidget {
   final ListController _controller = ListController();
@@ -24,7 +25,9 @@ class createdLists extends StatelessWidget {
             return ListView.builder(
               itemBuilder: (context, index) {
                 final NewLists lists = snapshot[index];
-                return _collectionsLists(lists);
+                return _collectionsLists(
+                  lists,
+                );
               },
               itemCount: snapshot.length,
             );
@@ -33,7 +36,9 @@ class createdLists extends StatelessWidget {
           return ListView.builder(
             itemBuilder: (context, index) {
               final NewLists lists = snapshot[index];
-              return _collectionsLists(lists);
+              return _collectionsLists(
+                lists,
+              );
             },
             itemCount: snapshot.length,
           );
@@ -65,9 +70,16 @@ class _collectionsLists extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
-        title: Text(
-          list.nameList,
-          style: const TextStyle(fontSize: 24.0),
+        title: InkWell(
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return listTransference();
+            }));
+          },
+          child: Text(
+            list.nameList,
+            style: const TextStyle(fontSize: 24.0),
+          ),
         ),
       ),
     );
