@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/models/transference.dart';
+import 'package:my_app/controllers/item_controller.dart';
+import 'package:my_app/models/new_items.dart';
 import 'package:my_app/screens/itens_list/transfer_form.dart';
 
 const titleAppBar = 'Itens da lista';
 
 class listTransference extends StatefulWidget {
-  final List<Transference> _transferenceList = [];
 
   @override
   State<StatefulWidget> createState() {
@@ -14,6 +14,8 @@ class listTransference extends StatefulWidget {
 }
 
 class createStateTransferList extends State<listTransference> {
+  final ItemController _controller = ItemController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,21 +24,48 @@ class createStateTransferList extends State<listTransference> {
         title: const Text(titleAppBar),
         foregroundColor: Colors.white,
       ),
-      body: ListView.builder(
-        itemCount: widget._transferenceList.length,
-        itemBuilder: (context, index) {
-          final newTransferences = widget._transferenceList[index];
-          return transferItens(newTransferences);
+      body: FutureBuilder<List<NewItems>>(
+          initialData: [],
+          future: _controller.findAll(),
+          builder: (context, snapshot) {
+            switch(snapshot.connectionState) {
+              
+              case ConnectionState.none:
+                break;
+              case ConnectionState.waiting:
+                return const Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      CircularProgressIndicator(),
+                    ],
+                  ),
+                );
+              case ConnectionState.active:
+                break;
+              case ConnectionState.done:
+              final List<NewItems> items = snapshot.data ?? [];
+              return ListView.builder(
+                itemCount: items.length,
+                itemBuilder: (context, index) {
+                  final NewItems item = items[index];
+                  return transferItens(item);
+                },
+              );
+            }
+            return Text("Lista vazia");
         },
-      ),
+      ), 
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return transferForm();
           })).then((newTransfer) {
             if (newTransfer != null) {
-              widget._transferenceList.add(newTransfer);
-              setState(() {});
+              setState(() {
+               // items.add(newTransfer);
+              });
             }
           });
         },
@@ -50,7 +79,7 @@ class createStateTransferList extends State<listTransference> {
 }
 
 class transferItens extends StatefulWidget {
-  final Transference _addItems;
+  final NewItems _addItems;
 
   const transferItens(this._addItems, {Key? key}) : super(key: key);
 
@@ -72,8 +101,8 @@ class _transferItensState extends State<transferItens> {
         ),
         child: CheckboxListTile(
           controlAffinity: ListTileControlAffinity.leading,
-          title: Text(widget._addItems.purchaseItem.toString()),
-          subtitle: Text(widget._addItems.quantityOfItem.toString()),
+          title: Text(widget._addItems.items.toString()),
+          subtitle: Text(widget._addItems.quantity.toString()),
           onChanged: (bool? value) {
             setState(() {
               isChecked = value ?? false;
