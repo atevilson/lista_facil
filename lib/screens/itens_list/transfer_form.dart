@@ -1,18 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/components/dataEntryNumber.dart';
 import 'package:my_app/components/dataEntryText.dart';
-import 'package:my_app/models/transference.dart';
+import 'package:my_app/database/dao/create_itens_dao.dart';
+import 'package:my_app/models/new_items.dart';
 
 const titleAppBar = 'Adicionar item';
 const dataEntryLabelOne = 'Novo item';
 const dataEntryLabelTwo = 'Quantidade';
 const titleElevatedButton = 'Adicionar';
 
-class transferForm extends StatelessWidget {
+class transferForm extends StatefulWidget {
   transferForm({super.key});
 
-  final TextEditingController _purchaseItemController = TextEditingController();
-  final TextEditingController _quantityOfItemController =
+  @override
+  State<transferForm> createState() => _transferFormState();
+}
+
+class _transferFormState extends State<transferForm> {
+  final ItemsDao _controller = ItemsDao();
+
+  final TextEditingController _items = TextEditingController();
+
+  final TextEditingController _quantity =
       TextEditingController();
 
   @override
@@ -28,9 +37,9 @@ class transferForm extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                DataEntryText(dataEntryLabelOne, _purchaseItemController,
+                DataEntryText(dataEntryLabelOne, _items,
                     Icons.add_shopping_cart),
-                DataEntryNumber(dataEntryLabelTwo, _quantityOfItemController,
+                DataEntryNumber(dataEntryLabelTwo, _quantity,
                     Icons.production_quantity_limits_outlined),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -47,11 +56,15 @@ class transferForm extends StatelessWidget {
   }
 
   void _createTransfer(BuildContext context) {
-    final purchaseItem = _purchaseItemController.text;
-    final int? quantityOfItem = int.tryParse(_quantityOfItemController.text);
-    if (quantityOfItem != null) {
-      final createTransferences = Transference(purchaseItem, quantityOfItem);
-      Navigator.pop(context, createTransferences);
+    final String items = _items.text;
+    final int? quantity = int.tryParse(_quantity.text);
+
+    if (quantity != null) {
+      final NewItems addItem = NewItems(items: items, quantity: quantity);
+        _controller.save(addItem).then((id) {
+          final NewItems savedItem = NewItems(id: id, items: items, quantity: quantity);
+            Navigator.pop(context, savedItem);
+        });
     }
   }
 }
