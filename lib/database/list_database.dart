@@ -4,7 +4,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 Future<Database> getDataBase() async {
-  final String path = join(await getDatabasesPath(), 'lista_facil4.db');
+  final String path = join(await getDatabasesPath(), 'lista_facil5.db');
   return openDatabase(path, onCreate: (db, version) {
     db.execute(ListsDao.tableSQL);
     db.execute(ItemsDao.tableSQLitens);
