@@ -58,16 +58,13 @@ class createStateTransferList extends State<listTransference> {
         },
       ), 
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
+        onPressed: () async {
+          final savedItem  = await Navigator.push(context, MaterialPageRoute(builder: (context) {
             return transferForm();
-          })).then((newTransfer) {
-            if (newTransfer != null) {
-              setState(() {
-               // items.add(newTransfer);
-              });
-            }
-          });
+          }));
+          if (savedItem != null) {
+            setState(() {});
+          }
         },
         backgroundColor: Color.fromARGB(255, 21, 92, 24),
         foregroundColor: Colors.white,
@@ -100,6 +97,8 @@ class _transferItensState extends State<transferItens> {
           border: Border.all(color: Colors.black26),
         ),
         child: CheckboxListTile(
+          activeColor: Colors.green[900],
+          checkColor: Colors.white,
           controlAffinity: ListTileControlAffinity.leading,
           title: Text(widget._addItems.items.toString()),
           subtitle: Text(widget._addItems.quantity.toString()),
