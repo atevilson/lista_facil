@@ -9,7 +9,7 @@ class ItemsDao {
   static const String _quantity = 'quantity';
 
   static const String tableSQLitens = 'CREATE TABLE $_nameTable('
-      '$_id INTEGER PRIMARY KEY, '
+      '$_id INTEGER PRIMARY KEY AUTOINCREMENT, '
       '$_item TEXT,'
       '$_quantity INTEGER )';
 
@@ -36,9 +36,9 @@ class ItemsDao {
     final List<NewItems> items = [];
     for (Map<String, dynamic> row in result) {
       final NewItems newItem = NewItems(
-        row[_id],
-        row[_item],
-        row[_quantity]
+        id: row[_id],
+        items: row[_item],
+        quantity: row[_quantity]
       );
       items.add(newItem);
     }
