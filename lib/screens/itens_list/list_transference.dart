@@ -20,7 +20,7 @@ class createStateTransferList extends State<listTransference> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 21, 92, 24),
+        backgroundColor: const Color.fromARGB(255, 21, 92, 24),
         title: const Text(titleAppBar),
         foregroundColor: Colors.white,
       ),
@@ -29,7 +29,6 @@ class createStateTransferList extends State<listTransference> {
           future: _controller.findAll(),
           builder: (context, snapshot) {
             switch(snapshot.connectionState) {
-              
               case ConnectionState.none:
                 break;
               case ConnectionState.waiting:
@@ -54,7 +53,10 @@ class createStateTransferList extends State<listTransference> {
                 },
               );
             }
-            return Text("Lista vazia");
+            if (snapshot.hasError) {
+              return const Text("Internal Server Error");
+            }
+            return const Text("Lista vazia");
         },
       ), 
       floatingActionButton: FloatingActionButton(
@@ -66,7 +68,7 @@ class createStateTransferList extends State<listTransference> {
             setState(() {});
           }
         },
-        backgroundColor: Color.fromARGB(255, 21, 92, 24),
+        backgroundColor: const Color.fromARGB(255, 21, 92, 24),
         foregroundColor: Colors.white,
         hoverColor: Colors.lightGreen,
         child: const Icon(Icons.add),
