@@ -15,7 +15,7 @@ class ItemController {
 
   Future<bool> saveList(String value) async {
     if (value.isNotEmpty) {
-      final NewItems newItens = NewItems(0, value, 0);
+      final NewItems newItens = NewItems(items: value, quantity: 0);
       await _listsDao.save(newItens);
       await findAll();
       return true;
