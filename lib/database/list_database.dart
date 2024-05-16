@@ -4,11 +4,11 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 Future<Database> getDataBase() async {
-  final String path = join(await  getDatabasesPath(), 'lista_facil5.db');
+  final String path = join(await  getDatabasesPath(), 'lista_facil.db');
   return openDatabase(path, onCreate: (db, version) {
     db.execute(ListsDao.tableSQL);
     db.execute(ItemsDao.tableSQLitens);
-  }, version: 1);
+  }, version: 1, onDowngrade: onDatabaseDowngradeDelete);
 }
 
 // Coloquei para validar a lista de itens, REMOVER APÓS OS TESTES!!!!
@@ -19,7 +19,7 @@ Future<void> listarItens() async {
     print("Itens na tabela 'new_itens':");
     for (Map<String, dynamic> row in result) {
       print(
-          "ID: ${row['id']}, Nome do Item: ${row['item']}, Quantidade: ${row['quantity']}, list_id: ${row['listId']}");
+          "ID: ${row['id']}, Nome do Item: ${row['item']}, Quantidade: ${row['quantity']}, list_id: ${row['list_id']}");
     }
   } else {
     print("Nenhum item encontrado na tabela 'new_itens'.");
