@@ -73,7 +73,7 @@ class _collectionsLists extends StatelessWidget {
         title: InkWell(
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return listTransference();
+              return listTransference(list);
             }));
           },
           child: Text(
