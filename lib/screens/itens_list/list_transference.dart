@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/controllers/item_controller.dart';
 import 'package:my_app/models/new_items.dart';
+import 'package:my_app/models/new_lists.dart';
 import 'package:my_app/screens/itens_list/transfer_form.dart';
 
 const titleAppBar = 'Itens da lista';
 
 class listTransference extends StatefulWidget {
-
+  final NewLists list;
+  listTransference(this.list);
   @override
   State<StatefulWidget> createState() {
     return createStateTransferList();
@@ -14,7 +16,13 @@ class listTransference extends StatefulWidget {
 }
 
 class createStateTransferList extends State<listTransference> {
-  final ItemController _controller = ItemController();
+  late ItemController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = ItemController(widget.list);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,25 +33,25 @@ class createStateTransferList extends State<listTransference> {
         foregroundColor: Colors.white,
       ),
       body: FutureBuilder<List<NewItems>>(
-          initialData: [],
-          future: _controller.findAll(),
-          builder: (context, snapshot) {
-            switch(snapshot.connectionState) {
-              case ConnectionState.none:
-                break;
-              case ConnectionState.waiting:
-                return const Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      CircularProgressIndicator(),
-                    ],
-                  ),
-                );
-              case ConnectionState.active:
-                break;
-              case ConnectionState.done:
+        initialData: [],
+        future: _controller.findItens(),
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+              break;
+            case ConnectionState.waiting:
+              return const Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(),
+                  ],
+                ),
+              );
+            case ConnectionState.active:
+              break;
+            case ConnectionState.done:
               final List<NewItems> items = snapshot.data ?? [];
               return ListView.builder(
                 itemCount: items.length,
@@ -52,17 +60,18 @@ class createStateTransferList extends State<listTransference> {
                   return transferItens(item);
                 },
               );
-            }
-            if (snapshot.hasError) {
-              return const Text("Internal Server Error");
-            }
-            return const Text("Lista vazia");
+          }
+          if (snapshot.hasError) {
+            return const Text("Internal Server Error");
+          }
+          return const Text("Lista vazia");
         },
-      ), 
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final savedItem  = await Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return transferForm();
+          final savedItem = await Navigator.push(context,
+              MaterialPageRoute(builder: (context) {
+            return transferForm(_controller);
           }));
           if (savedItem != null) {
             setState(() {});
