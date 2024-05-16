@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/database/list_database.dart';
 import 'package:my_app/screens/create_list/shopping_lists.dart';
 
 const _titleAppBar = 'Lista Fácil';
@@ -32,6 +33,9 @@ class listCollections extends StatelessWidget {
                   onTap: () {
                     Navigator.of(context).push(
                         MaterialPageRoute(builder: (context) => createdLists()));
+                        listarListas();
+                        listarItens();
+                        
                   },
                   child: const SizedBox(
                     height: 100,
