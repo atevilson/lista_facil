@@ -3,13 +3,13 @@ import 'package:my_app/models/new_lists.dart';
 import 'package:sqflite/sqflite.dart';
 
 class ListsDao {
-  static const String _nameTable = 'new_lists';
-  static const String _id = 'id';
-  static const String _name = 'name';
+  static const String nameTable = 'new_lists';
+  static const String id = 'id';
+  static const String name = 'name';
 
-  static const String tableSQL = 'CREATE TABLE $_nameTable('
-      '$_id INTEGER PRIMARY KEY, '
-      '$_name TEXT )';
+  static const String tableSQL = 'CREATE TABLE $nameTable('
+      '$id INTEGER PRIMARY KEY, '
+      '$name TEXT )';
 
   Future<int> save(NewLists listas) async {
     final Database db = await getDataBase();
@@ -22,18 +22,18 @@ class ListsDao {
 
   Future<int> _toList(NewLists listas, Database db) {
     final Map<String, dynamic> newLists = {};
-    newLists[_name] = listas.nameList;
-    return db.insert(_nameTable, newLists);
+    newLists[name] = listas.nameList;
+    return db.insert(nameTable, newLists);
   }
 
   Future<List<NewLists>> findAll() async {
     final Database db = await getDataBase();
-    final List<Map<String, dynamic>> result = await db.query(_nameTable);
+    final List<Map<String, dynamic>> result = await db.query(nameTable);
     final List<NewLists> lists = [];
     for (Map<String, dynamic> row in result) {
       final NewLists listNew = NewLists(
-        row[_id],
-        row[_name],
+        row[id],
+        row[name],
       );
       lists.add(listNew);
     }
