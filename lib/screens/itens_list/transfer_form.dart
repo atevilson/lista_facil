@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/components/dataEntryNumber.dart';
 import 'package:my_app/components/dataEntryText.dart';
-import 'package:my_app/database/dao/create_itens_dao.dart';
+import 'package:my_app/controllers/item_controller.dart';
 import 'package:my_app/models/new_items.dart';
 
 const titleAppBar = 'Adicionar item';
@@ -10,19 +10,17 @@ const dataEntryLabelTwo = 'Quantidade';
 const titleElevatedButton = 'Adicionar';
 
 class transferForm extends StatefulWidget {
-  transferForm({super.key});
+  final ItemController controller;
+  transferForm(this.controller, {super.key});
 
   @override
   State<transferForm> createState() => _transferFormState();
 }
 
 class _transferFormState extends State<transferForm> {
-  final ItemsDao _controller = ItemsDao();
-
   final TextEditingController _items = TextEditingController();
 
-  final TextEditingController _quantity =
-      TextEditingController();
+  final TextEditingController _quantity = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +35,8 @@ class _transferFormState extends State<transferForm> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                DataEntryText(dataEntryLabelOne, _items,
-                    Icons.add_shopping_cart),
+                DataEntryText(
+                    dataEntryLabelOne, _items, Icons.add_shopping_cart),
                 DataEntryNumber(dataEntryLabelTwo, _quantity,
                     Icons.production_quantity_limits_outlined),
                 ElevatedButton(
@@ -61,10 +59,9 @@ class _transferFormState extends State<transferForm> {
 
     if (quantity != null) {
       final NewItems addItem = NewItems(items: items, quantity: quantity);
-        _controller.save(addItem).then((id) {
-          final NewItems savedItem = NewItems(id: id, items: items, quantity: quantity);
-            Navigator.pop(context, savedItem);
-        });
+      widget.controller.saveItem(addItem).then((_) {
+        Navigator.pop(context, addItem);
+      });
     }
   }
 }
