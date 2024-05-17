@@ -14,9 +14,12 @@ class createdLists extends StatelessWidget {
     _controller.findAll();
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 21, 92, 24),
+        backgroundColor: Colors.red,
         foregroundColor: Colors.white,
-        title: Text(_title),
+        title: Text(_title, style: TextStyle(
+          fontSize: 24.0,
+          fontWeight: FontWeight.w500
+        ),),
       ),
       body: ValueListenableBuilder<List<NewLists>>(
         valueListenable: _controller.listaValores,
@@ -52,9 +55,8 @@ class createdLists extends StatelessWidget {
             ),
           );
         },
-        backgroundColor: const Color.fromARGB(255, 21, 92, 24),
+        backgroundColor: Colors.red,
         foregroundColor: Colors.white,
-        hoverColor: Colors.lightGreen,
         child: const Icon(Icons.add),
       ),
     );
