@@ -8,7 +8,7 @@ Future<Database> getDataBase() async {
   return openDatabase(path, onCreate: (db, version) {
     db.execute(ListsDao.tableSQL);
     db.execute(ItemsDao.tableSQLitens);
-  }, version: 1, onDowngrade: onDatabaseDowngradeDelete);
+  }, version: 1);
 }
 
 // Coloquei para validar a lista de itens, REMOVER APÓS OS TESTES!!!!
