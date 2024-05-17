@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:my_app/database/list_database.dart';
 import 'package:my_app/screens/create_list/shopping_lists.dart';
@@ -12,9 +13,12 @@ class listCollections extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color.fromARGB(255, 21, 92, 24),
+          backgroundColor: Colors.red,
           foregroundColor: Colors.white,
-          title: const Text(_titleAppBar),
+          title: const Text(_titleAppBar, style: TextStyle(
+            fontSize: 24.0,
+            fontWeight: FontWeight.w500
+          ),),
           titleSpacing: 8.0,
         ),
         body: Column(
@@ -22,13 +26,13 @@ class listCollections extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.only(top: 140.0),
               child: Image.asset('images/carrinho_compras.jpg'),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Material(
-                color: const Color.fromARGB(255, 90, 176, 23),
+                color: Colors.red,
                 child: InkWell(
                   onTap: () {
                     Navigator.of(context).push(
@@ -37,11 +41,11 @@ class listCollections extends StatelessWidget {
                         listarItens();
                         
                   },
-                  child: const SizedBox(
+                  child:  SizedBox(
                     height: 100,
-                    width: 120,
+                    width: 150,
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Text(
                           'Criar lista',
