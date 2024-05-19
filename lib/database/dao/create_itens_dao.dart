@@ -22,17 +22,34 @@ class ItemsDao {
     return _toMap(items, db);
   }
 
-  Future<int> _toMap(NewItems items, Database db) {
-    return _toList(items, db);
+  Future<int> delete(NewItems items) async {
+    final Database db = await getDataBase();
+    return _toMapDelete(items, db);
   }
 
-  Future<int> _toList(NewItems items, Database db) {
+  Future<int> _toMap(NewItems items, Database db) {
+    return _toInsert(items, db);
+  }
+
+  Future<int> _toMapDelete(NewItems items, Database db) {
+    return _toDelete(items, db);
+  }
+
+  Future<int> _toInsert(NewItems items, Database db) {
     final Map<String, dynamic> newItem = {};
     newItem[id] = items.id;
     newItem[item] = items.items;
     newItem[quantity] = items.quantity;
     newItem[listId] = items.listId;
     return db.insert(nameTable, newItem);
+  }
+
+  Future<int> _toDelete(NewItems items, Database db) {
+    return db.delete(
+      nameTable,
+      where: "$id = ?",
+      whereArgs: [items.id]
+    );
   }
 
   Future<List<NewItems>> findAll() async {
