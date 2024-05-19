@@ -2,23 +2,62 @@ import 'package:flutter/material.dart';
 import 'package:my_app/database/dao/create_itens_dao.dart';
 import 'package:my_app/models/new_items.dart';
 import 'package:my_app/models/new_lists.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ItemController {
   final NewLists newLists;
   final ItemsDao _listsDao = ItemsDao();
-  final ValueNotifier<List<NewItems>> quantityItems =
-      ValueNotifier<List<NewItems>>([]);
-  ItemController(this.newLists);
-  Future<List<NewItems>> findItens() async {
-    quantityItems.value = [];
-    return await _listsDao.findByListId(this.newLists.id);
+  final ValueNotifier<List<NewItems>> quantityItems = ValueNotifier<List<NewItems>>([]);
+  bool _ascendingOrder = true; // ordenação default
+
+  ItemController(this.newLists) {
+    _loadItems();
+  }
+
+  Future<void> _loadItems() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    _ascendingOrder = prefs.getBool('ascendingOrder') ?? true;
+
+    List<NewItems> items = await _listsDao.findByListId(newLists.id);
+    _sortItemsInternal(items);
+    quantityItems.value = items;
+  }
+
+  Future<void> findItens() async {
+    await _loadItems();
   }
 
   Future<bool> saveItem(NewItems value) async {
     final NewItems newItens = NewItems(
         listId: newLists.id, items: value.items, quantity: value.quantity);
     await _listsDao.save(newItens);
-    await findItens();
+    await _loadItems();
     return true;
+  }
+
+  Future<bool> deleteItem(NewItems value) async {
+    await _listsDao.delete(value);
+    await _loadItems();
+    return true;
+  }
+
+  void sortItems(bool ascending) async {
+    _ascendingOrder = ascending;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('ascendingOrder', ascending);
+
+    List<NewItems> items = List<NewItems>.from(quantityItems.value);
+    _sortItemsInternal(items);
+    quantityItems.value = items;
+  }
+
+  void _sortItemsInternal(List<NewItems> items) {
+    items.sort((a, b) {
+      String firstCharA = a.items.isNotEmpty ? a.items[0].toLowerCase() : '';
+      String firstCharB = b.items.isNotEmpty ? b.items[0].toLowerCase() : '';
+
+      int comparison = firstCharA.compareTo(firstCharB);
+      return _ascendingOrder ? comparison : -comparison;
+    });
   }
 }
