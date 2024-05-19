@@ -9,7 +9,7 @@ const titleAppBar = 'Itens da lista';
 
 class listTransference extends StatefulWidget {
   final NewLists list;
-  listTransference(this.list);
+  const listTransference(this.list, {super.key});
   @override
   State<StatefulWidget> createState() {
     return createStateTransferList();
