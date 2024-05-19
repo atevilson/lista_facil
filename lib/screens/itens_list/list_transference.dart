@@ -3,6 +3,7 @@ import 'package:my_app/controllers/item_controller.dart';
 import 'package:my_app/models/new_items.dart';
 import 'package:my_app/models/new_lists.dart';
 import 'package:my_app/screens/itens_list/transfer_form.dart';
+import 'package:my_app/utils_colors/utils_style.dart';
 
 const titleAppBar = 'Itens da lista';
 
@@ -17,6 +18,7 @@ class listTransference extends StatefulWidget {
 
 class createStateTransferList extends State<listTransference> {
   late ItemController _controller;
+  bool ascendingOrder = true;
 
   @override
   void initState() {
@@ -28,43 +30,103 @@ class createStateTransferList extends State<listTransference> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 21, 92, 24),
-        title: const Text(titleAppBar),
-        foregroundColor: Colors.white,
+        backgroundColor: UtilColors.instance.colorRed,
+        foregroundColor: UtilColors.instance.colorWhite,
+        title: Text(titleAppBar.toUpperCase()),
+        titleTextStyle: TextStyle(
+            fontSize: 22.0,
+            fontWeight: FontWeight.bold,
+            color: UtilColors.instance.colorWhite),
+        actions: [
+          IconButton(
+            onPressed: () => {},
+            icon: const Icon(Icons.share),
+          ),
+          PopupMenuButton<String>(
+            onSelected: (String result) {
+              setState(() {
+                ascendingOrder = result == 'Ordenar A-Z';
+                _controller.sortItems(ascendingOrder);
+              });
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              const PopupMenuItem<String>(
+                value: 'Ordenar A-Z',
+                child: Text('Ordenar A-Z'),
+              ),
+              const PopupMenuItem<String>(
+                value: 'Ordenar Z-A',
+                child: Text('Ordenar Z-A'),
+              ),
+            ],
+          ),
+        ],
       ),
-      body: FutureBuilder<List<NewItems>>(
-        initialData: [],
-        future: _controller.findItens(),
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.none:
-              break;
-            case ConnectionState.waiting:
-              return const Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    CircularProgressIndicator(),
-                  ],
-                ),
-              );
-            case ConnectionState.active:
-              break;
-            case ConnectionState.done:
-              final List<NewItems> items = snapshot.data ?? [];
-              return ListView.builder(
-                itemCount: items.length,
-                itemBuilder: (context, index) {
-                  final NewItems item = items[index];
-                  return transferItens(item);
+      body: ValueListenableBuilder<List<NewItems>>(
+        valueListenable: _controller.quantityItems,
+        builder: (context, items, _) {
+          if (items.isEmpty) {
+            return const Center(child: Text('Nenhum item encontrado'));
+          }
+          return ListView.builder(
+            itemCount: items.length,
+            itemBuilder: (context, index) {
+              final NewItems item = items[index];
+              return Dismissible(
+                key: Key(item.id.toString()),
+                direction: DismissDirection.endToStart,
+                confirmDismiss: (direction) async {
+                  return await showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text(
+                          "Confirmar exclusão",
+                          textAlign: TextAlign.left,
+                          style: TextStyle(color: UtilColors.instance.colorRed),
+                        ),
+                        content: Text(
+                          "Excluir o item ?",
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              fontSize: 18.0,
+                              color: UtilColors.instance.colorRed),
+                        ),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () => Navigator.of(context).pop(false),
+                            child: const Text(
+                              "Cancelar",
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () => Navigator.of(context).pop(true),
+                            child: const Text(
+                              "OK",
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  );
                 },
+                onDismissed: (direction) {
+                  _controller.deleteItem(item).then((_) {
+                    setState(() {});
+                  });
+                },
+                background: Container(
+                  color: Colors.red,
+                  alignment: Alignment.centerRight,
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: const Icon(Icons.delete, color: Colors.white),
+                ),
+                child: transferItens(item),
               );
-          }
-          if (snapshot.hasError) {
-            return const Text("Internal Server Error");
-          }
-          return const Text("Lista vazia");
+            },
+          );
         },
       ),
       floatingActionButton: FloatingActionButton(
@@ -77,9 +139,9 @@ class createStateTransferList extends State<listTransference> {
             setState(() {});
           }
         },
-        backgroundColor: const Color.fromARGB(255, 21, 92, 24),
-        foregroundColor: Colors.white,
-        hoverColor: Colors.lightGreen,
+        shape: const CircleBorder(),
+        backgroundColor: UtilColors.instance.colorRed,
+        foregroundColor: UtilColors.instance.colorWhite,
         child: const Icon(Icons.add),
       ),
     );
@@ -108,7 +170,7 @@ class _transferItensState extends State<transferItens> {
           border: Border.all(color: Colors.black26),
         ),
         child: CheckboxListTile(
-          activeColor: Colors.green[900],
+          activeColor: UtilColors.instance.colorRed,
           checkColor: Colors.white,
           controlAffinity: ListTileControlAffinity.leading,
           title: Text(widget._addItems.items.toString()),
