@@ -58,6 +58,15 @@ class ItemController {
 
       int comparison = firstCharA.compareTo(firstCharB);
       return _ascendingOrder ? comparison : -comparison;
-    });
+      },
+    );
+  }
+  Future<bool> loadCheckboxState(int itemId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('checkbox_$itemId') ?? false;
+  }
+  Future<void> saveCheckboxState(int itemId, bool value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('checkbox_$itemId', value);
   }
 }
