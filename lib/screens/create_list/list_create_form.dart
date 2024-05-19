@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/utils_colors/utils_style.dart';
 
 import '../../controllers/list_controller.dart';
+
+const _title = "Criar lista";
 
 class listCreateForm extends StatefulWidget {
   final ListController controller;
@@ -15,23 +18,22 @@ class _listCreateFormState extends State<listCreateForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Criar lista'),
-        backgroundColor: const Color.fromARGB(255, 21, 92, 24),
-        foregroundColor: Colors.white,
-      ),
+      appBar: appBarCustom(title: _title),
       body: Padding(
         padding: const EdgeInsets.only(top: 28.0),
         child: Column(
           children: [
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: TextField(
-                controller: _newListController,
-                decoration: const InputDecoration(
-                  labelText: 'Nova lista',
+              child: Padding(
+                padding: const EdgeInsets.only(top: 100.0),
+                child: TextField(
+                  controller: _newListController,
+                  decoration: const InputDecoration(
+                    labelText: 'NOVA LISTA',
+                  ),
+                  style: const TextStyle(fontSize: 24.0),
                 ),
-                style: const TextStyle(fontSize: 24.0),
               ),
             ),
             Padding(
@@ -40,13 +42,13 @@ class _listCreateFormState extends State<listCreateForm> {
                 width: 180.0,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 21, 92, 24),
-                    foregroundColor: Colors.white,
+                    backgroundColor: UtilColors.instance.colorRed,
+                    foregroundColor: UtilColors.instance.colorWhite,
                   ),
                   onPressed: () {
                     _createNewList(context);
                   },
-                  child: const Text('Criar'),
+                  child: const Text('CRIAR LISTA'),
                 ),
               ),
             ),
