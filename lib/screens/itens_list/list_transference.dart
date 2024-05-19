@@ -39,7 +39,9 @@ class createStateTransferList extends State<listTransference> {
             color: UtilColors.instance.colorWhite),
         actions: [
           IconButton(
-            onPressed: () => {},
+            onPressed: () =>  {
+               _controller.shareItems(_controller.quantityItems.value)
+            },
             icon: const Icon(Icons.share),
           ),
           PopupMenuButton<String>(
@@ -179,7 +181,7 @@ class _transferItensState extends State<transferItens> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(4.0),
+      padding: const EdgeInsets.all(2.0),
       child: Container(
         decoration: BoxDecoration(
           color: isChecked ? Colors.black12 : Colors.grey[200],
