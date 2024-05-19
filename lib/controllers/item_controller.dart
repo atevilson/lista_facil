@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_app/database/dao/create_itens_dao.dart';
 import 'package:my_app/models/new_items.dart';
 import 'package:my_app/models/new_lists.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ItemController {
@@ -65,8 +66,19 @@ class ItemController {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getBool('checkbox_$itemId') ?? false;
   }
+
   Future<void> saveCheckboxState(int itemId, bool value) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool('checkbox_$itemId', value);
   }
+
+  void shareItems(List<NewItems> items) {
+  String message = "${newLists.nameList}\n";
+  for (NewItems item in items) {
+    message += "${item.items} - ${item.quantity}\n";
+    }
+    Share.share(message);
+  }
 }
+
+
