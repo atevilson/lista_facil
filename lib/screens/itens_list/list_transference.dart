@@ -123,7 +123,7 @@ class createStateTransferList extends State<listTransference> {
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: const Icon(Icons.delete, color: Colors.white),
                 ),
-                child: transferItens(item),
+                child: transferItens(item, _controller),
               );
             },
           );
@@ -150,8 +150,9 @@ class createStateTransferList extends State<listTransference> {
 
 class transferItens extends StatefulWidget {
   final NewItems _addItems;
+  final ItemController _controller;
 
-  const transferItens(this._addItems, {Key? key}) : super(key: key);
+  transferItens(this._addItems, this._controller, {Key? key}) : super(key: key);
 
   @override
   _transferItensState createState() => _transferItensState();
@@ -159,6 +160,21 @@ class transferItens extends StatefulWidget {
 
 class _transferItensState extends State<transferItens> {
   bool isChecked = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCheckboxState(); // estado inicial
+  }
+
+  // carrega o estado do checkbox
+  void _loadCheckboxState() async {
+    int itemId = widget._addItems.id ?? 0;
+    bool state = await widget._controller.loadCheckboxState(itemId);
+    setState(() {
+      isChecked = state;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -175,10 +191,11 @@ class _transferItensState extends State<transferItens> {
           controlAffinity: ListTileControlAffinity.leading,
           title: Text(widget._addItems.items.toString()),
           subtitle: Text(widget._addItems.quantity.toString()),
-          onChanged: (bool? value) {
+          onChanged: (bool? value) async {
             setState(() {
               isChecked = value ?? false;
             });
+            await widget._controller.saveCheckboxState(widget._addItems.id ?? 0, isChecked);
           },
           value: isChecked,
         ),
@@ -186,3 +203,5 @@ class _transferItensState extends State<transferItens> {
     );
   }
 }
+
+
