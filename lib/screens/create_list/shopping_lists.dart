@@ -4,6 +4,7 @@ import 'package:my_app/controllers/list_controller.dart';
 import 'package:my_app/models/new_lists.dart';
 import 'package:my_app/screens/create_list/list_create_form.dart';
 import 'package:my_app/screens/itens_list/list_transference.dart';
+import 'package:my_app/utils_colors/utils_style.dart';
 
 class createdLists extends StatelessWidget {
   final ListController _controller = ListController();
@@ -13,14 +14,7 @@ class createdLists extends StatelessWidget {
   Widget build(BuildContext context) {
     _controller.findAll();
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.red,
-        foregroundColor: Colors.white,
-        title: Text(_title, style: TextStyle(
-          fontSize: 24.0,
-          fontWeight: FontWeight.w500
-        ),),
-      ),
+      appBar: appBarCustom(title: _title),
       body: ValueListenableBuilder<List<NewLists>>(
         valueListenable: _controller.listaValores,
         builder: (context, snapshot, _) {
@@ -55,8 +49,9 @@ class createdLists extends StatelessWidget {
             ),
           );
         },
-        backgroundColor: Colors.red,
-        foregroundColor: Colors.white,
+        shape: const CircleBorder(),
+        backgroundColor: UtilColors.instance.colorRed,
+        foregroundColor: UtilColors.instance.colorWhite,
         child: const Icon(Icons.add),
       ),
     );
