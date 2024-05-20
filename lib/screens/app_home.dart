@@ -23,33 +23,38 @@ class listCollections extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         appBar: appBarCustom(title: _titleAppBar),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 140.0),
-              child: Image.asset('images/carrinho_compras.jpg'),
-            ),
-            Container(
-              color: UtilColors.instance.colorContainer,
-              height: 115,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: <Widget> [
-                  _MenuItemHome("Criar Lista", 
-                  Icons.note_add, 
-                    onClick: () => _createLists(context),
-                  ),
-                  _MenuItemHome(
-                  'Listas criadas',
-                  Icons.list_alt_outlined,
-                  onClick: () => _pageCreatedLists(context),
-                ),
-                ],
+        body: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 140.0),
+                child: Image.asset('images/carrinho_compras.jpg'),
               ),
-            )
-          ],
+              Padding(
+                padding: const EdgeInsets.only(top: 115.0), // ajuste do SingleChild
+                child: Container(
+                  color: UtilColors.instance.colorContainer,
+                  height: 115,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: <Widget> [
+                      _MenuItemHome("Criar Lista", 
+                      Icons.note_add, 
+                        onClick: () => _createLists(context),
+                      ),
+                      _MenuItemHome(
+                      'Listas criadas',
+                      Icons.list_alt_outlined,
+                      onClick: () => _pageCreatedLists(context),
+                    ),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
