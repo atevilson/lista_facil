@@ -12,6 +12,11 @@ class ListController {
     listaValores.value = await _listsDao.findAll();
   }
 
+  Future<void> deleteItem(NewLists value) async {
+    await _listsDao.delete(value);
+    await findAll();
+  }
+
   Future<bool> saveList(String value) async {
     if (value.isNotEmpty) {
       final NewLists newLists = NewLists(0, value);
