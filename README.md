@@ -2,18 +2,20 @@
 
 ## About
 
-A new Flutter project.
+This project is a shopping list for study purposes.
 
-# Project Structure
+# Project Structure 
 
 ## The project is organized as follows:
 
 - `lib/`: Application source code.
 - `main.dart`: Application entry point.
 - `components/`: Data entry module.
+- `controllers`: Screens controllers.
 - `screens/`: Application screens.
-- `models/`: Stores reusable widgets.
+- `models/`: Models for application.
 - `datatbase`: Database for the application.
+- `utils_colors`: Customs colors for application.
 
 ### Author
 ---
