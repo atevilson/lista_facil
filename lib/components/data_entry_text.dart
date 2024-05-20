@@ -19,7 +19,7 @@ class DataEntryText extends StatelessWidget {
             icon: Icon(iconAll),
             iconColor: UtilColors.instance.colorRed,
             labelText: itemLabel,
-            labelStyle: TextStyle(color: UtilColors.instance.colorGray, fontSize: 16.0)),
+            labelStyle: TextStyle(color: UtilColors.instance.colorRed, fontSize: 16.0)),
         keyboardType: TextInputType.text,
       ),
     );
