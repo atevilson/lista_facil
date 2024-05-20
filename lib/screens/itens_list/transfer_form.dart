@@ -64,11 +64,24 @@ class _transferFormState extends State<transferForm> {
     final String items = _items.text;
     final int? quantity = int.tryParse(_quantity.text);
 
+    if (items.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('O campo item esta vazio!'))
+        );
+        return;
+    }
+
     if (quantity != null) {
       final NewItems addItem = NewItems(items: items, quantity: quantity);
       widget.controller.saveItem(addItem).then((_) {
         Navigator.pop(context, addItem);
       });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Insira um número válido!'),
+        ),
+      );
     }
   }
 }
