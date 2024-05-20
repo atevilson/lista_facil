@@ -2,13 +2,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:my_app/controllers/list_controller.dart';
+import 'package:my_app/screens/create_list/list_create_form.dart';
 import 'package:my_app/screens/create_list/shopping_lists.dart';
 import 'package:my_app/utils_colors/utils_style.dart';
 
 const _titleAppBar = 'Lista Fácil';
+final ListController controller = ListController();
 
 class listCollections extends StatelessWidget {
-  const listCollections({super.key});
+  listCollections({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -35,13 +38,13 @@ class listCollections extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 children: <Widget> [
                   _MenuItemHome("Criar Lista", 
-                  Icons.list_alt_outlined, 
-                    onClick: () => _pageCreatedLists(context),
+                  Icons.note_add, 
+                    onClick: () => _createLists(context),
                   ),
                   _MenuItemHome(
-                  'Confira ofertas',
-                  Icons.add_shopping_cart,
-                  onClick: () => (),
+                  'Listas criadas',
+                  Icons.list_alt_outlined,
+                  onClick: () => _pageCreatedLists(context),
                 ),
                 ],
               ),
@@ -51,6 +54,7 @@ class listCollections extends StatelessWidget {
       ),
     );
   }
+//listCreateForm
 
 void _pageCreatedLists(BuildContext context) {
     Navigator.of(context).push(
@@ -61,6 +65,13 @@ void _pageCreatedLists(BuildContext context) {
   }
 }
 
+void _createLists(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => listCreateForm(controller),
+      ),
+    );
+  }
 
 // Itens cards
 class _MenuItemHome extends StatelessWidget {
@@ -88,7 +99,7 @@ class _MenuItemHome extends StatelessWidget {
                   color: UtilColors.instance.colorWhite.withOpacity(0.5),
                   spreadRadius: 5,
                   blurRadius: 4,
-                  offset: Offset(0,2)
+                  offset: const Offset(0,2)
                 )
               ]
             ),
