@@ -24,7 +24,7 @@ class myApplication extends StatelessWidget {
           border: const OutlineInputBorder(),
         ),
       ),
-     home: listCollections(),
+     home: const listCollections(),
     );
   }
 }
