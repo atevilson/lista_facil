@@ -12,7 +12,7 @@ const titleElevatedButton = 'ADICIONAR ITEM';
 
 class transferForm extends StatefulWidget {
   final ItemController controller;
-  transferForm(this.controller, {super.key});
+  const transferForm(this.controller, {super.key});
 
   @override
   State<transferForm> createState() => _transferFormState();

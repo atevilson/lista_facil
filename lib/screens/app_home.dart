@@ -11,7 +11,7 @@ const _titleAppBar = 'Lista Fácil';
 final ListController controller = ListController();
 
 class listCollections extends StatelessWidget {
-  listCollections({super.key});
+  const listCollections({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +68,9 @@ void _pageCreatedLists(BuildContext context) {
 void _createLists(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => listCreateForm(controller),
+        builder: (context) {
+          return listCreateForm(controller);
+        },
       ),
     );
   }
