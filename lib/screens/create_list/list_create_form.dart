@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/screens/create_list/shopping_lists.dart';
 import 'package:my_app/utils_colors/utils_style.dart';
 
 import '../../controllers/list_controller.dart';
@@ -64,7 +65,12 @@ class _listCreateFormState extends State<listCreateForm> {
       await widget.controller.saveList(nameList);
       // remove a tela de criação da pilha
       if (!context.mounted) return;
-      Navigator.pop(context);
+      await Navigator.of(context)
+          .pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => createdLists(),
+        ),
+      );
     }
   }
 }

@@ -43,7 +43,7 @@ class createdLists extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          await Navigator.of(context).push(
+          await Navigator.of(context).pushReplacement(
             MaterialPageRoute(
               builder: (context) => listCreateForm(_controller),
             ),
