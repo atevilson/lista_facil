@@ -16,8 +16,26 @@ class ListsDao {
     return _toMap(listas, db);
   }
 
+  Future<int> delete(NewLists listas) async {
+    final Database db = await getDataBase();
+    return _toMapDelete(listas, db);
+  }
+
+  Future<int> _toMapDelete(NewLists listas, Database db) {
+    return _toDelete(listas, db);
+  }
+
+
   Future<int> _toMap(NewLists listas, Database db) {
     return _toList(listas, db);
+  }
+
+  Future<int> _toDelete(NewLists listas, Database db) {
+    return db.delete(
+      nameTable,
+      where: "$id = ?",
+      whereArgs: [listas.id]
+    );
   }
 
   Future<int> _toList(NewLists listas, Database db) {
