@@ -1,7 +1,5 @@
 
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:my_app/controllers/list_controller.dart';
 import 'package:my_app/screens/create_list/list_create_form.dart';
 import 'package:my_app/screens/create_list/shopping_lists.dart';
@@ -10,15 +8,11 @@ import 'package:my_app/utils_colors/utils_style.dart';
 const _titleAppBar = 'Lista Fácil';
 final ListController controller = ListController();
 
-class listCollections extends StatelessWidget {
-  const listCollections({super.key});
+class ListCollections extends StatelessWidget {
+  const ListCollections({super.key});
 
   @override
   Widget build(BuildContext context) {
-
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-    ]);
 
     return MaterialApp(
       home: Scaffold(
@@ -29,7 +23,7 @@ class listCollections extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 140.0),
+                padding: const EdgeInsets.only(top: 40.0),
                 child: Image.asset('images/carrinho_compras.jpg'),
               ),
               Padding(
