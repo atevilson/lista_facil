@@ -10,15 +10,15 @@ const dataEntryLabelOne = 'NOVO ITEM';
 const dataEntryLabelTwo = 'QUANTIDADE';
 const titleElevatedButton = 'ADICIONAR ITEM';
 
-class transferForm extends StatefulWidget {
+class TransferForm extends StatefulWidget {
   final ItemController controller;
-  const transferForm(this.controller, {super.key});
+  const TransferForm(this.controller, {super.key});
 
   @override
-  State<transferForm> createState() => _transferFormState();
+  State<TransferForm> createState() => _TransferFormState();
 }
 
-class _transferFormState extends State<transferForm> {
+class _TransferFormState extends State<TransferForm> {
   final TextEditingController _items = TextEditingController();
 
   final TextEditingController _quantity = TextEditingController();

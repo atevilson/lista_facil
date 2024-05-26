@@ -5,12 +5,14 @@ import 'package:my_app/screens/create_list/list_create_form.dart';
 import 'package:my_app/screens/itens_list/list_transference.dart';
 import 'package:my_app/utils_colors/utils_style.dart';
 
-class createdLists extends StatefulWidget {
+class CreatedLists extends StatefulWidget {
+  const CreatedLists({super.key});
+
   @override
-  State<createdLists> createState() => _createdListsState();
+  State<CreatedLists> createState() => _CreatedListsState();
 }
 
-class _createdListsState extends State<createdLists> {
+class _CreatedListsState extends State<CreatedLists> {
   final ListController _controller = ListController();
 
   final String _title = 'Listas de compras';
@@ -100,7 +102,7 @@ class _createdListsState extends State<createdLists> {
         onPressed: () async {
           await Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => listCreateForm(_controller),
+              builder: (context) => ListCreateForm(_controller),
             ),
           );
           _controller.findAll(); 
@@ -126,7 +128,7 @@ class _CollectionsLists extends StatelessWidget {
         title: InkWell(
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return listTransference(list);
+              return ListTransference(list);
             }));
           },
           child: Text(

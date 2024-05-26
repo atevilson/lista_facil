@@ -6,14 +6,14 @@ import '../../controllers/list_controller.dart';
 
 const _title = "Criar lista";
 
-class listCreateForm extends StatefulWidget {
+class ListCreateForm extends StatefulWidget {
   final ListController controller;
-  const listCreateForm(this.controller);
+  const ListCreateForm(this.controller, {super.key});
   @override
-  State<listCreateForm> createState() => _listCreateFormState();
+  State<ListCreateForm> createState() => _ListCreateFormState();
 }
 
-class _listCreateFormState extends State<listCreateForm> {
+class _ListCreateFormState extends State<ListCreateForm> {
   final TextEditingController _newListController = TextEditingController();
 
   @override
@@ -68,7 +68,7 @@ class _listCreateFormState extends State<listCreateForm> {
       await Navigator.of(context)
           .pushReplacement(
         MaterialPageRoute(
-          builder: (context) => createdLists(),
+          builder: (context) => CreatedLists(),
         ),
       );
     }

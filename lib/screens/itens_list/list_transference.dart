@@ -7,16 +7,16 @@ import 'package:my_app/utils_colors/utils_style.dart';
 
 const titleAppBar = 'Itens da lista';
 
-class listTransference extends StatefulWidget {
+class ListTransference extends StatefulWidget {
   final NewLists list;
-  const listTransference(this.list, {super.key});
+  const ListTransference(this.list, {super.key});
   @override
   State<StatefulWidget> createState() {
-    return createStateTransferList();
+    return CreateStateTransferList();
   }
 }
 
-class createStateTransferList extends State<listTransference> {
+class CreateStateTransferList extends State<ListTransference> {
   late ItemController _controller;
   bool ascendingOrder = true;
 
@@ -135,7 +135,7 @@ class createStateTransferList extends State<listTransference> {
         onPressed: () async {
           final savedItem = await Navigator.push(context,
               MaterialPageRoute(builder: (context) {
-            return transferForm(_controller);
+            return TransferForm(_controller);
           }));
           if (savedItem != null) {
             setState(() {});

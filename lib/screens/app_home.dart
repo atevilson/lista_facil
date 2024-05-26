@@ -58,7 +58,7 @@ class ListCollections extends StatelessWidget {
 void _pageCreatedLists(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => createdLists(),
+        builder: (context) => CreatedLists(),
       ),
     );
   }
@@ -68,7 +68,7 @@ void _createLists(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) {
-          return listCreateForm(controller);
+          return ListCreateForm(controller);
         },
       ),
     );

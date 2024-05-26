@@ -3,11 +3,11 @@ import 'package:my_app/screens/app_home.dart';
 import 'package:my_app/utils_colors/utils_style.dart';
 
 void main() {
-  runApp(const myApplication());
+  runApp(const MyApplication());
 }
 
-class myApplication extends StatelessWidget {
-  const myApplication({super.key});
+class MyApplication extends StatelessWidget {
+  const MyApplication({super.key});
 
   @override
   Widget build(BuildContext context) {
