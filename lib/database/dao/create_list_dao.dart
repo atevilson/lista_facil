@@ -1,3 +1,4 @@
+import 'package:my_app/database/dao/create_itens_dao.dart';
 import 'package:my_app/database/list_database.dart';
 import 'package:my_app/models/new_lists.dart';
 import 'package:sqflite/sqflite.dart';
@@ -29,13 +30,21 @@ class ListsDao {
   Future<int> _toMap(NewLists listas, Database db) {
     return _toList(listas, db);
   }
+  // Função ajustada para que, ao excluir a lista, remova primeiro seus itens.
+  Future<int> _toDelete(NewLists listas, Database db) async {
+    return await db.transaction((transaction) async {
+      transaction.delete(
+        ItemsDao.nameTable,
+        where: "${ItemsDao.listId} = ?",
+        whereArgs: [listas.id]
+      );
 
-  Future<int> _toDelete(NewLists listas, Database db) {
-    return db.delete(
-      nameTable,
-      where: "$id = ?",
-      whereArgs: [listas.id]
-    );
+      return await transaction.delete(
+        nameTable,
+        where: "$id = ?",
+        whereArgs: [listas.id],
+      );    
+    });
   }
 
   Future<int> _toList(NewLists listas, Database db) {
