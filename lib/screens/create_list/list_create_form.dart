@@ -68,7 +68,7 @@ class _ListCreateFormState extends State<ListCreateForm> {
       await Navigator.of(context)
           .pushReplacement(
         MaterialPageRoute(
-          builder: (context) => CreatedLists(),
+          builder: (context) => const CreatedLists(),
         ),
       );
     }

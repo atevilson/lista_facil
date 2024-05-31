@@ -100,7 +100,7 @@ class _CreatedListsState extends State<CreatedLists> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          await Navigator.of(context).push(
+          await Navigator.of(context).pushReplacement(
             MaterialPageRoute(
               builder: (context) => ListCreateForm(_controller),
             ),
