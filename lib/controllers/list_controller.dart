@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/database/dao/create_list_dao.dart';
-import 'package:my_app/models/new_lists.dart';
+import 'package:lista_facil/database/dao/create_list_dao.dart';
+import 'package:lista_facil/models/new_lists.dart';
 
 class ListController {
   final ListsDao _listsDao = ListsDao();

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/database/dao/create_itens_dao.dart';
-import 'package:my_app/models/new_items.dart';
-import 'package:my_app/models/new_lists.dart';
+import 'package:lista_facil/database/dao/create_itens_dao.dart';
+import 'package:lista_facil/models/new_items.dart';
+import 'package:lista_facil/models/new_lists.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

@@ -1,9 +1,9 @@
 
 import 'package:flutter/material.dart';
-import 'package:my_app/controllers/list_controller.dart';
-import 'package:my_app/screens/create_list/list_create_form.dart';
-import 'package:my_app/screens/create_list/shopping_lists.dart';
-import 'package:my_app/utils_colors/utils_style.dart';
+import 'package:lista_facil/controllers/list_controller.dart';
+import 'package:lista_facil/screens/create_list/list_create_form.dart';
+import 'package:lista_facil/screens/create_list/shopping_lists.dart';
+import 'package:lista_facil/utils_colors/utils_style.dart';
 
 const _titleAppBar = 'Lista Fácil';
 final ListController controller = ListController();

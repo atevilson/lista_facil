@@ -1,6 +1,6 @@
-import 'package:my_app/database/dao/create_list_dao.dart';
-import 'package:my_app/database/list_database.dart';
-import 'package:my_app/models/new_items.dart';
+import 'package:lista_facil/database/dao/create_list_dao.dart';
+import 'package:lista_facil/database/list_database.dart';
+import 'package:lista_facil/models/new_items.dart';
 import 'package:sqflite/sqflite.dart';
 
 class ItemsDao {

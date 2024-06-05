@@ -1,5 +1,5 @@
-import 'package:my_app/database/dao/create_itens_dao.dart';
-import 'package:my_app/database/dao/create_list_dao.dart';
+import 'package:lista_facil/database/dao/create_itens_dao.dart';
+import 'package:lista_facil/database/dao/create_list_dao.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/components/data_entry_number.dart';
-import 'package:my_app/components/data_entry_text.dart';
-import 'package:my_app/controllers/item_controller.dart';
-import 'package:my_app/models/new_items.dart';
-import 'package:my_app/utils_colors/utils_style.dart';
+import 'package:lista_facil/components/data_entry_number.dart';
+import 'package:lista_facil/components/data_entry_text.dart';
+import 'package:lista_facil/controllers/item_controller.dart';
+import 'package:lista_facil/models/new_items.dart';
+import 'package:lista_facil/utils_colors/utils_style.dart';
 
 const _title = 'Adicionar item';
 const dataEntryLabelOne = 'NOVO ITEM';

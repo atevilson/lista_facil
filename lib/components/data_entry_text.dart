@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/utils_colors/utils_style.dart';
+import 'package:lista_facil/utils_colors/utils_style.dart';
 
 class DataEntryText extends StatelessWidget {
   final TextEditingController itemController;

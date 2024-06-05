@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/controllers/list_controller.dart';
-import 'package:my_app/models/new_lists.dart';
-import 'package:my_app/screens/create_list/list_create_form.dart';
-import 'package:my_app/screens/itens_list/list_transference.dart';
-import 'package:my_app/utils_colors/utils_style.dart';
+import 'package:lista_facil/controllers/list_controller.dart';
+import 'package:lista_facil/models/new_lists.dart';
+import 'package:lista_facil/screens/create_list/list_create_form.dart';
+import 'package:lista_facil/screens/itens_list/list_transference.dart';
+import 'package:lista_facil/utils_colors/utils_style.dart';
 
 class CreatedLists extends StatefulWidget {
   const CreatedLists({super.key});
