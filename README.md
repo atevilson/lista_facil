@@ -4,6 +4,12 @@
 
 A Lista Fácil é um aplicativo de gerenciamento de listas que permite aos usuários criar, organizar e compartilhar suas listas de itens de forma conveniente. Abaixo contêm uma visão geral das funcionalidades do aplicativo, bem como detalhes sobre o banco de dados utilizado na aplicação.
 
+## Demonstração do app
+
+<video width="600" controls>
+  <source src="assets/app.mp4" type="video/mp4">
+</video>
+
 ## Funcionalidades do Aplicativo
 
 ### 1. Criar Listas de compras
