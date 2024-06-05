@@ -6,7 +6,7 @@ A Lista Fácil é um aplicativo de gerenciamento de listas que permite aos usuá
 
 ## Demonstração do app
 
-![Demonstração do App](./lib/assets/app.gif)
+<img src="./lib/assets/app.gif" width="400" alt="Demonstração do App">
 
 ## Funcionalidades do Aplicativo
 
