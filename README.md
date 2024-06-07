@@ -4,11 +4,11 @@
 
 A Lista Fácil é um aplicativo de gerenciamento de listas que permite aos usuários criar, organizar e compartilhar suas listas de itens de forma conveniente. Abaixo contêm uma visão geral das funcionalidades do aplicativo, bem como detalhes sobre o banco de dados utilizado na aplicação.
 
-## Apresentação do app
+### Apresentação do app
 
 <img src="./lib/assets/app.gif" width="250" alt="Demonstração do App">
 
-## Funcionalidades do Aplicativo
+### Funcionalidades do Aplicativo
 
 ### 1. Criar Listas de compras
 
@@ -38,7 +38,7 @@ Os itens das listas podem ser compartilhados facilmente em redes sociais, permit
 
 Os usuários têm a capacidade de excluir uma lista inteira juntamente com todos os itens contidos nela, proporcionando uma maneira eficaz de limpar e gerenciar suas listas.
 
-## Banco de Dados
+### Banco de Dados
 
 A Lista Fácil utiliza o Sqflite como banco de dados para armazenar todas as informações relacionadas às listas e seus respectivos itens. Sqflite é uma biblioteca de banco de dados SQLite para Flutter que oferece uma solução leve e eficiente para o armazenamento de dados local.
 
@@ -46,7 +46,7 @@ Para cada lista criada pelo usuário, uma tabela correspondente é criada no ban
 
 O uso do Sqflite garante uma experiência de usuário rápida e responsiva, com acesso rápido aos dados armazenados localmente no dispositivo do usuário.
 
-## O projeto está organizado da seguinte forma:
+### O projeto está organizado da seguinte forma:
 
 - `lib/`: Código fonte do aplicativo.
 - `assests/app.gif`: Apresentação do app.
