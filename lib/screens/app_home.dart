@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:lista_facil/components/menu_item.dart';
 import 'package:lista_facil/controllers/list_controller.dart';
 import 'package:lista_facil/screens/create_list/list_create_form.dart';
 import 'package:lista_facil/screens/create_list/shopping_lists.dart';
@@ -32,11 +33,11 @@ class ListCollections extends StatelessWidget {
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: <Widget> [
-                  _MenuItemHome("Criar Lista", 
+                  MenuItem("Criar Lista", 
                   Icons.note_add, 
                     onClick: () => _createLists(context),
                   ),
-                  _MenuItemHome(
+                  MenuItem(
                   'Listas criadas',
                   Icons.list_alt_outlined,
                   onClick: () => _pageCreatedLists(context),
@@ -71,59 +72,3 @@ void _createLists(BuildContext context) {
   }
 
 // Itens cards
-class _MenuItemHome extends StatelessWidget {
-  final String name;
-  final IconData icon;
-  final Function onClick;
-
-  const _MenuItemHome(
-    this.name,
-    this.icon, {
-    required this.onClick,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Material(
-        child: InkWell(
-          onTap: () => onClick(),
-          child: Container(
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  color: UtilColors.instance.colorWhite.withOpacity(0.5),
-                  spreadRadius: 5,
-                  blurRadius: 4,
-                  offset: const Offset(0,2)
-                )
-              ]
-            ),
-            padding: const EdgeInsets.all(8.0),
-            width: 150,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  name,
-                  style: TextStyle(
-                    color: UtilColors.instance.colorRed,
-                    fontSize: 15.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Icon(
-                  icon,
-                  color: UtilColors.instance.colorRed,
-                  size: 28.0,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
