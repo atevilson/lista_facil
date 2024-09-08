@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:lista_facil/utils_colors/utils_style.dart';
+import 'package:lista_facil/components/custom_icons.dart';
 
 class DataEntryText extends StatelessWidget {
   final TextEditingController itemController;
   final String itemLabel;
   final IconData iconAll;
 
-
-  const DataEntryText(this.itemLabel, this.itemController, this.iconAll, {super.key});
+  const DataEntryText(this.itemLabel, this.itemController, this.iconAll,
+      {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,10 +16,7 @@ class DataEntryText extends StatelessWidget {
       child: TextField(
         controller: itemController,
         decoration: InputDecoration(
-            icon: Icon(iconAll),
-            iconColor: UtilColors.instance.colorRed,
-            labelText: itemLabel,
-            labelStyle: TextStyle(color: UtilColors.instance.colorRed, fontSize: 16.0)),
+            icon: const Icon(CustomIcons.novoItem), labelText: itemLabel),
         keyboardType: TextInputType.text,
       ),
     );

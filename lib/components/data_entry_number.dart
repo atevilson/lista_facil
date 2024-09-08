@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lista_facil/utils_colors/utils_style.dart';
+import 'package:lista_facil/components/custom_icons.dart';
 
 class DataEntryNumber extends StatelessWidget {
   final TextEditingController itemController;
@@ -16,10 +16,7 @@ class DataEntryNumber extends StatelessWidget {
       child: TextField(
         controller: itemController,
         decoration: InputDecoration(
-            icon: Icon(iconAll),
-            iconColor: UtilColors.instance.colorRed,
-            labelText: itemLabel,
-            labelStyle:  TextStyle(color: UtilColors.instance.colorRed, fontSize: 16.0, )),
+            icon: const Icon(CustomIcons.quantidade), labelText: itemLabel),
         keyboardType: TextInputType.number,
       ),
     );
