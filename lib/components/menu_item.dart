@@ -1,6 +1,5 @@
 
 import 'package:flutter/material.dart';
-import 'package:lista_facil/utils_colors/utils_style.dart';
 
 class MenuItem extends StatelessWidget {
   final String name;
@@ -15,42 +14,49 @@ class MenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    double screenFlex = MediaQuery.of(context).size.width;
+
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.fromLTRB(10, 10, 15, 35),
       child: Material(
         child: InkWell(
           onTap: () => onClick(),
           child: Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               boxShadow: [
                 BoxShadow(
-                  color: UtilColors.instance.colorWhite.withOpacity(0.5),
-                  spreadRadius: 5,
-                  blurRadius: 4,
-                  offset: const Offset(0,2)
+                  blurRadius: 10,
+                  offset: Offset.zero,
                 )
               ]
             ),
-            padding: const EdgeInsets.all(8.0),
-            width: 150,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  name,
-                  style: TextStyle(
-                    color: UtilColors.instance.colorRed,
-                    fontSize: 15.0,
-                    fontWeight: FontWeight.bold,
-                  ),
+            padding: const EdgeInsets.all(3.0),
+            width: (screenFlex * 0.33),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(5),
+              child: Container(
+                color: Colors.white70,
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          name,
+                          style: const TextStyle(
+                            fontSize: 13.0,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Icon(
+                      icon,
+                      size: 28.0,
+                    ),
+                  ],
                 ),
-                Icon(
-                  icon,
-                  color: UtilColors.instance.colorRed,
-                  size: 28.0,
-                ),
-              ],
+              ),
             ),
           ),
         ),
