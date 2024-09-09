@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lista_facil/screens/create_list/shopping_lists.dart';
-import 'package:lista_facil/utils_colors/utils_style.dart';
 
 import '../../controllers/list_controller.dart';
 
@@ -19,7 +18,9 @@ class _ListCreateFormState extends State<ListCreateForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarCustom(title: _title),
+      appBar: AppBar(
+        title: const Text(_title),
+      ),
       body: Padding(
         padding: const EdgeInsets.only(top: 28.0),
         child: Column(
@@ -43,8 +44,6 @@ class _ListCreateFormState extends State<ListCreateForm> {
                 width: 180.0,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: UtilColors.instance.colorRed,
-                    foregroundColor: UtilColors.instance.colorWhite,
                   ),
                   onPressed: () {
                     _createNewList(context);
