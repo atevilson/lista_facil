@@ -3,7 +3,6 @@ import 'package:lista_facil/components/data_entry_number.dart';
 import 'package:lista_facil/components/data_entry_text.dart';
 import 'package:lista_facil/controllers/item_controller.dart';
 import 'package:lista_facil/models/new_items.dart';
-import 'package:lista_facil/utils_colors/utils_style.dart';
 
 const _title = 'Adicionar item';
 const dataEntryLabelOne = 'NOVO ITEM';
@@ -19,14 +18,14 @@ class TransferForm extends StatefulWidget {
 }
 
 class _TransferFormState extends State<TransferForm> {
+  
   final TextEditingController _items = TextEditingController();
-
   final TextEditingController _quantity = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: appBarCustom(title: _title),
+        appBar: AppBar(title: const Text(_title)),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: SingleChildScrollView(
@@ -46,10 +45,6 @@ class _TransferFormState extends State<TransferForm> {
                 Padding(
                   padding: const EdgeInsets.only(top: 20.0),
                   child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: UtilColors.instance.colorRed,
-                      foregroundColor: UtilColors.instance.colorWhite,
-                    ),
                     onPressed: () => _createTransfer(context),
                     child: const Text(titleElevatedButton),
                   ),
