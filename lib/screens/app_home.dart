@@ -1,10 +1,10 @@
 
 import 'package:flutter/material.dart';
+import 'package:lista_facil/components/custom_icons.dart';
 import 'package:lista_facil/components/menu_item.dart';
 import 'package:lista_facil/controllers/list_controller.dart';
 import 'package:lista_facil/screens/create_list/list_create_form.dart';
 import 'package:lista_facil/screens/create_list/shopping_lists.dart';
-import 'package:lista_facil/utils_colors/utils_style.dart';
 
 const _titleAppBar = 'Lista Fácil';
 final ListController controller = ListController();
@@ -15,42 +15,53 @@ class ListCollections extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return MaterialApp(
-      home: Scaffold(
-        appBar: appBarCustom(title: _titleAppBar),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          //crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Center(
-                child: Image.asset('images/carrinho_compras.jpg'),
-              )
-              ),
-            Container(
-              color: UtilColors.instance.colorContainer,
-              height: 115,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: <Widget> [
-                  MenuItem("Criar Lista", 
-                  Icons.note_add, 
-                    onClick: () => _createLists(context),
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text(_titleAppBar),
+        ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Expanded(
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: ColorFiltered(
+                  colorFilter: ColorFilter.mode(
+                      Colors.white.withOpacity(0.1), BlendMode.lighten),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: Image.asset(
+                      'images/carrinho_compras.jpg',
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                  MenuItem(
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 110,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: <Widget>[
+                MenuItem(
+                  "Criar Lista",
+                  CustomIcons.criarLista,
+                  onClick: () => _createLists(context),
+                ),
+                MenuItem(
                   'Listas criadas',
-                  Icons.list_alt_outlined,
+                  CustomIcons.listasCriadas,
                   onClick: () => _pageCreatedLists(context),
                 ),
-                ],
-              ),
-            )
-          ],
-        ),
+              ],
+            ),
+          )
+        ],
       ),
     );
   }
-//listCreateForm
 
 void _pageCreatedLists(BuildContext context) {
     Navigator.of(context).push(
@@ -70,5 +81,3 @@ void _createLists(BuildContext context) {
       ),
     );
   }
-
-// Itens cards
