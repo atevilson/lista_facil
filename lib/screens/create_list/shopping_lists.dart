@@ -26,8 +26,8 @@ class _CreatedListsState extends State<CreatedLists> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarCustom(
-        title: _title,
+      appBar: AppBar(
+        title: Text(_title),
       ),
       body: ValueListenableBuilder<List<NewLists>>(
         valueListenable: _controller.listaValores,
@@ -108,8 +108,6 @@ class _CreatedListsState extends State<CreatedLists> {
           _controller.findAll(); 
         },
         shape: const CircleBorder(),
-        backgroundColor: UtilColors.instance.colorRed,
-        foregroundColor: UtilColors.instance.colorWhite,
         child: const Icon(Icons.add),
       ),
     );
@@ -119,7 +117,7 @@ class _CreatedListsState extends State<CreatedLists> {
 class _CollectionsLists extends StatelessWidget {
   final NewLists list;
 
-  _CollectionsLists(this.list);
+  const _CollectionsLists(this.list);
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +131,7 @@ class _CollectionsLists extends StatelessWidget {
           },
           child: Text(
             list.nameList,
-            style: const TextStyle(fontSize: 24.0),
+            style: const TextStyle(fontSize: 22.0),
           ),
         ),
       ),

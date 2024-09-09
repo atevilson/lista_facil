@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lista_facil/screens/app_home.dart';
-import 'package:lista_facil/utils_colors/utils_style.dart';
 
 void main() {
   runApp(const MyApplication());
@@ -12,19 +11,60 @@ class MyApplication extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      home: const ListCollections(),
       theme: ThemeData(
-        inputDecorationTheme:  InputDecorationTheme(
-          labelStyle: TextStyle(color: UtilColors.instance.colorRed),
+        scaffoldBackgroundColor: Colors.white70,
+        canvasColor: Colors.white12,
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
+            backgroundColor: Colors.black45, foregroundColor: Colors.white70),
+        elevatedButtonTheme: const ElevatedButtonThemeData(
+          style: ButtonStyle(
+            backgroundColor: WidgetStatePropertyAll(
+              Colors.black45,
+            ),
+            foregroundColor: WidgetStatePropertyAll(
+              Colors.white70,
+            ),
+          ),
+        ),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.black,
+          foregroundColor: Colors.white70,
+          titleTextStyle: TextStyle(
+            color: Colors.white,
+            fontSize: 24.0,
+          ),
+        ),
+        listTileTheme: ListTileThemeData(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(
+                12.0,
+              ),
+            ),
+            textColor: Colors.white70,
+            tileColor: Colors.black45),
+        checkboxTheme: const CheckboxThemeData(
+          fillColor: WidgetStatePropertyAll(Colors.black),
+        ),
+        inputDecorationTheme: const InputDecorationTheme(
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: UtilColors.instance.colorRed, width: 2.0),
+            borderSide: BorderSide(color: Colors.black45),
           ),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: UtilColors.instance.colorGray, width: 1.0),
+            borderSide: BorderSide(color: Colors.black),
           ),
-          border: const OutlineInputBorder(),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.black45),
+          ),
+          labelStyle: TextStyle(color: Colors.black),
         ),
+        textSelectionTheme: const TextSelectionThemeData(
+          cursorColor: Colors.black,
+          selectionColor: Colors.black,
+          selectionHandleColor: Colors.black,
+        ),
+        useMaterial3: true,
       ),
-     home: const ListCollections(),
     );
   }
 }
