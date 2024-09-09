@@ -30,13 +30,7 @@ class CreateStateTransferList extends State<ListTransference> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: UtilColors.instance.colorRed,
-        foregroundColor: UtilColors.instance.colorWhite,
         title: Text(titleAppBar.toUpperCase()),
-        titleTextStyle: TextStyle(
-            fontSize: 22.0,
-            fontWeight: FontWeight.bold,
-            color: UtilColors.instance.colorWhite),
         actions: [
           IconButton(
             onPressed: () =>  {
@@ -125,7 +119,7 @@ class CreateStateTransferList extends State<ListTransference> {
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: const Icon(Icons.delete, color: Colors.white),
                 ),
-                child: transferItens(item, _controller),
+                child: TransferItens(item, _controller),
               );
             },
           );
@@ -142,25 +136,23 @@ class CreateStateTransferList extends State<ListTransference> {
           }
         },
         shape: const CircleBorder(),
-        backgroundColor: UtilColors.instance.colorRed,
-        foregroundColor: UtilColors.instance.colorWhite,
         child: const Icon(Icons.add),
       ),
     );
   }
 }
 
-class transferItens extends StatefulWidget {
+class TransferItens extends StatefulWidget {
   final NewItems _addItems;
   final ItemController _controller;
 
-  transferItens(this._addItems, this._controller, {Key? key}) : super(key: key);
+  const TransferItens(this._addItems, this._controller, {super.key});
 
   @override
-  _transferItensState createState() => _transferItensState();
+  TransferItensState createState() => TransferItensState();
 }
 
-class _transferItensState extends State<transferItens> {
+class TransferItensState extends State<TransferItens> {
   bool isChecked = false;
 
   @override
@@ -184,12 +176,9 @@ class _transferItensState extends State<transferItens> {
       padding: const EdgeInsets.all(2.0),
       child: Container(
         decoration: BoxDecoration(
-          color: isChecked ? Colors.black12 : Colors.grey[200],
-          border: Border.all(color: Colors.black26),
+          color: isChecked ? Colors.black54 : null,
         ),
         child: CheckboxListTile(
-          activeColor: UtilColors.instance.colorRed,
-          checkColor: Colors.white,
           controlAffinity: ListTileControlAffinity.leading,
           title: Text(widget._addItems.items.toString()),
           subtitle: Text(widget._addItems.quantity.toString()),
