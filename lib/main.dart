@@ -13,7 +13,7 @@ class MyApplication extends StatelessWidget {
     return MaterialApp(
       home: const ListCollections(),
       theme: ThemeData(
-        scaffoldBackgroundColor: Colors.white70,
+        scaffoldBackgroundColor: Colors.white60,
         canvasColor: Colors.white12,
         floatingActionButtonTheme: const FloatingActionButtonThemeData(
             backgroundColor: Colors.black45, foregroundColor: Colors.white70),
@@ -31,7 +31,7 @@ class MyApplication extends StatelessWidget {
           backgroundColor: Colors.black,
           foregroundColor: Colors.white70,
           titleTextStyle: TextStyle(
-            color: Colors.white,
+            color: Colors.grey,
             fontSize: 24.0,
           ),
         ),
@@ -42,7 +42,7 @@ class MyApplication extends StatelessWidget {
               ),
             ),
             textColor: Colors.white70,
-            tileColor: Colors.black45),
+            tileColor: Colors.black),
         checkboxTheme: const CheckboxThemeData(
           fillColor: WidgetStatePropertyAll(Colors.black),
         ),
@@ -64,6 +64,23 @@ class MyApplication extends StatelessWidget {
           selectionHandleColor: Colors.black,
         ),
         useMaterial3: true,
+        dialogTheme: DialogTheme(
+          titleTextStyle: const TextStyle(
+            color: Colors.black,
+            fontSize: 24,
+          ),
+          contentTextStyle: const TextStyle(
+              color: Colors.black,
+              fontSize: 24.0,
+            ),
+            backgroundColor: Colors.white54, 
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.0),
+            ),
+          ),
+          iconTheme: const IconThemeData(
+            color: Colors.white70
+          )
       ),
     );
   }
