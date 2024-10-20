@@ -5,7 +5,7 @@ import 'package:lista_facil/models/new_items.dart';
 import 'package:lista_facil/models/new_lists.dart';
 import 'package:lista_facil/screens/itens_list/transfer_form.dart';
 
-const titleAppBar = 'Itens da lista';
+const titleAppBar = 'Itens';
 
 class ListTransference extends StatefulWidget {
   final NewLists list;
@@ -30,7 +30,7 @@ class CreateStateTransferList extends State<ListTransference> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(titleAppBar),
+        title: Text("$titleAppBar ${widget.list.nameList.toLowerCase()}"),
         actions: [
           IconButton(
             onPressed: () =>  {
@@ -62,7 +62,28 @@ class CreateStateTransferList extends State<ListTransference> {
         valueListenable: _controller.quantityItems,
         builder: (context, items, _) {
           if (items.isEmpty) {
-            return const Center(child: Text('Nenhum item encontrado'));
+            return const Padding(
+              padding: EdgeInsets.only(top: 320.0),
+              child: Center(
+                child: Column(
+                  children: [
+                    Icon(
+                      Icons.warning,
+                      color: Colors.black45,
+                      size: 50,
+                    ),
+                    SizedBox(
+                      height: 8.0,
+                    ),
+                    Text(
+                      'Nenhum item adicionado',
+                      style: TextStyle(fontSize: 25.0, 
+                      color: Colors.black45),
+                    ),
+                  ],
+                ),
+              ),
+            );
           }
           return ListView.builder(
             itemCount: items.length,
