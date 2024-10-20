@@ -23,20 +23,23 @@ class MenuItem extends StatelessWidget {
         child: InkWell(
           onTap: () => onClick(),
           child: Container(
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(
-                  blurRadius: 10,
-                  offset: Offset.zero,
+                  blurRadius: 9,
+                  offset: Offset.fromDirection(5)
                 )
               ]
             ),
             padding: const EdgeInsets.all(3.0),
-            width: (screenFlex * 0.33),
+            width: (screenFlex * 0.43),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(5),
+              borderRadius: const BorderRadius.only(
+                bottomRight: Radius.elliptical(13, 13),
+                topLeft: Radius.elliptical(13, 13),
+              ),
               child: Container(
-                color: Colors.white70,
+                color: Colors.black,
                 child: Row(
                   children: <Widget>[
                     Expanded(
@@ -45,14 +48,15 @@ class MenuItem extends StatelessWidget {
                         child: Text(
                           name,
                           style: const TextStyle(
-                            fontSize: 13.0,
+                          fontSize: 15.0,
+                          color: Colors.white70
                           ),
                         ),
                       ),
                     ),
                     Icon(
                       icon,
-                      size: 28.0,
+                      size: 32.0,
                     ),
                   ],
                 ),
