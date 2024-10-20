@@ -34,11 +34,15 @@ class _CreatedListsState extends State<CreatedLists> {
         builder: (context, snapshot, _) {
           if (snapshot.isEmpty) {
             return const Center(
-              child: Text('Nenhuma lista disponível'),
+              child: Text('Nenhuma lista disponível',
+              style: TextStyle(
+                fontSize: 32.0
+              ),),
             );
           }
 
           return ListView.builder(
+            padding: const EdgeInsets.all(1.0),
             itemBuilder: (context, index) {
               final NewLists lists = snapshot[index];
               return DialogCustom(
@@ -79,6 +83,7 @@ class _CollectionsLists extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      margin: const EdgeInsets.all(2.0),
       child: ListTile(
         title: InkWell(
           onTap: () {

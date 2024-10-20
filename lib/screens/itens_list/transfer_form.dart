@@ -45,17 +45,18 @@ class _TransferFormState extends State<TransferForm> {
                 Padding(
                   padding: const EdgeInsets.only(top: 20.0),
                   child: ElevatedButton(
-                    onPressed: () => _createTransfer(context),
+                    onPressed: () => _createItens(),
                     child: const Text(titleElevatedButton),
                   ),
                 )
-              ],
-            ),
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 
-  void _createTransfer(BuildContext context) {
+  Future<void> _createItens() async {
     final String items = _items.text;
     final int? quantity = int.tryParse(_quantity.text);
 
@@ -68,9 +69,10 @@ class _TransferFormState extends State<TransferForm> {
 
     if (quantity != null) {
       final NewItems addItem = NewItems(items: items, quantity: quantity);
-      widget.controller.saveItem(addItem).then((_) {
-        Navigator.pop(context, addItem);
-      });
+      await widget.controller.saveItem(addItem);
+        if (mounted) {
+          Navigator.pop(context, addItem);
+        }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
