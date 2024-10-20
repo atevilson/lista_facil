@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:lista_facil/components/dialog_custom.dart';
 import 'package:lista_facil/controllers/list_controller.dart';
 import 'package:lista_facil/models/new_lists.dart';
 import 'package:lista_facil/screens/create_list/list_create_form.dart';
 import 'package:lista_facil/screens/itens_list/list_transference.dart';
-import 'package:lista_facil/utils_colors/utils_style.dart';
 
 class CreatedLists extends StatefulWidget {
   const CreatedLists({super.key});
@@ -41,56 +41,13 @@ class _CreatedListsState extends State<CreatedLists> {
           return ListView.builder(
             itemBuilder: (context, index) {
               final NewLists lists = snapshot[index];
-              return Dismissible(
-                key: Key(lists.id.toString()),
-                direction: DismissDirection.endToStart,
-                confirmDismiss: (direction) async {
-                  return await showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text(
-                          "Confirmar exclusão",
-                          textAlign: TextAlign.left,
-                          style: TextStyle(color: UtilColors.instance.colorRed),
-                        ),
-                        content: Text(
-                          "Excluir a lista?",
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                              fontSize: 18.0,
-                              color: UtilColors.instance.colorRed),
-                        ),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () => Navigator.of(context).pop(false),
-                            child: const Text(
-                              "Cancelar",
-                              style: TextStyle(color: Colors.red),
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () => Navigator.of(context).pop(true),
-                            child: const Text(
-                              "OK",
-                              style: TextStyle(color: Colors.red),
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-                onDismissed: (direction) async {
-                  await _controller.deleteItem(lists);
-                  _controller.findAll(); 
-                },
-                background: Container(
-                  color: Colors.red,
-                  alignment: Alignment.centerRight,
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: const Icon(Icons.delete, color: Colors.white),
-                ),
+              return DialogCustom(
+                keyConfirm: Key(lists.id.toString()),
+                onDismissed: () async => await _controller.deleteItem(lists),
+                confirmTitle: "Confirmar exclusão",
+                confirmContent: "Deseja realmente excluir a lista ${lists.nameList} ?",
+                confirmText: "Ok",
+                cancelText: "Cancelar",
                 child: _CollectionsLists(lists),
               );
             },
