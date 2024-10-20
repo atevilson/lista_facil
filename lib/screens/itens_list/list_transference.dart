@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:lista_facil/components/dialog_custom.dart';
 import 'package:lista_facil/controllers/item_controller.dart';
 import 'package:lista_facil/models/new_items.dart';
 import 'package:lista_facil/models/new_lists.dart';
 import 'package:lista_facil/screens/itens_list/transfer_form.dart';
-import 'package:lista_facil/utils_colors/utils_style.dart';
 
 const titleAppBar = 'Itens da lista';
 
@@ -30,7 +30,7 @@ class CreateStateTransferList extends State<ListTransference> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(titleAppBar.toUpperCase()),
+        title: const Text(titleAppBar),
         actions: [
           IconButton(
             onPressed: () =>  {
@@ -40,10 +40,12 @@ class CreateStateTransferList extends State<ListTransference> {
           ),
           PopupMenuButton<String>(
             onSelected: (String result) {
-              setState(() {
-                ascendingOrder = result == 'Ordenar A-Z';
-                _controller.sortItems(ascendingOrder);
-              });
+              setState(
+                () {
+                  ascendingOrder = result == 'Ordenar A-Z';
+                  _controller.sortItems(ascendingOrder);
+                },
+              );
             },
             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
               const PopupMenuItem<String>(
@@ -68,59 +70,15 @@ class CreateStateTransferList extends State<ListTransference> {
             itemCount: items.length,
             itemBuilder: (context, index) {
               final NewItems item = items[index];
-              return Dismissible(
-                key: Key(item.id.toString()),
-                direction: DismissDirection.endToStart,
-                confirmDismiss: (direction) async {
-                  return await showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text(
-                          "Confirmar exclusão",
-                          textAlign: TextAlign.left,
-                          style: TextStyle(color: UtilColors.instance.colorRed),
-                        ),
-                        content: Text(
-                          "Excluir o item ?",
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                              fontSize: 18.0,
-                              color: UtilColors.instance.colorRed),
-                        ),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () => Navigator.of(context).pop(false),
-                            child: const Text(
-                              "Cancelar",
-                              style: TextStyle(color: Colors.red),
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () => Navigator.of(context).pop(true),
-                            child: const Text(
-                              "OK",
-                              style: TextStyle(color: Colors.red),
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-                onDismissed: (direction) {
-                  _controller.deleteItem(item).then((_) {
-                    setState(() {});
-                  });
-                },
-                background: Container(
-                  color: Colors.red,
-                  alignment: Alignment.centerRight,
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: const Icon(Icons.delete, color: Colors.white),
-                ),
-                child: TransferItens(item, _controller),
-              );
+              return DialogCustom(
+                keyConfirm: Key(item.id.toString()), 
+                onDismissed: () async => await _controller.deleteItem(item),
+                confirmTitle: "Confirmar exclusão",
+                confirmContent: "Deseja realmente excluir o item ${item.items} ?",
+                confirmText: "Ok",
+                cancelText: "Cancelar",
+                child: TransferItens(item, _controller), 
+                );
             },
           );
         },
