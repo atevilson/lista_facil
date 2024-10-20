@@ -4,7 +4,7 @@ import 'package:lista_facil/components/custom_icons.dart';
 import 'package:lista_facil/components/menu_item.dart';
 import 'package:lista_facil/controllers/list_controller.dart';
 import 'package:lista_facil/screens/create_list/list_create_form.dart';
-import 'package:lista_facil/screens/create_list/shopping_lists.dart';
+import 'package:lista_facil/screens/create_list/created_lists.dart';
 
 const _titleAppBar = 'Lista Fácil';
 final ListController controller = ListController();
@@ -27,10 +27,10 @@ class ListCollections extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(5.0),
                 child: ColorFiltered(
-                  colorFilter: ColorFilter.mode(
-                      Colors.white.withOpacity(0.1), BlendMode.lighten),
+                  colorFilter: const ColorFilter.mode(
+                      Colors.transparent, BlendMode.hardLight),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0),
+                    borderRadius: BorderRadius.circular(300.0),
                     child: Image.asset(
                       'images/carrinho_compras.jpg',
                       fit: BoxFit.cover,
