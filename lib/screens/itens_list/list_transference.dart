@@ -40,12 +40,10 @@ class CreateStateTransferList extends State<ListTransference> {
           ),
           PopupMenuButton<String>(
             onSelected: (String result) {
-              setState(
-                () {
-                  ascendingOrder = result == 'Ordenar A-Z';
-                  _controller.sortItems(ascendingOrder);
-                },
-              );
+              setState(() {
+                ascendingOrder = result == 'Ordenar A-Z';
+                _controller.sortItems(ascendingOrder);
+              });
             },
             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
               const PopupMenuItem<String>(
