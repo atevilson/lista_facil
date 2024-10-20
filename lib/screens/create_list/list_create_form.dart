@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lista_facil/screens/create_list/shopping_lists.dart';
+import 'package:lista_facil/screens/create_list/created_lists.dart';
 
 import '../../controllers/list_controller.dart';
 
