@@ -17,9 +17,9 @@ class ListController {
     await findAll();
   }
 
-  Future<bool> saveList(String value) async {
+  Future<bool> saveList(String value, double budget) async {
     if (value.isNotEmpty) {
-      final NewLists newLists = NewLists(0, value);
+      final NewLists newLists = NewLists(0, value, budget);
       await _listsDao.save(newLists);
       await findAll();
       return true;
