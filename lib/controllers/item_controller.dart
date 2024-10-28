@@ -10,6 +10,7 @@ class ItemController {
   final ItemsDao _listsDao = ItemsDao();
   final ValueNotifier<List<NewItems>> quantityItems = ValueNotifier<List<NewItems>>([]);
   bool _ascendingOrder = true; // ordenação default
+  final ValueNotifier<double> total = ValueNotifier<double>(0.0);
 
   ItemController(this.newLists) {
     _loadItems();
