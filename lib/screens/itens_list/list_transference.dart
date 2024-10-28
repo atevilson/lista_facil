@@ -4,6 +4,7 @@ import 'package:lista_facil/controllers/item_controller.dart';
 import 'package:lista_facil/models/new_items.dart';
 import 'package:lista_facil/models/new_lists.dart';
 import 'package:lista_facil/screens/itens_list/transfer_form.dart';
+import 'package:lista_facil/utils_colors/utils_style.dart';
 
 const titleAppBar = 'Itens';
 
@@ -48,59 +49,139 @@ class CreateStateTransferList extends State<ListTransference> {
             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
               const PopupMenuItem<String>(
                 value: 'Ordenar A-Z',
-                child: Text('Ordenar A-Z'),
+                child: Text('Ordenar (A-Z)', 
+                        style: TextStyle(
+                          color: UtilColors.colorBlack, 
+                          fontWeight: FontWeight.bold, 
+                          fontSize: 12.0)),
               ),
               const PopupMenuItem<String>(
                 value: 'Ordenar Z-A',
-                child: Text('Ordenar Z-A'),
+                child: Text('Ordenar (Z-A)',
+                style: TextStyle(
+                          color: UtilColors.colorBlack, 
+                          fontWeight: FontWeight.bold, 
+                          fontSize: 12.0)),
               ),
             ],
           ),
         ],
       ),
-      body: ValueListenableBuilder<List<NewItems>>(
-        valueListenable: _controller.quantityItems,
-        builder: (context, items, _) {
-          if (items.isEmpty) {
-            return const Padding(
-              padding: EdgeInsets.only(top: 320.0),
-              child: Center(
-                child: Column(
-                  children: [
-                    Icon(
-                      Icons.warning,
-                      color: Colors.black45,
-                      size: 50,
+      body: Column(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+          padding: const EdgeInsets.all(5.0),
+          decoration: BoxDecoration(
+            color: UtilColors.colorBlueGrey800,
+          ),
+            child:  Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                   const Icon(
+                    Icons.attach_money, 
+                    color: UtilColors.colorWhite,
+                  ),
+
+                  Text(
+                    widget.list.budget != null
+                        ? "Orçamento: R\$ ${widget.list.budget}"
+                        : "Orçamento: Não definido",
+                    style: const TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                      color: UtilColors.colorWhite
                     ),
-                    SizedBox(
-                      height: 8.0,
+                  ),
+                ],
+              )),
+              ValueListenableBuilder<double>(
+                valueListenable: _controller.total,
+                builder: (context, total, _) {
+                  final budget = widget.list.budget;
+                  Color? textColor;
+          
+                  if (budget != null && total > budget) {
+                    textColor = UtilColors.colorRed800;
+                  } else {
+                    textColor = UtilColors.colorGreenAccent400;
+                  }
+          
+                  return Container(
+                    padding: const EdgeInsets.all(5.0),
+                    decoration: BoxDecoration(
+                      color: UtilColors.colorBlueGrey800,
                     ),
-                    Text(
-                      'Nenhum item adicionado',
-                      style: TextStyle(fontSize: 25.0, 
-                      color: Colors.black45),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.money_off_sharp,
+                          color: UtilColors.colorGreenAccent400,
+                        ),
+                        Text(
+                          "Total gasto: R\$ $total",
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
+                            color: textColor,
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  );
+                },
               ),
-            );
-          }
-          return ListView.builder(
-            itemCount: items.length,
-            itemBuilder: (context, index) {
-              final NewItems item = items[index];
-              return DialogCustom(
-                keyConfirm: Key(item.id.toString()), 
-                onDismissed: () async => await _controller.deleteItem(item),
-                confirmTitle: "Confirmar exclusão",
-                confirmContent: "Deseja realmente excluir o item ${item.items} ?",
-                confirmText: "Ok",
-                cancelText: "Cancelar",
-                child: TransferItens(item, _controller), 
+            ],
+          ),
+          Expanded(
+            child: ValueListenableBuilder<List<NewItems>>(
+              valueListenable: _controller.quantityItems,
+              builder: (context, items, _) {
+                if (items.isEmpty) {
+                  return const Padding(
+                    padding: EdgeInsets.only(top: 320.0),
+                    child: Center(
+                      child: Column(
+                        children: [
+                          Icon(
+                            Icons.warning,
+                            color: UtilColors.colorBlack45,
+                            size: 50,
+                          ),
+                          SizedBox(
+                            height: 8.0,
+                          ),
+                          Text(
+                            'Nenhum item adicionado',
+                            style: TextStyle(fontSize: 25.0, 
+                            color: UtilColors.colorBlack45),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }
+                return ListView.builder(
+                  itemCount: items.length,
+                  itemBuilder: (context, index) {
+                    final NewItems item = items[index];
+                    return DialogCustom(
+                      keyConfirm: Key(item.id.toString()), 
+                      onDismissed: () async => await _controller.deleteItem(item),
+                      confirmTitle: "Confirmar exclusão",
+                      confirmContent: "Deseja realmente excluir o item ${item.items} ?",
+                      confirmText: "Ok",
+                      cancelText: "Cancelar",
+                      child: TransferItens(item, _controller), 
+                      );
+                  },
                 );
-            },
-          );
-        },
+              },
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
@@ -153,7 +234,8 @@ class TransferItensState extends State<TransferItens> {
       padding: const EdgeInsets.all(2.0),
       child: Container(
         decoration: BoxDecoration(
-          color: isChecked ? Colors.black54 : null,
+          borderRadius: BorderRadius.circular(10.0),
+          color: isChecked ? UtilColors.colorBlack45 : UtilColors.colorBlack,
         ),
         child: CheckboxListTile(
           controlAffinity: ListTileControlAffinity.leading,
@@ -163,6 +245,46 @@ class TransferItensState extends State<TransferItens> {
             setState(() {
               isChecked = value ?? false;
             });
+            if(isChecked) {
+              final double? price = await showDialog<double>(
+                context: context,
+                builder: (context) => AlertDialog(
+                  backgroundColor: UtilColors.colorBlack,
+                  title: const Text("Insira o preço do item"),
+                  content: TextField(
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(labelText: "Valor (R\$)",),
+                    onSubmitted: (valor) {
+                      valor = valor.trim();
+                      final formatPrices = RegExp(r'^\d+(\,\d{1,2})?$'); 
+
+                      if(valor.startsWith(",") || valor.startsWith(".") || valor.startsWith("-") || formatPrices.hasMatch(valor) || !(valor.isNotEmpty == true)) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                           SnackBar(
+                            content: Text('Insira um preço válido!',
+                            softWrap: isChecked = false,),
+                          ),
+                        );
+                      }else {
+                        Navigator.of(context).pop(double.tryParse(valor));
+                        isChecked == true;
+                      }
+                    },
+                  ),
+                ),
+              );
+              if (price != null) {
+                await widget._controller
+                    .checkAddOrDecrease(widget._addItems.id!, true, price);
+              } else {
+                await widget._controller
+                    .checkAddOrDecrease(widget._addItems.id!, false, 0.0);
+              }
+            } else {
+              await widget._controller.checkAddOrDecrease(
+                  widget._addItems.id!, false, widget._addItems.price ?? 0.0);
+            }
+
             await widget._controller.saveCheckboxState(widget._addItems.id ?? 0, isChecked);
           },
           value: isChecked,
