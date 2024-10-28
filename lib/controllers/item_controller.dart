@@ -43,20 +43,22 @@ Future<void> _loadTotalSpent() async{
 }
 
   Future<void> findItens() async {
-    await _loadItems();
+    await _loadListItems();
   }
 
   Future<bool> saveItem(NewItems value) async {
     final NewItems newItens = NewItems(
         listId: newLists.id, items: value.items, quantity: value.quantity);
     await _listsDao.save(newItens);
-    await _loadItems();
+    await _loadListItems();
     return true;
   }
 
   Future<bool> deleteItem(NewItems value) async {
     await _listsDao.delete(value);
-    await _loadItems();
+
+    await _loadListItems();
+
     return true;
   }
 
