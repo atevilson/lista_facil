@@ -4,6 +4,7 @@ import 'package:lista_facil/controllers/list_controller.dart';
 import 'package:lista_facil/models/new_lists.dart';
 import 'package:lista_facil/screens/create_list/list_create_form.dart';
 import 'package:lista_facil/screens/itens_list/list_transference.dart';
+import 'package:lista_facil/utils_colors/utils_style.dart';
 
 class CreatedLists extends StatefulWidget {
   const CreatedLists({super.key});
@@ -85,6 +86,7 @@ class _CollectionsLists extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.all(2.0),
       child: ListTile(
+        tileColor: UtilColors.colorBlack,
         title: InkWell(
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) {

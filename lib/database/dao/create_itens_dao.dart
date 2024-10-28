@@ -9,11 +9,13 @@ class ItemsDao {
   static const String item = 'item';
   static const String quantity = 'quantity';
   static const String listId = 'list_id';
+  static const String price = 'price';
 
   static const String tableSQLitens = 'CREATE TABLE $nameTable('
       '$id INTEGER PRIMARY KEY AUTOINCREMENT, '
       '$item TEXT,'
       '$quantity INTEGER,'
+      '$price REAL,'
       '$listId INTEGER,'
       'FOREIGN KEY ($listId) REFERENCES ${ListsDao.nameTable} (${ListsDao.id}))';
 
@@ -40,8 +42,29 @@ class ItemsDao {
     newItem[id] = items.id;
     newItem[item] = items.items;
     newItem[quantity] = items.quantity;
+    newItem[price] = items.price;
     newItem[listId] = items.listId;
     return db.insert(nameTable, newItem);
+  }
+
+  Future<int> update(NewItems items) async {
+    final Database db = await getDataBase();
+    return _toMapUpdate(items, db);
+  }
+
+  Future<int> _toMapUpdate(NewItems items, Database db) {
+    final Map<String, dynamic> newItem = {};
+    newItem[item] = items.items;
+    newItem[quantity] = items.quantity;
+    newItem[price] = items.price;
+    newItem[listId] = items.listId;
+    
+    return db.update(
+      nameTable, 
+      newItem, 
+      where: "$id = ?", 
+      whereArgs: [items.id]
+    );
   }
 
   Future<int> _toDelete(NewItems items, Database db) {
@@ -61,6 +84,7 @@ class ItemsDao {
           id: row[id],
           items: row[item],
           quantity: row[quantity],
+          price: row[price],
           listId: row[listId]);
       items.add(newItem);
     }
@@ -77,6 +101,7 @@ class ItemsDao {
           id: row[id],
           items: row[item],
           quantity: row[quantity],
+          price: row[price],
           listId: row[listId]);
       items.add(newItem);
     }

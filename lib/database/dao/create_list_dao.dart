@@ -7,10 +7,12 @@ class ListsDao {
   static const String nameTable = 'new_lists';
   static const String id = 'id';
   static const String name = 'name';
+  static const String budget = 'budget';
 
   static const String tableSQL = 'CREATE TABLE $nameTable('
       '$id INTEGER PRIMARY KEY, '
-      '$name TEXT )';
+      '$name TEXT, '
+      '$budget REAL)';
 
   Future<int> save(NewLists listas) async {
     final Database db = await getDataBase();
@@ -50,6 +52,7 @@ class ListsDao {
   Future<int> _toList(NewLists listas, Database db) {
     final Map<String, dynamic> newLists = {};
     newLists[name] = listas.nameList;
+    newLists[budget] = listas.budget;
     return db.insert(nameTable, newLists);
   }
 
@@ -61,6 +64,7 @@ class ListsDao {
       final NewLists listNew = NewLists(
         row[id],
         row[name],
+        row[budget]
       );
       lists.add(listNew);
     }
