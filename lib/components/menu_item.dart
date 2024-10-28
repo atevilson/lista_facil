@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:lista_facil/utils_colors/utils_style.dart';
 
 class MenuItem extends StatelessWidget {
   final String name;
@@ -39,7 +40,7 @@ class MenuItem extends StatelessWidget {
                 topLeft: Radius.elliptical(13, 13),
               ),
               child: Container(
-                color: Colors.black,
+                color: UtilColors.colorWhite60,
                 child: Row(
                   children: <Widget>[
                     Expanded(
@@ -48,15 +49,16 @@ class MenuItem extends StatelessWidget {
                         child: Text(
                           name,
                           style: const TextStyle(
-                          fontSize: 15.0,
-                          color: Colors.white70
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18.0,
+                            color: UtilColors.colorBlack
                           ),
                         ),
                       ),
                     ),
                     Icon(
                       icon,
-                      size: 32.0,
+                      size: 37.0,
                     ),
                   ],
                 ),
