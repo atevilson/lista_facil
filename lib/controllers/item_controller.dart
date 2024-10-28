@@ -25,6 +25,17 @@ class ItemController extends ChangeNotifier {
     quantityItems.value = items;
   }
 
+  Future<void> _saveTotal() async {
+  SharedPreferences prefs =await SharedPreferences.getInstance();
+  await prefs.setDouble('total_spent_${newLists.id}', total.value); 
+}
+
+Future<void> _loadTotalSpent() async{
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  total.value = prefs.getDouble('total_spent_${newLists.id}') ?? 0.0;
+  notifyListeners();
+}
+
   Future<void> findItens() async {
     await _loadItems();
   }
