@@ -17,7 +17,7 @@ class ItemController extends ChangeNotifier {
     _loadTotalSpent();
   }
 
-  Future<void> _loadItems() async {
+  Future<void> _loadListItems() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _ascendingOrder = prefs.getBool('ascendingOrder') ?? true;
 
