@@ -23,6 +23,11 @@ class ItemController extends ChangeNotifier {
 
     List<NewItems> items = await _listsDao.findByListId(newLists.id);
     _sortItemsInternal(items);
+
+    for (NewItems item in items) {
+    item.isChecked = await loadCheckboxState(item.id!);
+  }
+    
     quantityItems.value = items;
   }
 
