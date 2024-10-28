@@ -48,7 +48,7 @@ Future<void> _loadTotalSpent() async{
 
   Future<bool> saveItem(NewItems value) async {
     final NewItems newItens = NewItems(
-        listId: newLists.id, items: value.items, quantity: value.quantity);
+        listId: newLists.id, items: value.items, quantity: value.quantity, price: value.price);
     await _listsDao.save(newItens);
     await _loadListItems();
     return true;
