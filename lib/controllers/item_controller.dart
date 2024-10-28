@@ -91,6 +91,33 @@ Future<void> _loadTotalSpent() async{
       },
     );
   }
+
+  Future<void> checkAddOrDecrease(int itemId, bool isChecked, double price) async {
+    NewItems item =
+        quantityItems.value.firstWhere((element) => element.id == itemId);
+    
+    if(isChecked) {
+        total.value += price * item.quantity;
+        // (total.value += double.parse((price * item.quantity).toStringAsFixed(2)));
+        total.value = double.parse(total.value.toStringAsFixed(2));
+        item.price = price; 
+        item.isChecked = true;
+        await _listsDao.update(item);
+    }else {
+      total.value -= item.price! * item.quantity;
+      total.value = double.parse(total.value.toStringAsFixed(2));
+      item.isChecked = false;
+    }
+
+    total.notifyListeners();
+
+    await saveCheckboxState(itemId, isChecked);
+
+    await _saveTotal();  
+
+    await _loadListItems();
+  }
+
   Future<bool> loadCheckboxState(int itemId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getBool('checkbox_$itemId') ?? false;
@@ -108,10 +135,6 @@ Future<void> _loadTotalSpent() async{
     }
     Share.share(message);
   }
-}
-
-
-
 }
 
 
