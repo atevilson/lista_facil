@@ -55,6 +55,15 @@ Future<void> _loadTotalSpent() async{
   }
 
   Future<bool> deleteItem(NewItems value) async {
+    if(value.id != null && await loadCheckboxState(value.id!)) { // valida se o item está marcado antes de deletar
+      total.value -= value.price! * value.quantity;
+      total.value = double.parse(total.value.toStringAsFixed(2));
+
+      await _saveTotal();
+
+      notifyListeners();
+    }
+
     await _listsDao.delete(value);
 
     await _loadListItems();
