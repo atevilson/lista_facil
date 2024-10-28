@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lista_facil/screens/create_list/created_lists.dart';
+import 'package:lista_facil/utils_colors/utils_style.dart';
 
 import '../../controllers/list_controller.dart';
 
@@ -34,19 +35,46 @@ class _ListCreateFormState extends State<ListCreateForm> {
                   children: [
                     TextField(
                       controller: _newListController,
+                      cursorColor: UtilColors.colorBlack,
                       decoration: const InputDecoration(
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: UtilColors.colorBlack),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: UtilColors.colorBlack),
+                        ),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: UtilColors.colorBlack),
+                        ),
+                        labelStyle: TextStyle(color: UtilColors.colorBlack),
+                        hintStyle: TextStyle(color: UtilColors.colorBlack),
+                        
                         labelText: 'Nova lista',
                       ),
-                      style: const TextStyle(fontSize: 24.0),
+                      style: const TextStyle(fontSize: 24.0, 
+                      color: UtilColors.colorBlack),
                     ),
                     const SizedBox(height: 8.0,),
                     TextField(
                       controller: _budgetController,
+                      cursorColor: UtilColors.colorBlack,
                       decoration: const InputDecoration(
                         labelText: "Orçamento R\$",
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: UtilColors.colorBlack),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: UtilColors.colorBlack),
+                        ),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: UtilColors.colorBlack),
+                        ),
+                        labelStyle: TextStyle(color: UtilColors.colorBlack),
+                        hintStyle: TextStyle(color: UtilColors.colorBlack),
                       ),
                       keyboardType: TextInputType.number,
-                      style: const TextStyle(fontSize: 24.0),
+                      style: const TextStyle(fontSize: 24.0,
+                      color: UtilColors.colorBlack),
                     ),
                   ],
                 ),
