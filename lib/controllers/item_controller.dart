@@ -103,11 +103,11 @@ Future<void> _loadTotalSpent() async{
         item.price = price; 
         item.isChecked = true;
         await _listsDao.update(item);
-    }else if (!isChecked && item.price == 1.0) {
-      item.isChecked = false;
-    } else {
-      total.value -= item.price! * item.quantity;
-      total.value = double.parse(total.value.toStringAsFixed(2));
+    }else {
+      if(item.isChecked!) {
+        total.value -= item.price! * item.quantity;
+        total.value = double.parse(total.value.toStringAsFixed(2));
+      }
       item.isChecked = false;
     }
 

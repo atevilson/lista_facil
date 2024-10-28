@@ -244,7 +244,8 @@ class TransferItensState extends State<TransferItens> {
             setState(() {
               isChecked = value ?? false;
             });
-            if(isChecked) {
+            if (isChecked) {
+              String valor = "";
               final double? price = await showDialog<double>(
                 context: context,
                 builder: (context) => AlertDialog(
@@ -252,28 +253,43 @@ class TransferItensState extends State<TransferItens> {
                   title: const Text("Insira o preço do item"),
                   content: TextField(
                     keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(labelText: "Valor (R\$)",),
-                    onSubmitted: (valor) {
-                      valor = valor.trim();
-                      final formatPrices = RegExp(r'^\d+(\,\d{1,2})?$'); 
-
-                      if(valor.startsWith(",") || valor.startsWith(".") || valor.startsWith("-") || formatPrices.hasMatch(valor) || !(valor.isNotEmpty == true)) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                           SnackBar(
-                            backgroundColor: UtilColors.colorBlack,
-                            content: Text('Insira um preço válido!',
-                            softWrap: isChecked = false,
-                            style: const TextStyle(
-                              color: UtilColors.colorWhite
-                            ),),
-                          ),
-                        );
-                      }else {
-                        Navigator.of(context).pop(double.tryParse(valor));
-                        isChecked == true;
-                      }
+                    decoration: const InputDecoration(labelText: "Valor (R\$)"),
+                    onChanged: (input) {
+                      valor = input.trim().replaceAll(",", "."); // atlz o valor
                     },
                   ),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("Cancelar"),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        final formatPrices = RegExp(r'^\d+(\.\d{0,2})?$');
+
+                        if (formatPrices.hasMatch(valor) && valor.isNotEmpty) {
+                          Navigator.of(context).pop(
+                              double.tryParse(valor)); // Fecha com valor válido
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              backgroundColor: UtilColors.colorBlack,
+                              content: Text(
+                                'Insira um preço válido!',
+                                style: TextStyle(color: UtilColors.colorWhite),
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                      child: const Text(
+                        'Ok',
+                        style: TextStyle(color: UtilColors.colorBlack),
+                      ),
+                    ),
+                  ],
                 ),
               );
               if (price != null) {
@@ -288,7 +304,8 @@ class TransferItensState extends State<TransferItens> {
                   widget._addItems.id!, false, widget._addItems.price ?? 0.0);
             }
 
-            await widget._controller.saveCheckboxState(widget._addItems.id ?? 0, isChecked);
+            await widget._controller
+                .saveCheckboxState(widget._addItems.id ?? 0, isChecked);
           },
           value: isChecked,
         ),
