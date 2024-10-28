@@ -5,7 +5,7 @@ import 'package:lista_facil/models/new_lists.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ItemController {
+class ItemController extends ChangeNotifier {
   final NewLists newLists;
   final ItemsDao _listsDao = ItemsDao();
   final ValueNotifier<List<NewItems>> quantityItems = ValueNotifier<List<NewItems>>([]);
