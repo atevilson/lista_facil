@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:lista_facil/utils_colors/utils_style.dart';
 
 class DialogCustom extends StatelessWidget {
   final Key keyConfirm;
@@ -25,9 +26,6 @@ class DialogCustom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    // final Color backgroundColor = Theme.of(context).colorScheme.error;
-    // final Color iconColor = Theme.of(context).colorScheme.onError;
-
     return Dismissible(
       key: keyConfirm,
       direction: DismissDirection.endToStart,
@@ -45,7 +43,9 @@ class DialogCustom extends StatelessWidget {
                 ),
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(true),
-                  child: Text(confirmText),
+                  child: Text(confirmText,
+                    style: const TextStyle(color: UtilColors.colorBlack),
+                  ),
                 ),
               ],
             );
@@ -56,7 +56,7 @@ class DialogCustom extends StatelessWidget {
         onDismissed();
       },
       background: Container(
-        color: Theme.of(context).shadowColor,
+        color: UtilColors.colorBlueGrey800,
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Icon(
