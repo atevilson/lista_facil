@@ -73,9 +73,9 @@ class CreateStateTransferList extends State<ListTransference> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
-          padding: const EdgeInsets.all(5.0),
-          decoration: BoxDecoration(
-            color: UtilColors.colorBlueGrey800,
+          padding: const EdgeInsets.all(7.0),
+          decoration: const BoxDecoration(
+            color: UtilColors.colorBlack45,
           ),
             child:  Row(
                 mainAxisSize: MainAxisSize.min,
@@ -110,9 +110,9 @@ class CreateStateTransferList extends State<ListTransference> {
                   }
           
                   return Container(
-                    padding: const EdgeInsets.all(5.0),
-                    decoration: BoxDecoration(
-                      color: UtilColors.colorBlueGrey800,
+                    padding: const EdgeInsets.all(7.0),
+                    decoration: const BoxDecoration(
+                      color: UtilColors.colorBlack45,
                     ),
                     child: Row(
                       children: [
@@ -140,26 +140,25 @@ class CreateStateTransferList extends State<ListTransference> {
               valueListenable: _controller.quantityItems,
               builder: (context, items, _) {
                 if (items.isEmpty) {
-                  return const Padding(
-                    padding: EdgeInsets.only(top: 320.0),
-                    child: Center(
-                      child: Column(
-                        children: [
-                          Icon(
-                            Icons.warning,
-                            color: UtilColors.colorBlack45,
-                            size: 50,
-                          ),
-                          SizedBox(
-                            height: 8.0,
-                          ),
-                          Text(
-                            'Nenhum item adicionado',
-                            style: TextStyle(fontSize: 25.0, 
-                            color: UtilColors.colorBlack45),
-                          ),
-                        ],
-                      ),
+                  return const Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.warning,
+                          color: UtilColors.colorBlack45,
+                          size: 50,
+                        ),
+                        SizedBox(
+                          height: 8.0,
+                        ),
+                        Text(
+                          'Nenhum item adicionado',
+                          style: TextStyle(fontSize: 25.0),
+                        ),
+                      ],
                     ),
                   );
                 }
@@ -261,8 +260,12 @@ class TransferItensState extends State<TransferItens> {
                       if(valor.startsWith(",") || valor.startsWith(".") || valor.startsWith("-") || formatPrices.hasMatch(valor) || !(valor.isNotEmpty == true)) {
                         ScaffoldMessenger.of(context).showSnackBar(
                            SnackBar(
+                            backgroundColor: UtilColors.colorBlack,
                             content: Text('Insira um preço válido!',
-                            softWrap: isChecked = false,),
+                            softWrap: isChecked = false,
+                            style: const TextStyle(
+                              color: UtilColors.colorWhite
+                            ),),
                           ),
                         );
                       }else {
