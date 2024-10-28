@@ -13,7 +13,8 @@ class ItemController extends ChangeNotifier {
   final ValueNotifier<double> total = ValueNotifier<double>(0.0);
 
   ItemController(this.newLists) {
-    _loadItems();
+    _loadListItems();
+    _loadTotalSpent();
   }
 
   Future<void> _loadItems() async {
