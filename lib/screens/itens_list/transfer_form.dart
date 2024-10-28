@@ -37,11 +37,8 @@ class _TransferFormState extends State<TransferForm> {
                       dataEntryLabelOne, _items, 
                       Icons.add_shopping_cart),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10.0),
-                  child: DataEntryNumber(dataEntryLabelTwo, _quantity,
-                      Icons.add_shopping_cart),
-                ),
+                DataEntryNumber(dataEntryLabelTwo, _quantity,
+                    Icons.add_shopping_cart),
                 Padding(
                   padding: const EdgeInsets.only(top: 20.0),
                   child: ElevatedButton(
