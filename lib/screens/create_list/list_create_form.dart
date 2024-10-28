@@ -14,6 +14,7 @@ class ListCreateForm extends StatefulWidget {
 
 class _ListCreateFormState extends State<ListCreateForm> {
   final TextEditingController _newListController = TextEditingController();
+  final TextEditingController _budgetController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -29,12 +30,25 @@ class _ListCreateFormState extends State<ListCreateForm> {
               padding: const EdgeInsets.all(16.0),
               child: Padding(
                 padding: const EdgeInsets.only(top: 100.0),
-                child: TextField(
-                  controller: _newListController,
-                  decoration: const InputDecoration(
-                    labelText: 'NOVA LISTA',
-                  ),
-                  style: const TextStyle(fontSize: 24.0),
+                child: Column(
+                  children: [
+                    TextField(
+                      controller: _newListController,
+                      decoration: const InputDecoration(
+                        labelText: 'Nova lista',
+                      ),
+                      style: const TextStyle(fontSize: 24.0),
+                    ),
+                    const SizedBox(height: 8.0,),
+                    TextField(
+                      controller: _budgetController,
+                      decoration: const InputDecoration(
+                        labelText: "Orçamento R\$",
+                      ),
+                      keyboardType: TextInputType.number,
+                      style: const TextStyle(fontSize: 24.0),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -60,8 +74,9 @@ class _ListCreateFormState extends State<ListCreateForm> {
 
   Future<void> _createNewList(BuildContext context) async {
     final String nameList = _newListController.text;
-    if (nameList.isNotEmpty) {
-      await widget.controller.saveList(nameList);
+    final double? budget = double.tryParse(_budgetController.text);
+    if (nameList.isNotEmpty && budget != null) {
+      await widget.controller.saveList(nameList, budget);
       // remove a tela de criação da pilha
       if (!context.mounted) return;
       await Navigator.of(context)
