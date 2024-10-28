@@ -35,10 +35,22 @@ class _CreatedListsState extends State<CreatedLists> {
         builder: (context, snapshot, _) {
           if (snapshot.isEmpty) {
             return const Center(
-              child: Text('Nenhuma lista disponível',
-              style: TextStyle(
-                fontSize: 32.0
-              ),),
+              child: Column(
+                mainAxisSize: MainAxisSize.min, 
+                mainAxisAlignment: MainAxisAlignment.center, 
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.warning,
+                    color: UtilColors.colorBlack45,
+                    size: 50.0,
+                  ),
+                  Text(
+                    'Nenhuma lista disponível',
+                    style: TextStyle(fontSize: 32.0),
+                  ),
+                ],
+              ),
             );
           }
 

@@ -5,9 +5,9 @@ import 'package:lista_facil/controllers/item_controller.dart';
 import 'package:lista_facil/models/new_items.dart';
 
 const _title = 'Adicionar item';
-const dataEntryLabelOne = 'NOVO ITEM';
-const dataEntryLabelTwo = 'QUANTIDADE';
-const titleElevatedButton = 'ADICIONAR ITEM';
+const dataEntryLabelOne = 'Novo Item';
+const dataEntryLabelTwo = 'Quantidade';
+const titleElevatedButton = 'Adicionar Item';
 
 class TransferForm extends StatefulWidget {
   final ItemController controller;

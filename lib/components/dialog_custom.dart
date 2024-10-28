@@ -56,12 +56,12 @@ class DialogCustom extends StatelessWidget {
         onDismissed();
       },
       background: Container(
-        color: UtilColors.colorBlueGrey800,
+        color: UtilColors.colorWhite70,
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Icon(
+          size: 29.0,
           icon,
-          //color: iconColor,
         ),
       ),
       child: child,

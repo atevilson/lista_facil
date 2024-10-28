@@ -19,8 +19,10 @@ class MyApplication extends StatelessWidget {
         ),
         scaffoldBackgroundColor: UtilColors.colorWhite60,
         canvasColor: UtilColors.colorWhite12,
-        floatingActionButtonTheme: FloatingActionButtonThemeData(
-            backgroundColor: UtilColors.colorBlueGrey800, foregroundColor: UtilColors.colorWhite),
+        floatingActionButtonTheme:  const FloatingActionButtonThemeData(
+          iconSize: 32.0,
+          backgroundColor: UtilColors.colorWhite70, 
+          foregroundColor: UtilColors.colorBlack),
         elevatedButtonTheme: const ElevatedButtonThemeData(
           style: ButtonStyle(
             backgroundColor: WidgetStatePropertyAll(
@@ -109,7 +111,7 @@ class MyApplication extends StatelessWidget {
             color: UtilColors.colorGray
           ),
           iconTheme: const IconThemeData(
-            color: Colors.white70
+            color: UtilColors.colorBlack,
           )
       ),
     );

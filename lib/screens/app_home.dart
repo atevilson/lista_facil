@@ -17,7 +17,14 @@ class ListCollections extends StatelessWidget {
 
       return Scaffold(
         appBar: AppBar(
-          title: const Text(_titleAppBar),
+          title: const Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(_titleAppBar),
+              Icon(Icons.shopping_cart, size: 28.0,)
+            ],
+          ),
         ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -41,7 +48,7 @@ class ListCollections extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: 110,
+            height: 120,
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: <Widget>[
@@ -52,7 +59,7 @@ class ListCollections extends StatelessWidget {
                 ),
                 MenuItem(
                   'Listas criadas',
-                  CustomIcons.listasCriadas,
+                  Icons.view_list_sharp,
                   onClick: () => _pageCreatedLists(context),
                 ),
               ],
