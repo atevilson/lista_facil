@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lista_facil/screens/app_home.dart';
+import 'package:lista_facil/screens/splash_screen.dart';
 import 'package:lista_facil/utils_colors/utils_style.dart';
 
 void main() {
@@ -12,75 +12,82 @@ class MyApplication extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: const ListCollections(),
+      home: const SplashScreen(),
       theme: ThemeData(
         textTheme: const TextTheme(
-          bodyLarge: TextStyle(color: UtilColors.colorWhite)
+          bodyLarge: TextStyle(color: ThemeColor.colorWhite)
         ),
-        scaffoldBackgroundColor: UtilColors.colorWhite60,
-        canvasColor: UtilColors.colorWhite12,
+        scaffoldBackgroundColor: const Color.fromRGBO(3, 119, 253, 1),
+        canvasColor: ThemeColor.colorWhite12,
         floatingActionButtonTheme:  const FloatingActionButtonThemeData(
           iconSize: 32.0,
-          backgroundColor: UtilColors.colorWhite70, 
-          foregroundColor: UtilColors.colorBlack),
-        elevatedButtonTheme: const ElevatedButtonThemeData(
-          style: ButtonStyle(
-            backgroundColor: WidgetStatePropertyAll(
-              UtilColors.colorBlack45,
-            ),
-            foregroundColor: WidgetStatePropertyAll(
-              UtilColors.colorWhite70,
-            ),
-          ),
-        ),
+          backgroundColor: ThemeColor.colorWhite70, 
+          foregroundColor: ThemeColor.colorBlack),
+        // elevatedButtonTheme: const ElevatedButtonThemeData(
+        //   style: ButtonStyle(minimumSize: WidgetStatePropertyAll(Size(200, 200)),
+        //     backgroundColor: WidgetStatePropertyAll(
+        //       Color(0xFF0377FD),
+        //     ),
+        //     foregroundColor: WidgetStatePropertyAll(
+        //       UtilColors.colorWhite70,
+        //     ),
+        //   ),
+        // ),
         appBarTheme: const AppBarTheme(
-          backgroundColor: UtilColors.colorBlack,
-          foregroundColor: UtilColors.colorWhite70,
+          backgroundColor: Color(0xFF0377FD),
+          foregroundColor: ThemeColor.colorWhite70,
           titleTextStyle: TextStyle(
-            color: UtilColors.colorGray,
+            color: ThemeColor.colorGray,
             fontSize: 24.0,
           ),
         ),
-        listTileTheme: ListTileThemeData(
+          cardTheme: CardTheme(
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
+              borderRadius: BorderRadius.circular(15.0),
+              side: const BorderSide(color: Colors.blue, width: 1.0),
             ),
-            textColor: UtilColors.colorWhite,
-            //tileColor: Colors.black,
-            selectedTileColor: UtilColors.colorBlack),
+            margin: const EdgeInsets.symmetric(vertical: 8.0),
+        ),
+        listTileTheme: ListTileThemeData(
+                  shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+            textColor: ThemeColor.colorWhite,
+            tileColor: ThemeColor.colorWhite,
+            selectedTileColor: ThemeColor.colorBlack),
             //selectedTileColor: Colors.blue),
         checkboxTheme: CheckboxThemeData(
           splashRadius: 2.0,
-          fillColor: const WidgetStatePropertyAll(UtilColors.colorBlack),
-          checkColor: const WidgetStatePropertyAll(UtilColors.colorWhite),
+          fillColor: const WidgetStatePropertyAll(ThemeColor.colorBlack),
+          checkColor: const WidgetStatePropertyAll(ThemeColor.colorWhite),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(11.0)
           )
         ),
         inputDecorationTheme: const InputDecorationTheme(
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: UtilColors.colorWhite),
+            borderSide: BorderSide(color: ThemeColor.colorWhite),
           ),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: UtilColors.colorWhite),
+            borderSide: BorderSide(color: ThemeColor.colorWhite),
           ),
           border: OutlineInputBorder(
-            borderSide: BorderSide(color:UtilColors.colorWhite),
+            borderSide: BorderSide(color:ThemeColor.colorWhite),
           ),
-          labelStyle: TextStyle(color: UtilColors.colorWhite),
-          hintStyle: TextStyle(color: UtilColors.colorWhite)
+          labelStyle: TextStyle(color: ThemeColor.colorWhite),
+          hintStyle: TextStyle(color: ThemeColor.colorWhite)
           
         ),
-        hoverColor: UtilColors.colorWhite,
+        hoverColor: ThemeColor.colorWhite,
         textSelectionTheme: const TextSelectionThemeData(
-            cursorColor: UtilColors.colorWhite,
-            selectionColor: UtilColors.colorWhite,
-            selectionHandleColor: UtilColors.colorWhite,
+            cursorColor: ThemeColor.colorWhite,
+            selectionColor: ThemeColor.colorWhite,
+            selectionHandleColor: ThemeColor.colorWhite,
           ),
         useMaterial3: true,
         dialogTheme: DialogTheme(
           titleTextStyle: const TextStyle(
-            color: UtilColors.colorWhite,
+            color: ThemeColor.colorWhite,
             fontSize: 26,
           ),
           contentTextStyle: const TextStyle(
@@ -94,7 +101,7 @@ class MyApplication extends StatelessWidget {
           ),
           textButtonTheme: TextButtonThemeData(
             style: ButtonStyle(
-              foregroundColor: const WidgetStatePropertyAll(UtilColors.colorWhite),
+              foregroundColor:  const WidgetStatePropertyAll(ThemeColor.colorWhite),
               backgroundColor: WidgetStatePropertyAll(Colors.grey[600]),
               textStyle: const WidgetStatePropertyAll(
                 TextStyle(fontSize: 19.0,
@@ -108,10 +115,10 @@ class MyApplication extends StatelessWidget {
             )
           ),
           popupMenuTheme: const PopupMenuThemeData(
-            color: UtilColors.colorGray
+            color: ThemeColor.colorGray
           ),
-          iconTheme: const IconThemeData(
-            color: UtilColors.colorBlack,
+          iconTheme:  const IconThemeData(
+            color: ThemeColor.colorWhite,
           )
       ),
     );
