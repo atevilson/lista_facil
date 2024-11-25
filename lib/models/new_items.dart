@@ -8,8 +8,8 @@ class NewItems {
 
   NewItems({this.id, required this.items, required this.quantity, this.listId, this.price, this.isChecked});
 
-  @override
-  String toString() {
-    return 'NewLists{items: $id, $items, $quantity, $listId}';
-  }
+  // @override
+  // String toString() {
+  //   return 'NewLists{items: $id, $items, $quantity, $listId}';
+  // }
 }

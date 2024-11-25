@@ -40,7 +40,7 @@ class MenuItem extends StatelessWidget {
                 topLeft: Radius.elliptical(13, 13),
               ),
               child: Container(
-                color: UtilColors.colorWhite60,
+                color: ThemeColor.colorWhite60,
                 child: Row(
                   children: <Widget>[
                     Expanded(
@@ -51,7 +51,7 @@ class MenuItem extends StatelessWidget {
                           style: const TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 18.0,
-                            color: UtilColors.colorBlack
+                            color: ThemeColor.colorBlack
                           ),
                         ),
                       ),

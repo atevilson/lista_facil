@@ -44,7 +44,7 @@ class DialogCustom extends StatelessWidget {
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(true),
                   child: Text(confirmText,
-                    style: const TextStyle(color: UtilColors.colorBlack),
+                    style: const TextStyle(color: ThemeColor.colorBlack),
                   ),
                 ),
               ],
@@ -55,13 +55,20 @@ class DialogCustom extends StatelessWidget {
       onDismissed: (direction) {
         onDismissed();
       },
-      background: Container(
-        color: UtilColors.colorWhite70,
-        alignment: Alignment.centerRight,
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Icon(
-          size: 29.0,
-          icon,
+      background: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 3.0, vertical: 5.0),
+        child: Container(
+          margin: const EdgeInsets.symmetric(vertical: 4.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15.0),
+            color: ThemeColor.colorBlueTema,
+          ),
+          alignment: Alignment.centerRight,
+          padding: const EdgeInsets.symmetric(horizontal: 25),
+          child: Icon(
+            size: 25.0,
+            icon,
+          ),
         ),
       ),
       child: child,
