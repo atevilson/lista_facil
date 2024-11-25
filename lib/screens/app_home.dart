@@ -1,76 +1,378 @@
-
 import 'package:flutter/material.dart';
-import 'package:lista_facil/components/custom_icons.dart';
-import 'package:lista_facil/components/menu_item.dart';
 import 'package:lista_facil/controllers/list_controller.dart';
-import 'package:lista_facil/screens/create_list/list_create_form.dart';
-import 'package:lista_facil/screens/create_list/created_lists.dart';
+import 'package:lista_facil/screens/create_list/create_list.dart';
+class AppHome extends StatefulWidget {
+  const AppHome({super.key});
 
-const _titleAppBar = 'Lista Fácil';
-final ListController controller = ListController();
+  @override
+  State<AppHome> createState() => _AppHomeState();
+}
 
-class ListCollections extends StatelessWidget {
-  const ListCollections({super.key});
+class _AppHomeState extends State<AppHome> with SingleTickerProviderStateMixin {
+
+  late final AnimationController _animationController;
+  final TextEditingController _newListController = TextEditingController();
+  final TextEditingController _budgetController = TextEditingController();
+  final ListController _listController = ListController();
+  late bool _isExpanded;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _isExpanded = false;
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 100),
+      vsync: this,
+    );
+  }
+
+  void _toggleExpand() {
+    setState(() {
+      _isExpanded = !_isExpanded;
+      if (_isExpanded) {
+        _animationController.forward();
+      } else {
+        _animationController.reverse();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    _newListController.dispose();
+    _budgetController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
 
-      return Scaffold(
-        appBar: AppBar(
-          title: const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.end,
+    return Scaffold(
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return Stack(
             children: [
-              Text(_titleAppBar),
-              Icon(Icons.shopping_cart, size: 28.0,)
-            ],
-          ),
-        ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Expanded(
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: ColorFiltered(
-                  colorFilter: const ColorFilter.mode(
-                      Colors.transparent, BlendMode.hardLight),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(300.0),
-                    child: Image.asset(
-                      'images/carrinho_compras.jpg',
-                      fit: BoxFit.cover,
+              SingleChildScrollView(
+                child: Column(
+                  children: [
+                    SizedBox(height: screenHeight * 0.12),
+                    Center(
+                      child: Column(
+                        children: [
+                          Image.asset(
+                            'images/logo.png',
+                            height: screenHeight * 0.4, // 30% de altura da tela
+                          ),
+                          SizedBox(height: screenHeight * 0.02),
+                          Text(
+                            'Crie agora\nmesmo a\nsua primeira\nlista fácil',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              height: 1.0,
+                              leadingDistribution:
+                                  TextLeadingDistribution.proportional,
+                              wordSpacing: 1.0,
+                              color: Colors.white,
+                              fontSize:
+                                  screenWidth * 0.1, // 10% de largura da telaa
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
+                    SizedBox(height: screenHeight * 0.04),
+                    Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: screenWidth * 0.06),
+                      child: TextField(
+                        keyboardType: TextInputType.none,
+                        textInputAction: TextInputAction.done,
+                        onTap: () {
+                          _pageCreatedLists(context);
+                        },
+                        decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(color: Colors.white54),
+                            borderRadius: BorderRadius.circular(25.0),
+                          ),
+                          hintText: 'Buscar lista',
+                          hintStyle: const TextStyle(color: Colors.white54),
+                          suffixIcon:
+                              const Icon(Icons.search, color: Colors.white54),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(color: Colors.white),
+                            borderRadius: BorderRadius.circular(25.0),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 15),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: screenHeight * 0.02),
+                  ],
                 ),
               ),
-            ),
-          ),
-          SizedBox(
-            height: 120,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: <Widget>[
-                MenuItem(
-                  "Criar Lista",
-                  CustomIcons.criarLista,
-                  onClick: () => _createLists(context),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: AnimatedBuilder(
+                  animation: _animationController,
+                  builder: (context, child) {
+                    double maxHeight = screenHeight * 0.4;
+                    double minHeight = screenHeight * 0.1;
+
+                    double height = minHeight +
+                        (maxHeight - minHeight) * _animationController.value;
+
+                    return Container( // Esse container expande ao clicar
+                      height: height,
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage('images/base_bottom.png'),
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                      child: Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            GestureDetector(
+                              onVerticalDragUpdate: (details) {
+                                if (details.delta.dy < 0 && !_isExpanded) {
+                                  _toggleExpand();
+                                } else if (details.delta.dy > 0 &&
+                                    _isExpanded) {
+                                  _toggleExpand();
+                                }
+                              },
+                              onTap: _toggleExpand,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  if (!_isExpanded)
+                                    Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Container(
+                                          margin: EdgeInsets.only(
+                                              bottom: screenHeight * 0.015),
+                                          width: screenWidth * 0.15,
+                                          height: screenHeight * 0.008,
+                                          decoration: BoxDecoration(
+                                            color: const Color(0xFF0377FD),
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                          ),
+                                        ),
+                                        Text(
+                                          'Nova lista',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            color: const Color(0xFF0377FD),
+                                            fontSize: screenWidth * 0.045,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                ],
+                              ),
+                            ),
+                            if (_isExpanded)
+                              Expanded(
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(25.0),
+                                    ),
+                                  ),
+                                  child: SingleChildScrollView(
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: screenWidth * 0.1,
+                                          vertical: screenHeight * 0.05),
+                                      child: Column(
+                                        children: [
+                                          GestureDetector(
+                                            onVerticalDragUpdate: (details) {
+                                              if (details.delta.dy > 0 &&
+                                                  _isExpanded) {
+                                                _toggleExpand();
+                                              }
+                                            },
+                                            onVerticalDragEnd: (details) {
+                                              if (_isExpanded) {
+                                                _toggleExpand();
+                                              }
+                                            },
+                                            onTap: () {
+                                              _toggleExpand(); 
+                                            },
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Container(
+                                                  margin: EdgeInsets.only(
+                                                      bottom:
+                                                          screenHeight * 0.015),
+                                                  width: screenWidth * 0.15,
+                                                  height: screenHeight * 0.008,
+                                                  decoration: BoxDecoration(
+                                                    color:
+                                                        const Color(0xFF0377FD),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10.0),
+                                                  ),
+                                                ),
+                                                Text(
+                                                  'Nova lista',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w500,
+                                                    color:
+                                                        const Color(0xFF0377FD),
+                                                    fontSize:
+                                                        screenWidth * 0.045,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(height: screenHeight * 0.03),
+                                          TextField(
+                                            controller: _newListController,
+                                            cursorColor: Colors.blue,
+                                            decoration: InputDecoration(
+                                              labelText: 'Nome da Lista',
+                                              labelStyle: TextStyle(
+                                                color: Colors.blue.shade700,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(25.0),
+                                                borderSide: BorderSide(
+                                                    color: Colors.blue.shade700,
+                                                    width: 1.5),
+                                              ),
+                                              enabledBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(25.0),
+                                                borderSide: BorderSide(
+                                                    color: Colors.blue.shade200,
+                                                    width: 1.5),
+                                              ),
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(25.0),
+                                              ),
+                                            ),
+                                            keyboardType: TextInputType.text,
+                                            style: TextStyle(
+                                              fontSize: screenWidth * 0.05,
+                                              color: Colors.blue.shade700,
+                                            ),
+                                          ),
+                                          SizedBox(height: screenHeight * 0.01),
+                                          TextField(
+                                            controller: _budgetController,
+                                            cursorColor: Colors.blue,
+                                            decoration: InputDecoration(
+                                              labelText: 'Orçamento',
+                                              labelStyle: TextStyle(
+                                                color: Colors.blue.shade700,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(25.0),
+                                                borderSide: BorderSide(
+                                                    color: Colors.blue.shade700,
+                                                    width: 1.5),
+                                              ),
+                                              enabledBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(25.0),
+                                                borderSide: BorderSide(
+                                                    color: Colors.blue.shade200,
+                                                    width: 1.5),
+                                              ),
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(25.0),
+                                              ),
+                                            ),
+                                            keyboardType: TextInputType.number,
+                                            style: TextStyle(
+                                              fontSize: screenWidth * 0.05,
+                                              color: Colors.blue.shade700,
+                                            ),
+                                          ),
+                                          SizedBox(height: screenHeight * 0.01),
+                                          SizedBox(
+                                            width: screenWidth * 0.9,
+                                            height: screenHeight * 0.08,
+                                            child: ElevatedButton(
+                                              onPressed: () =>
+                                                  _createNewList(context),
+                                              style: ElevatedButton.styleFrom(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          25.0),
+                                                ),
+                                                backgroundColor:
+                                                    const Color(0xFF0377FD),
+                                              ),
+                                              child: Text(
+                                                'Criar nova lista',
+                                                style: TextStyle(
+                                                  fontSize: screenWidth * 0.05,
+                                                  //fontWeight: FontWeight.bold,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )
+                          ],
+                        ),
+                      ),
+                    );
+                  },
                 ),
-                MenuItem(
-                  'Listas criadas',
-                  Icons.view_list_sharp,
-                  onClick: () => _pageCreatedLists(context),
-                ),
-              ],
-            ),
-          )
-        ],
+              ),
+            ],
+          );
+        },
       ),
     );
   }
 
-void _pageCreatedLists(BuildContext context) {
+  Future<void> _createNewList(BuildContext context) async {
+    final String nameList = _newListController.text;
+    final double? budget = double.tryParse(_budgetController.text);
+    if (nameList.isNotEmpty && budget != null) {
+      await _listController.saveList(nameList, budget);
+      if (!context.mounted) return;
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const CreatedLists(),
+        ),
+      );
+    }
+    _budgetController.clear();
+    _newListController.clear();
+  }
+
+  void _pageCreatedLists(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => const CreatedLists(),
@@ -78,13 +380,3 @@ void _pageCreatedLists(BuildContext context) {
     );
   }
 }
-
-void _createLists(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) {
-          return ListCreateForm(controller);
-        },
-      ),
-    );
-  }
