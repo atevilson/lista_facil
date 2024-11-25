@@ -26,4 +26,13 @@ class ListController {
     }
     return false;
   }
+
+  Future<List<NewLists>> searchListsByName(String name) {
+    return _listsDao.findByListsName(name);
+  }
+
+  Future<void> updateList(NewLists list) async {
+    await _listsDao.updateList(list);
+    await findAll();
+  }
 }
