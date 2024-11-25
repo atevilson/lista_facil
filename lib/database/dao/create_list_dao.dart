@@ -70,4 +70,33 @@ class ListsDao {
     }
     return lists;
   }
+
+  Future<List<NewLists>> findByListsName(String name) async {
+    final Database db = await getDataBase();
+    final List<Map<String, dynamic>> result =
+        await db.query(
+          nameTable, 
+          where: "${ListsDao.name} LIKE ?",
+          whereArgs: ['%$name%']);
+    final List<NewLists> lists = [];
+    for (Map<String, dynamic> row in result) {
+      final NewLists newItem = NewLists(
+          row[id],
+          row[ListsDao.name],
+          row[budget]
+          );
+      lists.add(newItem);
+    }
+    return lists;
+  }
+
+  Future<int> updateList(NewLists list) async {
+    final Database db = await getDataBase();
+    return db.update(
+      nameTable,
+      {name: list.nameList, budget: list.budget},
+      where: "$id = ?",
+      whereArgs: [list.id],
+    );
+  } 
 }
