@@ -19,7 +19,7 @@ class ListsDao {
     return _toMap(listas, db);
   }
 
-  Future<int> delete(NewLists listas) async {
+  Future<int> deleteLists(NewLists listas) async {
     final Database db = await getDataBase();
     return _toMapDelete(listas, db);
   }
@@ -32,7 +32,7 @@ class ListsDao {
   Future<int> _toMap(NewLists listas, Database db) {
     return _toList(listas, db);
   }
-  // Função ajustada para que, ao excluir a lista, remova primeiro seus itens.
+  // métdo ajustado para que ao excluir a lista remova primeiro seus itens.
   Future<int> _toDelete(NewLists listas, Database db) async {
     return await db.transaction((transaction) async {
       transaction.delete(
@@ -71,30 +71,13 @@ class ListsDao {
     return lists;
   }
 
-  Future<List<NewLists>> findByListsName(String name) async {
-    final Database db = await getDataBase();
-    final List<Map<String, dynamic>> result =
-        await db.query(
-          nameTable, 
-          where: "${ListsDao.name} LIKE ?",
-          whereArgs: ['%$name%']);
-    final List<NewLists> lists = [];
-    for (Map<String, dynamic> row in result) {
-      final NewLists newItem = NewLists(
-          row[id],
-          row[ListsDao.name],
-          row[budget]
-          );
-      lists.add(newItem);
-    }
-    return lists;
-  }
-
   Future<int> updateList(NewLists list) async {
     final Database db = await getDataBase();
     return db.update(
-      nameTable,
-      {name: list.nameList, budget: list.budget},
+      nameTable, {
+        name: list.nameList, 
+        budget: list.budget
+        },
       where: "$id = ?",
       whereArgs: [list.id],
     );
