@@ -4,9 +4,10 @@ class NewItems {
   final int quantity;
   double? price;
   int? listId;
-  bool? isChecked;
+  bool isChecked;
+  bool? isEditing;
 
-  NewItems({this.id, required this.items, required this.quantity, this.listId, this.price, this.isChecked});
+  NewItems({this.id, required this.items, required this.quantity, this.listId, this.price, this.isChecked = false, this.isEditing});
 
   // @override
   // String toString() {
