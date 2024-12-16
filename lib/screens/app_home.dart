@@ -17,8 +17,9 @@ class _AppHomeState extends State<AppHome> with SingleTickerProviderStateMixin {
   late bool _isExpanded;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
+    _listController.init();
     _isExpanded = false;
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 100),
@@ -131,7 +132,7 @@ class _AppHomeState extends State<AppHome> with SingleTickerProviderStateMixin {
                       decoration: const BoxDecoration(
                         image: DecorationImage(
                           image: AssetImage('images/base_bottom.png'),
-                          fit: BoxFit.contain,
+                          fit: BoxFit.fitHeight,
                         ),
                       ),
                       child: Center(
@@ -139,6 +140,7 @@ class _AppHomeState extends State<AppHome> with SingleTickerProviderStateMixin {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             GestureDetector(
+                              behavior: HitTestBehavior.opaque,
                               onVerticalDragUpdate: (details) {
                                 if (details.delta.dy < 0 && !_isExpanded) {
                                   _toggleExpand();
@@ -368,8 +370,14 @@ class _AppHomeState extends State<AppHome> with SingleTickerProviderStateMixin {
         ),
       );
     }
-    _budgetController.clear();
-    _newListController.clear();
+    setState(() {
+      _budgetController.clear();
+      _newListController.clear();
+      _isExpanded = false;
+      _animationController.reverse().timeout(Duration(microseconds: 1));
+    });
+    if (!context.mounted) return;
+      FocusScope.of(context).unfocus();
   }
 
   void _pageCreatedLists(BuildContext context) {

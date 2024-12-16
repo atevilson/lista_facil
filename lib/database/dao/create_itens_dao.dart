@@ -47,26 +47,6 @@ class ItemsDao {
     return db.insert(nameTable, newItem);
   }
 
-  Future<int> update(NewItems items) async {
-    final Database db = await getDataBase();
-    return _toMapUpdate(items, db);
-  }
-
-  Future<int> _toMapUpdate(NewItems items, Database db) {
-    final Map<String, dynamic> newItem = {};
-    newItem[item] = items.items;
-    newItem[quantity] = items.quantity;
-    newItem[price] = items.price;
-    newItem[listId] = items.listId;
-    
-    return db.update(
-      nameTable, 
-      newItem, 
-      where: "$id = ?", 
-      whereArgs: [items.id]
-    );
-  }
-
   Future<int> _toDelete(NewItems items, Database db) {
     return db.delete(
       nameTable,
@@ -106,5 +86,18 @@ class ItemsDao {
       items.add(newItem);
     }
     return items;
+  }
+
+  Future<int> updateItem(NewItems items) async {
+    final Database db = await getDataBase();
+    return db.update(
+      nameTable, {
+        item: items.items, 
+        quantity: items.quantity,
+        price: items.price,
+        },
+        where: "$id = ?",
+      whereArgs: [items.id],
+    );
   }
 }
