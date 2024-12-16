@@ -18,8 +18,11 @@ class ListController extends ChangeNotifier {
   }
 
   Future<void> findAll() async {
-    listaValores.value = [];
-    listaValores.value = await _listsDao.findAll();
+    List<NewLists> lists = await _listsDao.findAll();
+    for(NewLists list in lists) {
+      list.bookMarked = _prefs.getBool('bookmark_${list.id}') ?? false;
+    }
+    listaValores.value = lists;
   }
 
   Future<void> deleteItem(NewLists value) async {
