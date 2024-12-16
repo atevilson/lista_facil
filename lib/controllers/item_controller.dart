@@ -7,12 +7,21 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ItemController extends ChangeNotifier {
   final NewLists newLists;
-  final ItemsDao _listsDao = ItemsDao();
+  final ItemsDao _itemDao = ItemsDao();
   final ValueNotifier<List<NewItems>> quantityItems = ValueNotifier<List<NewItems>>([]);
   bool _ascendingOrder = true; // ordenação default
+  bool get isAscending => _ascendingOrder;
   final ValueNotifier<double> total = ValueNotifier<double>(0.0);
 
+  late SharedPreferences _prefs;
+
   ItemController(this.newLists) {
+    //
+  }
+
+  Future<void> init() async {
+    _prefs = await SharedPreferences.getInstance();
+    _ascendingOrder = _prefs.getBool('ascendingOrder') ?? true;
     _loadListItems();
     _loadTotalSpent();
   }
