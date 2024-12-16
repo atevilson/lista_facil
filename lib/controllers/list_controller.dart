@@ -52,6 +52,7 @@ class ListController extends ChangeNotifier {
 
   Future<void> updateList(NewLists list) async {
     await _listsDao.updateList(list);
+    await _prefs.setBool('bookmark_${list.id}', list.bookMarked);
     await findAll();
   }
 }
