@@ -370,8 +370,14 @@ class _AppHomeState extends State<AppHome> with SingleTickerProviderStateMixin {
         ),
       );
     }
-    _budgetController.clear();
-    _newListController.clear();
+    setState(() {
+      _budgetController.clear();
+      _newListController.clear();
+      _isExpanded = false;
+      _animationController.reverse().timeout(Duration(microseconds: 1));
+    });
+    if (!context.mounted) return;
+      FocusScope.of(context).unfocus();
   }
 
   void _pageCreatedLists(BuildContext context) {
