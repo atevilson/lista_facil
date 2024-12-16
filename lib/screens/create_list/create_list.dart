@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:lista_facil/components/app_bar_lista.dart';
 import 'package:lista_facil/controllers/list_controller.dart';
 
 import 'package:lista_facil/models/new_lists.dart';
-import 'package:lista_facil/screens/itens_list/list_transference.dart';
+import 'package:lista_facil/screens/create_items/create_itens.dart';
 import 'package:lista_facil/utils_colors/utils_style.dart';
 
 class CreatedLists extends StatefulWidget {
@@ -19,8 +20,8 @@ class _CreatedListsState extends State<CreatedLists> with SingleTickerProviderSt
   final TextEditingController _newListController = TextEditingController();
   final TextEditingController _budgetController = TextEditingController();
   late final AnimationController _animationController;
-  bool _showCreateForm = false; // Controle de visibilidade do formulário de criar lista
-  bool _isSearchActive = false; // Controle de visibilidade da lupa
+  bool _showCreateForm = false; // visibilidade do formulário de criar lista
+  bool _isSearchActive = false; // visibilidade da lupa
   List<NewLists> _filteredLists = [];
   bool _isEditing = false;
   bool _isDelete = false;
@@ -29,6 +30,7 @@ class _CreatedListsState extends State<CreatedLists> with SingleTickerProviderSt
   @override
   void initState() {
     super.initState();
+    _controller.init();
     _controller.findAll();
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 500),
@@ -51,92 +53,27 @@ Widget build(BuildContext context) {
   final screenWidth = MediaQuery.of(context).size.width;
 
   return Scaffold(
-    backgroundColor: Color(0xFFe5f1ff),
+    backgroundColor: ThemeColor.colorBlueScafold,
     body: Column(
       children: [
-        Container(
-          decoration: BoxDecoration(
-            color: ThemeColor.colorBlueTema,
-            boxShadow: [
-              BoxShadow(
-                color: ThemeColor.colorBlueAccent.withOpacity(0.9),
-                spreadRadius: 3,
-                blurRadius: 8,
-                offset: const Offset(0, 4),
-              )
-            ],
+        AppBarCustom(
+          isSearchActive: _isSearchActive, 
+          onBack: () => Navigator.of(context).pop(), 
+          onSearch: _togleSearch, 
+          title: "Lista de compras",
+          searchController: _searchController,
+          onSearchChanged: _searchList,
+          hintText: "Buscar lista",
+          color: ThemeColor.colorBlueTema, 
+          controller: _controller,
           ),
-          height: 118,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 18.0),
-            child: Row(
-              children: [
-                // Botão de voltar
-                IconButton(
-                  icon: const Icon(Icons.arrow_back, color: ThemeColor.colorWhite),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-                const SizedBox(width: 8.0),
-                Expanded(
-                  child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 350),
-                    child: _isSearchActive
-                        ? TextField(
-                            key: const ValueKey(1),
-                            controller: _searchController,
-                            decoration: InputDecoration(
-                              hintText: 'Buscar lista',
-                              hintStyle: const TextStyle(color: ThemeColor.colorWhite60),
-                              filled: true,
-                              fillColor: ThemeColor.colorBlueTema,
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(25.0),
-                                borderSide: const BorderSide(
-                                    color: ThemeColor.colorWhite60, width: 1.5),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(25.0),
-                                borderSide: const BorderSide(
-                                    color: ThemeColor.colorWhite, width: 1.5),
-                              ),
-                            ),
-                            style: const TextStyle(color: ThemeColor.colorWhite),
-                            onChanged: (query) {
-                              _searchList(query);
-                            },
-                          )
-                        : Text(
-                            "Listas de compras",
-                            key: const ValueKey(2),
-                            style: const TextStyle(
-                              color: ThemeColor.colorWhite,
-                              fontSize: 24,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                  ),
-                ),
-                // Botão de busca
-                _isSearchActive ? IconButton(
-                  icon: const Icon(Icons.close, color: ThemeColor.colorWhite),
-                  onPressed: _togleSearch,
-                ) : IconButton(
-                                icon: const Icon(Icons.search, color: ThemeColor.colorWhite60),
-                                onPressed: _togleSearch,
-                              ),
-              ],
-            ),
-          ),
-        ),
           Expanded(
             child: _filteredLists.isEmpty
                 ? ValueListenableBuilder<List<NewLists>>(
                     valueListenable: _controller.listaValores,
                     builder: (context, snapshot, _) {
                       if (snapshot.isEmpty) {
-                        return const Center(
+                        return Center(
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -144,12 +81,13 @@ Widget build(BuildContext context) {
                             children: [
                               Icon(
                                 Icons.warning,
-                                color: ThemeColor.colorBlack45,
+                                color: ThemeColor.colorBlueGrey800,
                                 size: 50.0,
                               ),
                               Text(
                                 'Nenhuma lista disponível',
-                                style: TextStyle(fontSize: 20.0),
+                                style: TextStyle(fontSize: 20.0,
+                                color: ThemeColor.colorBlueGrey800),
                               ),
                             ],
                           ),
@@ -161,6 +99,7 @@ Widget build(BuildContext context) {
                         itemBuilder: (context, index) {
                           final NewLists lists = snapshot[index];
                           return _CollectionsLists(
+                            controller: _controller,
                             lists,
                             onDelete: () => _showDeleteConfirmation(lists),
                             onEdit: () => _showEditForm(lists),
@@ -177,21 +116,21 @@ Widget build(BuildContext context) {
                     itemBuilder: (context, index) {
                       final NewLists lists = _filteredLists[index];
                       return _CollectionsLists(
+                        controller: _controller,
                         lists,
-                        onDelete: () => _deleteItem(),
+                        onDelete: () => _deleteList(),
                         onEdit: () => _showEditForm(lists),
                       );
                     },
                   ),
           ),
-
           if (_showCreateForm)
-            Visibility(
-              child: Flexible(
-                child: Container(
-                  color: ThemeColor.colorWhite,
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: _isDelete ? Column(
+            Expanded(
+              child: Container(
+                color: ThemeColor.colorWhite,
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: _isDelete ? SingleChildScrollView(
+                  child: Column(
                     children: [
                             const SizedBox(height: 150),
                       Text("Deseja excluir a lista \"${_listEdit?.nameList}\" ?",
@@ -207,7 +146,7 @@ Widget build(BuildContext context) {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                                 ElevatedButton(
-                                  onPressed: () => _deleteItem(),
+                                  onPressed: () => _deleteList(),
                                   style: ElevatedButton.styleFrom(
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(25)
@@ -237,8 +176,10 @@ Widget build(BuildContext context) {
                         ],
                       ),
                     ], 
-                  ) :
-                  Column(
+                  ),
+                ) :
+                SingleChildScrollView(
+                  child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       const SizedBox(height: 40),
@@ -332,8 +273,8 @@ Widget build(BuildContext context) {
                       ),
                       const SizedBox(height: 15),
                       SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
+                                  width: double.infinity,
+                                  child: ElevatedButton(
                   onPressed: () {
                     setState(() {
                       _showCreateForm = !_showCreateForm; 
@@ -346,25 +287,29 @@ Widget build(BuildContext context) {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25.0),
                     ),
-                    backgroundColor: ThemeColor.colorBlueTema,
-                  ),
-                  child: Text(
-                    "Cancelar",
-                    style: const TextStyle(fontSize: 18.0, color: ThemeColor.colorWhite),
-                  ),
-                ),
+                                  backgroundColor: ThemeColor.colorBlueTema,
                                 ),
-                    ],
-                  ),
-                ),
+                                child: Text(
+                                  "Cancelar",
+                                  style: const TextStyle(
+                                      fontSize: 18.0,
+                                      color: ThemeColor.colorWhite),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
               ),
             ),
           SingleChildScrollView(
             child: Container(
+              height: _isEditing || _showCreateForm ? 20 : 150,
               color: ThemeColor.colorWhite,
               padding: const EdgeInsets.all(30.0),
               child: Center(
                 child: SizedBox(
+                  height: 50,
                   width: double.infinity,
                   child: !_showCreateForm ? ElevatedButton(
                     onPressed: () {
@@ -400,6 +345,7 @@ Widget build(BuildContext context) {
       _isSearchActive = !_isSearchActive;
       if(!_isSearchActive) {
         _searchController.clear();
+        _filteredLists = [];
       }
     });
   }
@@ -422,9 +368,9 @@ Widget build(BuildContext context) {
     });
   }
 
-  void _deleteItem() async {
+  void _deleteList() async {
     if(_isDelete && _listEdit != null) {
-      await _controller.deleteItem(_listEdit!);
+      await _controller.deleteList(_listEdit!);
     setState(() {
       _showCreateForm = false;
       _isEditing = false;
@@ -503,14 +449,16 @@ class _CollectionsLists extends StatefulWidget {
   final NewLists list;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
+  final ListController controller;
 
-  const _CollectionsLists(this.list, {required this.onEdit, required this.onDelete});
+  const _CollectionsLists(this.list, {required this.onEdit, required this.onDelete, required this.controller});
 
   @override
   State<_CollectionsLists> createState() => _CollectionsListsState();
 }
 
 class _CollectionsListsState extends State<_CollectionsLists> {
+
   @override
   Widget build(BuildContext context) {
     return Slidable(
@@ -523,7 +471,7 @@ class _CollectionsListsState extends State<_CollectionsLists> {
             onPressed: (context) {
               widget.onEdit();
             },
-            backgroundColor: ThemeColor.colorBlue,
+            backgroundColor: ThemeColor.colorBlueTema,
             foregroundColor: Colors.white,
             icon: Icons.edit,
           ),
@@ -537,7 +485,7 @@ class _CollectionsListsState extends State<_CollectionsLists> {
             onPressed: (context) {
               widget.onDelete();
             },
-            backgroundColor: ThemeColor.colorBlue,
+            backgroundColor: ThemeColor.colorBlueTema,
             foregroundColor: Colors.white,
             icon: Icons.delete,
           ),
@@ -550,7 +498,7 @@ class _CollectionsListsState extends State<_CollectionsLists> {
           title: InkWell(
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return ListTransference(widget.list);
+                return CreatedItens(widget.list);
               }));
             },
             child: Text(
@@ -576,10 +524,11 @@ class _CollectionsListsState extends State<_CollectionsLists> {
               ),
               const SizedBox(width: 5),
               GestureDetector(
-                onTap: () {
+                onTap: () async {
                   setState(() {
                     widget.list.bookMarked = !widget.list.bookMarked;
                   });
+                  await widget.controller.setListMarked(widget.list.id, widget.list.bookMarked);
                 },
                 child: Icon(
                   widget.list.bookMarked ? Icons.bookmark : Icons.bookmark_border,
