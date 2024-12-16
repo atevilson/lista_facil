@@ -132,7 +132,7 @@ class _AppHomeState extends State<AppHome> with SingleTickerProviderStateMixin {
                       decoration: const BoxDecoration(
                         image: DecorationImage(
                           image: AssetImage('images/base_bottom.png'),
-                          fit: BoxFit.contain,
+                          fit: BoxFit.fitHeight,
                         ),
                       ),
                       child: Center(
@@ -140,6 +140,7 @@ class _AppHomeState extends State<AppHome> with SingleTickerProviderStateMixin {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             GestureDetector(
+                              behavior: HitTestBehavior.opaque,
                               onVerticalDragUpdate: (details) {
                                 if (details.delta.dy < 0 && !_isExpanded) {
                                   _toggleExpand();
