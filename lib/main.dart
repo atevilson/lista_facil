@@ -58,13 +58,24 @@ class MyApplication extends StatelessWidget {
             //selectedTileColor: Colors.blue),
         checkboxTheme: CheckboxThemeData(
           splashRadius: 2.0,
-          fillColor: const WidgetStatePropertyAll(ThemeColor.colorBlack),
-          checkColor: const WidgetStatePropertyAll(ThemeColor.colorWhite),
+          //fillColor: WidgetStatePropertyAll(ThemeColor.colorGreyCheckBox),
+          //checkColor: const WidgetStatePropertyAll(ThemeColor.colorWhite),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(11.0)
-          )
+          ),
+          side: WidgetStateBorderSide.resolveWith((Set<WidgetState> states) {
+            if(states.contains(WidgetState.selected)) {
+              return BorderSide(
+                color: ThemeColor.colorTransparent,
+                width: 2.0
+              );
+            }
+            return BorderSide(
+              color: ThemeColor.colorBlueTema
+            );
+          })
         ),
-        inputDecorationTheme: const InputDecorationTheme(
+        inputDecorationTheme: InputDecorationTheme(
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(color: ThemeColor.colorWhite),
           ),
@@ -79,7 +90,7 @@ class MyApplication extends StatelessWidget {
           
         ),
         hoverColor: ThemeColor.colorWhite,
-        textSelectionTheme: const TextSelectionThemeData(
+        textSelectionTheme: TextSelectionThemeData(
             cursorColor: ThemeColor.colorWhite,
             selectionColor: ThemeColor.colorWhite,
             selectionHandleColor: ThemeColor.colorWhite,
@@ -101,8 +112,8 @@ class MyApplication extends StatelessWidget {
           ),
           textButtonTheme: TextButtonThemeData(
             style: ButtonStyle(
-              foregroundColor:  const WidgetStatePropertyAll(ThemeColor.colorWhite),
-              backgroundColor: WidgetStatePropertyAll(Colors.grey[600]),
+              foregroundColor: WidgetStatePropertyAll(ThemeColor.colorBlack),
+              backgroundColor: WidgetStatePropertyAll(ThemeColor.colorWhite),
               textStyle: const WidgetStatePropertyAll(
                 TextStyle(fontSize: 19.0,
                 fontWeight: FontWeight.w700)
