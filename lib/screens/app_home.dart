@@ -17,8 +17,9 @@ class _AppHomeState extends State<AppHome> with SingleTickerProviderStateMixin {
   late bool _isExpanded;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
+    _listController.init();
     _isExpanded = false;
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 100),
