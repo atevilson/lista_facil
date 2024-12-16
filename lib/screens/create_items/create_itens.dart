@@ -582,7 +582,7 @@ class _CollectionItems extends StatelessWidget {
 
                   if (isChecked) {
                     if (item.price! > 0.0) {
-                      await controller.toggleItemCheck(item.id!, true, item.price!);
+                      await controller.priceCheckerAndUpdater(item.id!, true, item.price!);
                     } else {
                       String valor = "";
                       final double? price = await showDialog<double>(
@@ -647,13 +647,13 @@ class _CollectionItems extends StatelessWidget {
                       );
 
                       if (price != null) {
-                        await controller.toggleItemCheck(item.id!, true, price);
+                        await controller.priceCheckerAndUpdater(item.id!, true, price);
                       } else {
-                        await controller.toggleItemCheck(item.id!, false, 0.0);
+                        await controller.priceCheckerAndUpdater(item.id!, false, 0.0);
                       }
                     }
                   } else {
-                    await controller.toggleItemCheck(
+                    await controller.priceCheckerAndUpdater(
                       item.id!,
                       false,
                       item.price!,
