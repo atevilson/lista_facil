@@ -7,6 +7,16 @@ class ListController {
   final ValueNotifier<List<NewLists>> listaValores =
       ValueNotifier<List<NewLists>>([]);
 
+  bool _ascendingOrder = true; // ordenação default
+  bool get isAscending => _ascendingOrder;
+
+  late SharedPreferences _prefs;
+
+  Future<void> init() async {
+    _prefs = await SharedPreferences.getInstance();
+    await findAll();
+  }
+
   Future<void> findAll() async {
     listaValores.value = [];
     listaValores.value = await _listsDao.findAll();
