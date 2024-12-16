@@ -25,8 +25,9 @@ class ListController extends ChangeNotifier {
     listaValores.value = lists;
   }
 
-  Future<void> deleteItem(NewLists value) async {
-    await _listsDao.delete(value);
+  Future<void> deleteList(NewLists value) async {
+    await _listsDao.deleteLists(value);
+    await _prefs.remove('bookmark_${value.id}');
     await findAll();
   }
 
