@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lista_facil/database/dao/create_list_dao.dart';
 import 'package:lista_facil/models/new_lists.dart';
 
-class ListController {
+class ListController extends ChangeNotifier {
   final ListsDao _listsDao = ListsDao();
   final ValueNotifier<List<NewLists>> listaValores =
       ValueNotifier<List<NewLists>>([]);
