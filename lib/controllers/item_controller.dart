@@ -146,6 +146,34 @@ Future<void> _loadTotalSpent() async{
     }
     Share.share(message);
   }
+
+  Future<List<NewItems>> searchItemByName(String query) async {
+    if(query.isEmpty){
+      return quantityItems.value;
+    }else {
+       return quantityItems.value
+        .where((local) => local.items.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+    }
+
+  }
+
+  Future<void> updateItem(NewItems updatedItem) async {
+     NewItems? oldItem = quantityItems.value.firstWhere((item) => item.id == updatedItem.id);
+
+    if (oldItem.id != null) {
+      if (oldItem.isChecked) {
+        double oldTotal = (oldItem.price ?? 0.0) * oldItem.quantity; // subtrai o valor antigo do total
+        double newTotal = (updatedItem.price ?? 0.0) * updatedItem.quantity; // add o novo valor ao total
+        total.value = total.value - oldTotal + newTotal;
+        total.value = double.parse(total.value.toStringAsFixed(2));
+        await _saveTotal();
+      }
+    }
+
+    await _itemDao.updateItem(updatedItem);
+    await _loadListItems();
+  }
 }
 
 
