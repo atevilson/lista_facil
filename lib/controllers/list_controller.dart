@@ -42,8 +42,12 @@ class ListController extends ChangeNotifier {
     return false;
   }
 
-  Future<List<NewLists>> searchListsByName(String name) {
-    return _listsDao.findByListsName(name);
+  Future<List<NewLists>> searchListsByName(String query) async {
+    if(query.isEmpty){
+      return listaValores.value;
+    }else{
+    return listaValores.value.where((local) => local.nameList.toLowerCase().contains(query.toLowerCase())).toList();
+    }
   }
 
   Future<void> updateList(NewLists list) async {
