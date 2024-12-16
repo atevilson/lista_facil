@@ -55,4 +55,37 @@ class ListController extends ChangeNotifier {
     await _prefs.setBool('bookmark_${list.id}', list.bookMarked);
     await findAll();
   }
+
+  Future<void> setListMarked(int listId, bool isListMarked) async {
+    await _prefs.setBool('bookmark_$listId', isListMarked);
+    int index = listaValores.value.indexWhere((list) => list.id == listId);
+    if(index != -1){
+      listaValores.value[index].bookMarked = isListMarked;
+    }
+  }
+
+  Future<bool> getBookMarked(int listId) async {
+    return _prefs.getBool('bookmark_$listId') ?? false;
+  }
+
+  void sortItems(bool ascending) async {
+    _ascendingOrder = ascending;
+    await _prefs.setBool('ascendingOrder', ascending);
+
+    List<NewLists> lists = List<NewLists>.from(listaValores.value);
+    _sortItemsInternal(lists);
+    listaValores.value = lists;
+    notifyListeners();
+  }
+
+  void _sortItemsInternal(List<NewLists> items) {
+    items.sort((a, b) {
+      String firstCharA = a.nameList.isNotEmpty ? a.nameList[0].toLowerCase() : '';
+      String firstCharB = b.nameList.isNotEmpty ? b.nameList[0].toLowerCase() : '';
+
+      int comparison = firstCharA.compareTo(firstCharB);
+      return _ascendingOrder ? comparison : -comparison;
+      },
+    );
+  }
 }
