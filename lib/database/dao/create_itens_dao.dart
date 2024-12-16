@@ -107,4 +107,17 @@ class ItemsDao {
     }
     return items;
   }
+
+  Future<int> updateItem(NewItems items) async {
+    final Database db = await getDataBase();
+    return db.update(
+      nameTable, {
+        item: items.items, 
+        quantity: items.quantity,
+        price: items.price,
+        },
+        where: "$id = ?",
+      whereArgs: [items.id],
+    );
+  }
 }
