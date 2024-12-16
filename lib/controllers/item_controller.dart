@@ -27,27 +27,22 @@ class ItemController extends ChangeNotifier {
   }
 
   Future<void> _loadListItems() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    _ascendingOrder = prefs.getBool('ascendingOrder') ?? true;
-
-    List<NewItems> items = await _listsDao.findByListId(newLists.id);
+    List<NewItems> items = await _itemDao.findByListId(newLists.id);
     _sortItemsInternal(items);
 
     for (NewItems item in items) {
-    item.isChecked = await loadCheckboxState(item.id!);
-  }
-    
+    item.isChecked = _prefs.getBool("checkbox_${item.id}") ?? false;
+  }   
     quantityItems.value = items;
+    notifyListeners();
   }
 
   Future<void> _saveTotal() async {
-  SharedPreferences prefs =await SharedPreferences.getInstance();
-  await prefs.setDouble('total_spent_${newLists.id}', total.value); 
+  await _prefs.setDouble('total_spent_${newLists.id}', total.value);
 }
 
 Future<void> _loadTotalSpent() async{
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  total.value = prefs.getDouble('total_spent_${newLists.id}') ?? 0.0;
+  total.value = _prefs.getDouble('total_spent_${newLists.id}') ?? 0.0;
   notifyListeners();
 }
 
@@ -58,23 +53,21 @@ Future<void> _loadTotalSpent() async{
   Future<bool> saveItem(NewItems value) async {
     final NewItems newItens = NewItems(
         listId: newLists.id, items: value.items, quantity: value.quantity, price: value.price);
-    await _listsDao.save(newItens);
+    await _itemDao.save(newItens);
     await _loadListItems();
     return true;
   }
 
   Future<bool> deleteItem(NewItems value) async {
     if(value.id != null && await loadCheckboxState(value.id!)) { // valida se o item está marcado antes de deletar
-      total.value -= value.price! * value.quantity;
+      total.value -= (value.price! * value.quantity);
       total.value = double.parse(total.value.toStringAsFixed(2));
 
       await _saveTotal();
-
       notifyListeners();
     }
 
-    await _listsDao.delete(value);
-
+    await _itemDao.delete(value);
     await _loadListItems();
 
     return true;
@@ -82,12 +75,12 @@ Future<void> _loadTotalSpent() async{
 
   void sortItems(bool ascending) async {
     _ascendingOrder = ascending;
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('ascendingOrder', ascending);
+    await _prefs.setBool('ascendingOrder', ascending);
 
     List<NewItems> items = List<NewItems>.from(quantityItems.value);
     _sortItemsInternal(items);
     quantityItems.value = items;
+    notifyListeners();
   }
 
   void _sortItemsInternal(List<NewItems> items) {
@@ -101,42 +94,33 @@ Future<void> _loadTotalSpent() async{
     );
   }
 
-  Future<void> checkAddOrDecrease(int itemId, bool isChecked, double price) async {
-    NewItems item =
-        quantityItems.value.firstWhere((element) => element.id == itemId);
-    
-    if(isChecked) {
-        total.value += price * item.quantity;
-        // (total.value += double.parse((price * item.quantity).toStringAsFixed(2)));
-        total.value = double.parse(total.value.toStringAsFixed(2));
-        item.price = price; 
-        item.isChecked = true;
-        await _listsDao.update(item);
-    }else {
-      if(item.isChecked!) {
-        total.value -= item.price! * item.quantity;
-        total.value = double.parse(total.value.toStringAsFixed(2));
-      }
+  Future<void> priceCheckerAndUpdater(int itemId, bool isChecked, double price) async {
+    NewItems? item = quantityItems.value.firstWhere((element) => element.id == itemId);
+
+    if (isChecked) {
+      total.value += (price * item.quantity);
+      item.isChecked = true;
+      item.price = price; // Atualiza o preço se necessário
+    } else {
+      total.value -= (item.price! * item.quantity);
       item.isChecked = false;
     }
 
-    total.notifyListeners();
+    total.value = double.parse(total.value.toStringAsFixed(2));
+    notifyListeners();
 
-    await saveCheckboxState(itemId, isChecked);
-
-    await _saveTotal();  
-
+    await _prefs.setBool("checkbox_$itemId", isChecked);
+    await _saveTotal();
+    await _itemDao.updateItem(item);
     await _loadListItems();
   }
 
   Future<bool> loadCheckboxState(int itemId) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getBool('checkbox_$itemId') ?? false;
+    return _prefs.getBool('checkbox_$itemId') ?? false;
   }
 
   Future<void> saveCheckboxState(int itemId, bool value) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('checkbox_$itemId', value);
+    await _prefs.setBool('checkbox_$itemId', value);
   }
 
   void shareItems(List<NewItems> items) {
