@@ -35,6 +35,7 @@ class ListController extends ChangeNotifier {
     if (value.isNotEmpty) {
       final NewLists newLists = NewLists(0, value, budget);
       await _listsDao.save(newLists);
+      await _prefs.setBool('bookmark_${newLists.id}', false);
       await findAll();
       return true;
     }
