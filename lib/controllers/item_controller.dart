@@ -160,6 +160,24 @@ Future<void> _loadTotalSpent() async{
     await _itemDao.updateItem(updatedItem);
     await _loadListItems();
   }
+
+  void addLayoffItem(NewItems item) { // adiciona um unico item a dispensa
+    _layoffList.add(item);
+    notifyListeners();
+  }
+
+  void addLayoffItems(List<NewItems> list) { // adiciona múltiplos itens a dispensa
+    _layoffList.addAll(list);
+    notifyListeners();
+  }
+
+  NewItems? getLayoffItemByName(String name) { // retorna um item com base na lista de dispensa ou null
+    try{
+      return _layoffList.firstWhere((item) => item.items.toLowerCase() == name.toLowerCase());
+    }catch(e){
+      return null;
+    }
+  }
 }
 
 
