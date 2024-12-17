@@ -9,6 +9,8 @@ class ItemController extends ChangeNotifier {
   final NewLists newLists;
   final ItemsDao _itemDao = ItemsDao();
   final ValueNotifier<List<NewItems>> quantityItems = ValueNotifier<List<NewItems>>([]);
+  final List<NewItems> _layoffList = [];
+  List<NewItems> get layoffList => _layoffList; // lista da dispensa
   bool _ascendingOrder = true; // ordenação default
   bool get isAscending => _ascendingOrder;
   final ValueNotifier<double> total = ValueNotifier<double>(0.0);
