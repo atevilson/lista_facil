@@ -543,30 +543,31 @@ class _CreatedItensState extends State<CreatedItens> with SingleTickerProviderSt
       }
     }
 
-      final updateItem = NewItems(
-        id: _itemEdit?.id,
-        items: _itemNameController.text,
-        quantity: newQuantity,
-        price: newPrice,
-        listId: widget.list.id,
-        isChecked: _itemEdit?.isChecked ?? false,
-      );
-      await _controller.updateItem(updateItem);
-      setState(() {
-        _clearFormState();
-      });
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: ThemeColor.colorRed800,
-          content: const Text(
-            'Por favor, preencha todos os campos corretamente.',
-            style: TextStyle(color: ThemeColor.colorWhite, fontSize: 14.0),
-          ),
+    final updateItem = NewItems(
+      id: _itemEdit?.id,
+      items: newName,
+      quantity: newQuantity,
+      price: newPrice,
+      listId: widget.list.id,
+      isChecked: _itemEdit?.isChecked ?? false,
+    );
+    await _controller.updateItem(updateItem);
+    setState(() {
+      _clearFormState();
+    });
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: ThemeColor.colorRed800,
+        content: const Text(
+          'Por favor, preencha todos os campos corretamente.',
+          style: TextStyle(color: ThemeColor.colorWhite, fontSize: 14.0),
         ),
-      );
-    }
+      ),
+    );
   }
+}
+
 
   void _clearFormState() {
     _showCreateForm = false;
