@@ -513,7 +513,6 @@ class _CreatedItensState extends State<CreatedItens> with SingleTickerProviderSt
     final int newQuantity = int.parse(_itemQuantityController.text);
     final double newPrice = double.tryParse(_itemPriceController.text.trim()) ?? 0.0;
 
-    // Verificar se o novo nome já existe na dispensa (exceto para o item atual)
     NewItems? existingItem = widget.listController.getLayoffItemByName(newName);
     if (existingItem != null && existingItem.id != _itemEdit?.id) {
       // Mostrar alerta informando a quantidade existente
