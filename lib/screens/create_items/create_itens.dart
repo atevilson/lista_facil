@@ -39,7 +39,7 @@ class _CreatedItensState extends State<CreatedItens> with SingleTickerProviderSt
   @override
   void initState() {
     super.initState();
-    _controller = ItemController(widget.list);
+    _controller = ItemController(widget.list, widget.listController);
     _controller.init();
   }
 
