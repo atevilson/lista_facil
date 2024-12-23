@@ -5,6 +5,7 @@ import 'package:lista_facil/controllers/list_controller.dart';
 
 import 'package:lista_facil/models/new_lists.dart';
 import 'package:lista_facil/screens/create_items/create_itens.dart';
+import 'package:lista_facil/screens/widgets/pantry_items_screen.dart';
 import 'package:lista_facil/utils_colors/utils_style.dart';
 
 class CreatedLists extends StatefulWidget {
@@ -81,13 +82,13 @@ Widget build(BuildContext context) {
                             children: [
                               Icon(
                                 Icons.warning,
-                                color: ThemeColor.colorBlueGrey800,
+                                color: ThemeColor.colorBlue,
                                 size: 50.0,
                               ),
                               Text(
                                 'Nenhuma lista disponível',
                                 style: TextStyle(fontSize: 20.0,
-                                color: ThemeColor.colorBlueGrey800),
+                                color: ThemeColor.colorBlue),
                               ),
                             ],
                           ),
@@ -125,24 +126,25 @@ Widget build(BuildContext context) {
                   ),
           ),
           if (_showCreateForm)
-            Expanded(
-              child: Container(
-                color: ThemeColor.colorWhite,
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: _isDelete ? SingleChildScrollView(
-                  child: Column(
-                    children: [
-                            const SizedBox(height: 150),
-                      Text("Deseja excluir a lista \"${_listEdit?.nameList}\" ?",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        color: ThemeColor.colorBlueTema,
-                        fontSize: 20
-                        ),
-                        textAlign: TextAlign.center,
+            Container(
+              color: ThemeColor.colorWhite,
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: _isDelete ? SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const SizedBox(height: 110),
+                    Text("Deseja excluir a lista \"${_listEdit?.nameList}\" ?",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      color: ThemeColor.colorBlueTema,
+                      fontSize: 20
                       ),
-                      SizedBox(height: 30),
-                      Row(
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: 30),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 18.0),
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                                 ElevatedButton(
@@ -175,132 +177,132 @@ Widget build(BuildContext context) {
                                 child: Icon(Icons.close, color: ThemeColor.colorBlueTema,))
                         ],
                       ),
-                    ], 
-                  ),
-                ) :
-                SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const SizedBox(height: 40),
-                      Text(
-                        _isEditing ? "Editar lista" : "Nova lista",
-                        style: TextStyle(
-                          letterSpacing: 3.0,
-                          fontWeight: FontWeight.w800,
-                          color: ThemeColor.colorBlueTema,
-                          fontSize: 18,
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: screenHeight * 0.015),
-                        width: screenWidth * 0.88,
-                        height: screenHeight * 0.002,
-                        decoration: BoxDecoration(
-                          color: ThemeColor.colorBlueTema,
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                      ),
-                      const SizedBox(height: 20,),
-                      TextField(
-                        controller: _newListController,
-                        cursorColor: ThemeColor.colorBlue,
-                        decoration: InputDecoration(
-                          labelText: "Nome da Lista",
-                          labelStyle: TextStyle(
-                            color: ThemeColor.blueShade700,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25.0),
-                            borderSide: BorderSide(color: ThemeColor.blueShade700, width: 1.5),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25.0),
-                            borderSide: BorderSide(color: ThemeColor.blueShade200, width: 1.5),
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25.0),
-                          ),
-                        ),
-                        keyboardType: TextInputType.text,
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          color: ThemeColor.blueShade700,
-                        ),
-                      ),
-                      const SizedBox(height: 8.0),
-                      TextField(
-                        controller: _budgetController,
-                        cursorColor: ThemeColor.colorBlue,
-                        decoration: InputDecoration(
-                          labelText: "Orçamento",
-                          labelStyle: TextStyle(
-                            color: ThemeColor.blueShade700,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25.0),
-                            borderSide: BorderSide(color: ThemeColor.blueShade700, width: 1.5),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25.0),
-                            borderSide: BorderSide(color: ThemeColor.blueShade200, width: 1.5),
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25.0),
-                          ),
-                        ),
-                        keyboardType: TextInputType.number,
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          color: ThemeColor.blueShade700,
-                        ),
-                      ),
-                      const SizedBox(height: 15),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: _isEditing ? () => _saveEditList(context) : () => _createNewList(context),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: ThemeColor.colorBlueTema,
-                          ),
-                          child: Text(
-                            _isEditing ? "Salvar" : "Criar nova lista",
-                            style: TextStyle(fontSize: 18.0, color: ThemeColor.colorWhite),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 15),
-                      SizedBox(
-                                  width: double.infinity,
-                                  child: ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      _showCreateForm = !_showCreateForm; 
-                      _newListController.clear();
-                      _budgetController.clear();
-                      _isEditing = false;
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25.0),
                     ),
-                                  backgroundColor: ThemeColor.colorBlueTema,
-                                ),
-                                child: Text(
-                                  "Cancelar",
-                                  style: const TextStyle(
-                                      fontSize: 18.0,
-                                      color: ThemeColor.colorWhite),
-                                ),
+                  ], 
+                ),
+              ) :
+              SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const SizedBox(height: 40),
+                    Text(
+                      _isEditing ? "Editar lista" : "Nova lista",
+                      style: TextStyle(
+                        letterSpacing: 3.0,
+                        fontWeight: FontWeight.w800,
+                        color: ThemeColor.colorBlueTema,
+                        fontSize: 18,
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: screenHeight * 0.015),
+                      width: screenWidth * 0.88,
+                      height: screenHeight * 0.002,
+                      decoration: BoxDecoration(
+                        color: ThemeColor.colorBlueTema,
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                    const SizedBox(height: 20,),
+                    TextField(
+                      controller: _newListController,
+                      cursorColor: ThemeColor.colorBlue,
+                      decoration: InputDecoration(
+                        labelText: "Nome da Lista",
+                        labelStyle: TextStyle(
+                          color: ThemeColor.blueShade700,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                          borderSide: BorderSide(color: ThemeColor.blueShade700, width: 1.5),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                          borderSide: BorderSide(color: ThemeColor.blueShade200, width: 1.5),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                        ),
+                      ),
+                      keyboardType: TextInputType.text,
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        color: ThemeColor.blueShade700,
+                      ),
+                    ),
+                    const SizedBox(height: 8.0),
+                    TextField(
+                      controller: _budgetController,
+                      cursorColor: ThemeColor.colorBlue,
+                      decoration: InputDecoration(
+                        labelText: "Orçamento",
+                        labelStyle: TextStyle(
+                          color: ThemeColor.blueShade700,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                          borderSide: BorderSide(color: ThemeColor.blueShade700, width: 1.5),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                          borderSide: BorderSide(color: ThemeColor.blueShade200, width: 1.5),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                        ),
+                      ),
+                      keyboardType: TextInputType.number,
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        color: ThemeColor.blueShade700,
+                      ),
+                    ),
+                    const SizedBox(height: 15),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: _isEditing ? () => _saveEditList(context) : () => _createNewList(context),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: ThemeColor.colorBlueTema,
+                        ),
+                        child: Text(
+                          _isEditing ? "Salvar" : "Criar nova lista",
+                          style: TextStyle(fontSize: 18.0, color: ThemeColor.colorWhite),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 15),
+                    SizedBox(
+                                width: double.infinity,
+                                child: ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    _showCreateForm = !_showCreateForm; 
+                    _newListController.clear();
+                    _budgetController.clear();
+                    _isEditing = false;
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+                                backgroundColor: ThemeColor.colorBlueTema,
+                              ),
+                              child: Text(
+                                "Cancelar",
+                                style: const TextStyle(
+                                    fontSize: 18.0,
+                                    color: ThemeColor.colorWhite),
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-              ),
+                    ),
             ),
           SingleChildScrollView(
             child: Container(
@@ -390,28 +392,68 @@ Widget build(BuildContext context) {
     });
   }
 
-  Future<void> _createNewList(BuildContext context) async {
-    final String nameList = _newListController.text;
-    final double? budget = double.tryParse(_budgetController.text);
-    if (nameList.isNotEmpty && budget != null) {
-      await _controller.saveList(nameList, budget);
-      setState(() {
-        _showCreateForm = false;
-        _newListController.clear();
-        _budgetController.clear();
-      });
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: ThemeColor.colorRed800,
-          content: const Text(
-            "Por favor, preencha todos os campos corretamente.",
-            style: TextStyle(color: ThemeColor.colorWhite, fontSize: 14.0),
+Future<void> _createNewList(BuildContext context) async {
+  final String nameList = _newListController.text;
+  final double? budget = double.tryParse(_budgetController.text);
+  if (nameList.isNotEmpty && budget != null) {
+    await _controller.saveList(nameList, budget);
+    setState(() {
+      _showCreateForm = false;
+      _newListController.clear();
+      _budgetController.clear();
+    });
+
+    if (!context.mounted) return;
+
+    bool? addLayoff = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: ThemeColor.colorBlueTema,
+        title: const Text("Deseja adicionar itens da dispensa?"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text("Não", 
+            style: TextStyle(
+              fontWeight: FontWeight.w300,
+              color: ThemeColor.colorBlueTema,
+            ),),
           ),
+          SizedBox(width: 10),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text("Sim",
+            style: TextStyle(
+              fontWeight: FontWeight.w300,
+              color: ThemeColor.colorBlueTema,
+            ),),
+          ),
+        ],
+      ),
+    );
+
+    if (addLayoff == true) {
+      if (!context.mounted) return;
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          /* pantry items screen é tela onde o usuário adiciona os itens de dispensa */
+          builder: (context) => PantryItemsScreen(listController: _controller),
         ),
       );
     }
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: ThemeColor.colorRed800,
+        content: const Text(
+          "Por favor, preencha todos os campos corretamente.",
+          style: TextStyle(color: ThemeColor.colorWhite, fontSize: 14.0),
+        ),
+      ),
+    );
   }
+}
 
   Future<void> _saveEditList(BuildContext context) async {
     if (_newListController.text.isNotEmpty &&
@@ -498,7 +540,7 @@ class _CollectionsListsState extends State<_CollectionsLists> {
           title: InkWell(
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return CreatedItens(widget.list);
+                return CreatedItens(widget.list, listController: widget.controller);
               }));
             },
             child: Text(

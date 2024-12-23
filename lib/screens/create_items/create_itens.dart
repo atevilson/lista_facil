@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lista_facil/components/app_bar_itens.dart';
 import 'package:lista_facil/controllers/item_controller.dart';
+import 'package:lista_facil/controllers/list_controller.dart';
 import 'package:lista_facil/models/new_items.dart';
 import 'package:lista_facil/models/new_lists.dart';
 import 'package:lista_facil/utils_colors/utils_style.dart';
@@ -10,7 +11,8 @@ const titleAppBar = 'Itens';
 
 class CreatedItens extends StatefulWidget {
   final NewLists list;
-  const CreatedItens(this.list, {super.key});
+  final ListController listController;
+  const CreatedItens(this.list, {super.key, required this.listController});
 
   @override
   State<CreatedItens> createState() => _CreatedItensState();
@@ -37,7 +39,7 @@ class _CreatedItensState extends State<CreatedItens> with SingleTickerProviderSt
   @override
   void initState() {
     super.initState();
-    _controller = ItemController(widget.list);
+    _controller = ItemController(widget.list, widget.listController);
     _controller.init();
   }
 
@@ -451,60 +453,120 @@ class _CreatedItensState extends State<CreatedItens> with SingleTickerProviderSt
     final int? quantity = int.tryParse(_itemQuantityController.text.trim());
     final double? price = double.tryParse(_itemPriceController.text.trim());
 
-    if (itemName.isNotEmpty && quantity != null) {
-      final newItem = NewItems(
-        items: itemName,
-        quantity: quantity,
-        price: price ?? 0.0,
-        listId: widget.list.id,
-      );
-      await _controller.saveItem(newItem);
-      setState(() {
-        _clearFormState();
-      });
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: ThemeColor.colorRed800,
-          content: const Text(
-            "Por favor, preencha todos os campos corretamente.",
-            style: TextStyle(color: ThemeColor.colorWhite, fontSize: 14.0),
-          ),
+    if (itemName.isNotEmpty && quantity != null){
+      NewItems? existingItem = widget.listController.getLayoffItemByName(itemName);
+      if (existingItem != null) {
+
+      bool? userChoice = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          backgroundColor: ThemeColor.colorBlueTema,
+          title: Center(child: const Text("Atenção", style: TextStyle(fontSize: 30.0))),
+          content: Text(
+              "O item \"$itemName\" já possui \"${existingItem.quantity}\" unidades na dispensa.",
+              style: TextStyle(fontWeight: FontWeight.w400)),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),  
+              child: Text("Confirmar", style: TextStyle(color: ThemeColor.colorBlueTema)),
+            ),
+            SizedBox(width: 10,),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),  
+              child: Text("Editar", style: TextStyle(color: ThemeColor.colorBlueTema)),
+            ),
+          ],
         ),
       );
+      if(userChoice == true){
+        return;
+      }
     }
+
+    final newItem = NewItems(
+      items: itemName,
+      quantity: quantity,
+      price: price ?? 0.0,
+      listId: widget.list.id,
+    );
+    await _controller.saveItem(newItem);
+    setState(() {
+      _clearFormState();
+    });
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: ThemeColor.colorRed800,
+        content: const Text(
+          "Por favor, preencha todos os campos corretamente.",
+          style: TextStyle(color: ThemeColor.colorWhite, fontSize: 14.0),
+        ),
+      ),
+    );
   }
+}
 
   Future<void> _saveEditItem(BuildContext context) async {
-    if (_itemNameController.text.isNotEmpty &&
-        int.tryParse(_itemQuantityController.text) != null) {
-      final int newQuantity = int.parse(_itemQuantityController.text);
-      final double newPrice = double.tryParse(_itemPriceController.text.trim()) ?? 0.0;
+  if (_itemNameController.text.isNotEmpty &&
+      int.tryParse(_itemQuantityController.text) != null) {
+    final String newName = _itemNameController.text.trim();
+    final int newQuantity = int.parse(_itemQuantityController.text);
+    final double newPrice = double.tryParse(_itemPriceController.text.trim()) ?? 0.0;
 
-      final updateItem = NewItems(
-        id: _itemEdit?.id,
-        items: _itemNameController.text,
-        quantity: newQuantity,
-        price: newPrice,
-        listId: widget.list.id,
-        isChecked: _itemEdit?.isChecked ?? false,
-      );
-      await _controller.updateItem(updateItem);
-      setState(() {
-        _clearFormState();
-      });
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: ThemeColor.colorRed800,
-          content: const Text(
-            'Por favor, preencha todos os campos corretamente.',
-            style: TextStyle(color: ThemeColor.colorWhite, fontSize: 14.0),
-          ),
+    NewItems? existingItem = widget.listController.getLayoffItemByName(newName);
+    if (existingItem != null && existingItem.id != _itemEdit?.id) {
+      // Mostrar alerta informando a quantidade existente
+      bool? userChoice = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          backgroundColor: ThemeColor.colorBlueTema,
+          title: const Text("Atenção", style: TextStyle(fontSize: 30.0)),
+          content: Text(
+              "O item \"$newName\" já possui \"${existingItem.quantity}\" unidades na dispensa.",
+              style: TextStyle(fontWeight: FontWeight.w400)),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),  
+              child: Text("Confirmar", style: TextStyle(color: ThemeColor.colorBlueTema)),
+            ),
+            SizedBox(width: 10),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),  
+              child: Text("Editar", style: TextStyle(color: ThemeColor.colorBlueTema)),
+            ),
+          ],
         ),
       );
+      if(userChoice == true){
+        return;
+      }
     }
+
+    final updateItem = NewItems(
+      id: _itemEdit?.id,
+      items: newName,
+      quantity: newQuantity,
+      price: newPrice,
+      listId: widget.list.id,
+      isChecked: _itemEdit?.isChecked ?? false,
+    );
+    await _controller.updateItem(updateItem);
+    setState(() {
+      _clearFormState();
+    });
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: ThemeColor.colorRed800,
+        content: const Text(
+          'Por favor, preencha todos os campos corretamente.',
+          style: TextStyle(color: ThemeColor.colorWhite, fontSize: 14.0),
+        ),
+      ),
+    );
   }
+}
+
 
   void _clearFormState() {
     _showCreateForm = false;

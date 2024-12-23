@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lista_facil/controllers/list_controller.dart';
 import 'package:lista_facil/database/dao/create_itens_dao.dart';
 import 'package:lista_facil/models/new_items.dart';
 import 'package:lista_facil/models/new_lists.dart';
@@ -12,10 +13,11 @@ class ItemController extends ChangeNotifier {
   bool _ascendingOrder = true; // ordenação default
   bool get isAscending => _ascendingOrder;
   final ValueNotifier<double> total = ValueNotifier<double>(0.0);
+  final ListController listController;
 
   late SharedPreferences _prefs;
 
-  ItemController(this.newLists) {
+  ItemController(this.newLists, this.listController) {
     //
   }
 
