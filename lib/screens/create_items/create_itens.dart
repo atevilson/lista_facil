@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lista_facil/components/app_bar_itens.dart';
 import 'package:lista_facil/controllers/item_controller.dart';
+import 'package:lista_facil/controllers/list_controller.dart';
 import 'package:lista_facil/models/new_items.dart';
 import 'package:lista_facil/models/new_lists.dart';
 import 'package:lista_facil/utils_colors/utils_style.dart';
@@ -10,7 +11,8 @@ const titleAppBar = 'Itens';
 
 class CreatedItens extends StatefulWidget {
   final NewLists list;
-  const CreatedItens(this.list, {super.key});
+  final ListController listController;
+  const CreatedItens(this.list, {super.key, required this.listController});
 
   @override
   State<CreatedItens> createState() => _CreatedItensState();
