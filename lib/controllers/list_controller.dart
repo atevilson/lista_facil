@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lista_facil/database/dao/create_list_dao.dart';
+import 'package:lista_facil/models/new_items.dart';
 import 'package:lista_facil/models/new_lists.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -10,6 +11,8 @@ class ListController extends ChangeNotifier {
 
   bool _ascendingOrder = true; // ordenação default
   bool get isAscending => _ascendingOrder;
+  final List<NewItems> _layoffList = [];
+  List<NewItems> get layoffList => _layoffList; // lista da dispensa
 
   late SharedPreferences _prefs;
 
@@ -88,5 +91,23 @@ class ListController extends ChangeNotifier {
       return _ascendingOrder ? comparison : -comparison;
       },
     );
+  }
+  
+  void addLayoffItem(NewItems item) { // adiciona um unico item a dispensa
+    _layoffList.add(item);
+    notifyListeners();
+  }
+
+  void addLayoffItems(List<NewItems> list) { // adiciona múltiplos itens a dispensa
+    _layoffList.addAll(list);
+    notifyListeners();
+  }
+
+  NewItems? getLayoffItemByName(String name) { // retorna um item com base na lista de dispensa ou null
+    try{
+      return _layoffList.firstWhere((item) => item.items.toLowerCase() == name.toLowerCase());
+    }catch(e){
+      return null;
+    }
   }
 }
