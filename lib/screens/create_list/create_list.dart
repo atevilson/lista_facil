@@ -5,6 +5,7 @@ import 'package:lista_facil/controllers/list_controller.dart';
 
 import 'package:lista_facil/models/new_lists.dart';
 import 'package:lista_facil/screens/create_items/create_itens.dart';
+import 'package:lista_facil/screens/widgets/pantry_items_screen.dart';
 import 'package:lista_facil/utils_colors/utils_style.dart';
 
 class CreatedLists extends StatefulWidget {
@@ -390,28 +391,68 @@ Widget build(BuildContext context) {
     });
   }
 
-  Future<void> _createNewList(BuildContext context) async {
-    final String nameList = _newListController.text;
-    final double? budget = double.tryParse(_budgetController.text);
-    if (nameList.isNotEmpty && budget != null) {
-      await _controller.saveList(nameList, budget);
-      setState(() {
-        _showCreateForm = false;
-        _newListController.clear();
-        _budgetController.clear();
-      });
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: ThemeColor.colorRed800,
-          content: const Text(
-            "Por favor, preencha todos os campos corretamente.",
-            style: TextStyle(color: ThemeColor.colorWhite, fontSize: 14.0),
+Future<void> _createNewList(BuildContext context) async {
+  final String nameList = _newListController.text;
+  final double? budget = double.tryParse(_budgetController.text);
+  if (nameList.isNotEmpty && budget != null) {
+    await _controller.saveList(nameList, budget);
+    setState(() {
+      _showCreateForm = false;
+      _newListController.clear();
+      _budgetController.clear();
+    });
+
+    if (!context.mounted) return;
+
+    bool? addLayoff = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: ThemeColor.colorBlueTema,
+        title: const Text("Deseja adicionar itens da dispensa?"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text("Não", 
+            style: TextStyle(
+              fontWeight: FontWeight.w300,
+              color: ThemeColor.colorBlueTema,
+            ),),
           ),
+          SizedBox(width: 10),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text("Sim",
+            style: TextStyle(
+              fontWeight: FontWeight.w300,
+              color: ThemeColor.colorBlueTema,
+            ),),
+          ),
+        ],
+      ),
+    );
+
+    if (addLayoff == true) {
+      if (!context.mounted) return;
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          /* pantry items screen é tela onde o usuário adiciona os itens de dispensa */
+          builder: (context) => PantryItemsScreen(listController: _controller),
         ),
       );
     }
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: ThemeColor.colorRed800,
+        content: const Text(
+          "Por favor, preencha todos os campos corretamente.",
+          style: TextStyle(color: ThemeColor.colorWhite, fontSize: 14.0),
+        ),
+      ),
+    );
   }
+}
 
   Future<void> _saveEditList(BuildContext context) async {
     if (_newListController.text.isNotEmpty &&
