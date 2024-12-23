@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lista_facil/controllers/list_controller.dart';
 import 'package:lista_facil/database/dao/create_itens_dao.dart';
 import 'package:lista_facil/models/new_items.dart';
 import 'package:lista_facil/models/new_lists.dart';
@@ -9,15 +10,14 @@ class ItemController extends ChangeNotifier {
   final NewLists newLists;
   final ItemsDao _itemDao = ItemsDao();
   final ValueNotifier<List<NewItems>> quantityItems = ValueNotifier<List<NewItems>>([]);
-  final List<NewItems> _layoffList = [];
-  List<NewItems> get layoffList => _layoffList; // lista da dispensa
   bool _ascendingOrder = true; // ordenação default
   bool get isAscending => _ascendingOrder;
   final ValueNotifier<double> total = ValueNotifier<double>(0.0);
+  final ListController listController;
 
   late SharedPreferences _prefs;
 
-  ItemController(this.newLists) {
+  ItemController(this.newLists, this.listController) {
     //
   }
 
@@ -159,24 +159,6 @@ Future<void> _loadTotalSpent() async{
 
     await _itemDao.updateItem(updatedItem);
     await _loadListItems();
-  }
-
-  void addLayoffItem(NewItems item) { // adiciona um unico item a dispensa
-    _layoffList.add(item);
-    notifyListeners();
-  }
-
-  void addLayoffItems(List<NewItems> list) { // adiciona múltiplos itens a dispensa
-    _layoffList.addAll(list);
-    notifyListeners();
-  }
-
-  NewItems? getLayoffItemByName(String name) { // retorna um item com base na lista de dispensa ou null
-    try{
-      return _layoffList.firstWhere((item) => item.items.toLowerCase() == name.toLowerCase());
-    }catch(e){
-      return null;
-    }
   }
 }
 
