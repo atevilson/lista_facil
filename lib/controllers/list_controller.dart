@@ -39,7 +39,7 @@ class ListController extends ChangeNotifier {
 
   Future<bool> saveList(String value, double budget) async {
     if (value.isNotEmpty) {
-      final NewLists newLists = NewLists(0, value, budget);
+      final NewLists newLists = NewLists(0, value, budget, "");
       await _listsDao.save(newLists);
       await _prefs.setBool('bookmark_${newLists.id}', false);
       await findAll();

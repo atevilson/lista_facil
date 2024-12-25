@@ -463,6 +463,7 @@ Future<void> _createNewList(BuildContext context) async {
         _listEdit!.id,
         _newListController.text,
         newBudget,
+        ""
       );
       await _controller.updateList(updateList);
       setState(() {
