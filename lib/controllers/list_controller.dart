@@ -1,8 +1,10 @@
+import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
 import 'package:lista_facil/database/dao/create_list_dao.dart';
 import 'package:lista_facil/models/new_items.dart';
 import 'package:lista_facil/models/new_lists.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:string_similarity/string_similarity.dart';
 
 class ListController extends ChangeNotifier {
   final ListsDao _listsDao = ListsDao();
@@ -98,16 +100,43 @@ class ListController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addLayoffItems(List<NewItems> list) { // adiciona múltiplos itens a dispensa
+  void addLayoffItems(List<NewItems> list) {
+    // adiciona múltiplos itens a dispensa
     _layoffList.addAll(list);
     notifyListeners();
   }
 
-  NewItems? getLayoffItemByName(String name) { // retorna um item com base na lista de dispensa ou null
-    try{
-      return _layoffList.firstWhere((item) => item.items.toLowerCase() == name.toLowerCase());
-    }catch(e){
-      return null;
+  String _normalize(String text) {
+    return removeDiacritics(text).toLowerCase();
+  }
+
+  NewItems? getLayoffItemByName(String name) {
+    // retorna um item com base na lista de dispensa ou null
+    // try{
+    //   return _layoffList.firstWhere((item) => item.items.toLowerCase() == name.toLowerCase());
+    // }catch(e){
+    //   return null;
+    // }
+
+    if (_layoffList.isEmpty) return null;
+
+    String normalizedInput = _normalize(name);
+
+    double bestScore = 0;
+    NewItems? bestMatch;
+
+    for (var item in _layoffList){
+      double score = normalizedInput.similarityTo(_normalize(item.items)); // normalização do item antes de comparar
+      if (score > bestScore) {
+        bestScore = score;
+        bestMatch = item;
+      }
     }
+
+    if (bestScore > 0.5){ // score min para considerar se na comparação são equivalentes
+      return bestMatch;
+    }
+
+    return null;
   }
 }
