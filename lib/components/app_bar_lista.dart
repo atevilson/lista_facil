@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:lista_facil/components/custom_icons.dart';
 import 'package:lista_facil/controllers/list_controller.dart';
+import 'package:lista_facil/screens/widgets/report_screen.dart';
 import 'package:lista_facil/utils_colors/utils_style.dart';
 
 class AppBarCustom extends StatelessWidget {
@@ -101,10 +102,71 @@ class AppBarCustom extends StatelessWidget {
                   ),
                   onPressed: onSearch,
                 ),
-                IconButton(
-                      onPressed: () => controller.sortItems(!controller.isAscending), 
-                      icon: Icon(CustomIcons.alphabetic), 
-                      color: ThemeColor.colorWhite60),
+                PopupMenuButton<int>(
+                      position: PopupMenuPosition.over,
+                      color: ThemeColor.colorBlueScafold,
+                      icon: Icon(
+                        Icons.more_vert,
+                        color: ThemeColor.colorWhite,
+                      ),
+                      onSelected: (value) {
+                        switch (value) {
+                          case 1:
+                            controller.sortItems(!controller.isAscending);
+                            break;
+                          case 2:
+                            controller.sortItems(controller.isAscending);
+                            break;
+                          default:
+                            break;
+                        }
+                      },
+                      itemBuilder: (context) => [
+                        PopupMenuItem(
+                            value: 1,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Ordenar",
+                                style: TextStyle(
+                                  color: ThemeColor.colorBlueTema
+                                ),),
+                                IconButton(
+                                    iconSize: 28,
+                                    onPressed: () => controller
+                                        .sortItems(!controller.isAscending),
+                                    icon: Icon(CustomIcons.alphabetic),
+                                    color: ThemeColor.colorBlueTema),
+                              ],
+                            )),
+                        PopupMenuItem(
+                            value: 2,
+                            child: Row(
+                              children: [
+                                GestureDetector(
+                                  behavior: HitTestBehavior.opaque,
+                                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ReportScreen())),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        "Relatórios",
+                                        style: TextStyle(
+                                            color: ThemeColor.colorBlueTema),
+                                      ),
+                                      SizedBox(width: 40),
+                                      Icon(
+                                        Icons.report,
+                                        size: 28,
+                                        color: ThemeColor.colorBlueTema,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ))
+                      ],
+                    ),
               ],
             ),
           ],
