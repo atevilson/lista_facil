@@ -25,12 +25,9 @@ class _ReportScreenState extends State<ReportScreen> {
   }
 
   Future<void> _loadReports() async {
-    // 1) gasto médio
-    double media = await _controller.getGastosTrimestraisAlimentacao();
-    // 3) top 10 mais
-    List<MapEntry<String, int>> mais = await _controller.getTopItemsMaisComprados();
-    // 4) top 10 menos
-    //List<MapEntry<String, int>> menos = await _controller.getTop10MenosComprados3Meses();
+    double media = await _controller.getGastosTrimestraisAlimentacao(); // gasto médio
+    List<MapEntry<String, int>> mais = await _controller.getTopItemsMaisComprados(); // top 10 mais comprados
+    //List<MapEntry<String, int>> menos = await _controller.getTop10MenosComprados3Meses(); // top 10 menos comprados
 
     setState(() {
       _mediaMensal = media;
