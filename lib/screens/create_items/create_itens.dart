@@ -463,7 +463,7 @@ class _CreatedItensState extends State<CreatedItens> with SingleTickerProviderSt
           backgroundColor: ThemeColor.colorBlueTema,
           title: Center(child: const Text("Atenção", style: TextStyle(fontSize: 30.0))),
           content: Text(
-              "O item \"$itemName\" já possui \"${existingItem.quantity}\" unidades na dispensa.",
+              "O item \"$itemName\" já possui \"${existingItem.quantity}\" ${existingItem.quantity > 1 ? "unidades" : "unidade"} na dispensa.",
               style: TextStyle(fontWeight: FontWeight.w400)),
           actions: [
             TextButton(
@@ -522,7 +522,7 @@ class _CreatedItensState extends State<CreatedItens> with SingleTickerProviderSt
           backgroundColor: ThemeColor.colorBlueTema,
           title: const Text("Atenção", style: TextStyle(fontSize: 30.0)),
           content: Text(
-              "O item \"$newName\" já possui \"${existingItem.quantity}\" unidades na dispensa.",
+              "O item \"$newName\" já possui \"${existingItem.quantity}\" ${existingItem.quantity > 1 ? "unidades" : "unidade"} na dispensa.",
               style: TextStyle(fontWeight: FontWeight.w400)),
           actions: [
             TextButton(

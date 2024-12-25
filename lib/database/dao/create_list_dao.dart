@@ -8,11 +8,13 @@ class ListsDao {
   static const String id = 'id';
   static const String name = 'name';
   static const String budget = 'budget';
+  static const String createdAt = 'createdAt';
 
   static const String tableSQL = 'CREATE TABLE $nameTable('
       '$id INTEGER PRIMARY KEY, '
       '$name TEXT, '
-      '$budget REAL)';
+      '$budget REAL, '
+      '$createdAt TEXT)';
 
   Future<int> save(NewLists listas) async {
     final Database db = await getDataBase();
