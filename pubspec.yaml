@@ -17,6 +17,8 @@ dependencies:
   share_plus: ^10.1.2
   path: ^1.9.0
   flutter_slidable: ^3.1.1
+  string_similarity: ^2.1.1
+  diacritic: ^0.1.6
 
 dev_dependencies:
   flutter_test:
