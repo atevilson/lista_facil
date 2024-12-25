@@ -55,6 +55,7 @@ class ListsDao {
     final Map<String, dynamic> newLists = {};
     newLists[name] = listas.nameList;
     newLists[budget] = listas.budget;
+    newLists[createdAt] = listas.createdAt ?? DateTime.now().toIso8601String();
     return db.insert(nameTable, newLists);
   }
 
@@ -66,7 +67,8 @@ class ListsDao {
       final NewLists listNew = NewLists(
         row[id],
         row[name],
-        row[budget]
+        row[budget],
+        row[createdAt],
       );
       lists.add(listNew);
     }
