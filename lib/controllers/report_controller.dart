@@ -52,7 +52,7 @@ class ReportController {
       final nome = items.items;
       final mesAno = "${createdDate.year.toString().padLeft(4, '0')}-${createdDate.month.toString().padLeft(2, '0')}";
       if(!agrupado.containsKey(nome)){
-        agrupado[nome];
+        agrupado[nome] = {};
       }
       if(!agrupado[nome]!.containsKey(mesAno)){
         agrupado[nome]![mesAno] = [];
