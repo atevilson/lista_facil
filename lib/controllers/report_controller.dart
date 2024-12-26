@@ -38,18 +38,18 @@ class ReportController {
     return media;
   }
 
-  // varicação de preços entre itens (comparativo mês a mês)
+  // variação de preços entre itens (comparativo mês a mês)
   Future<Map<String, List<double>>> getVariacaoPrecoItemMesAMes() async{
     List<NewItems> allItems = await _itemsDao.findAll(); 
 
     final Map<String, Map<String, List<double>>> agrupado = {};
 
-    for (var items in allItems) {
-      if(items.createdAt == null) continue;
-      final createdDate = DateTime.tryParse(items.createdAt!);
+    for (var item in allItems) {
+      if(item.createdAt == null) continue;
+      final createdDate = DateTime.tryParse(item.createdAt!);
       if(createdDate == null) continue;
 
-      final nome = items.items;
+      final nome = item.items;
       final mesAno = "${createdDate.year.toString().padLeft(4, '0')}-${createdDate.month.toString().padLeft(2, '0')}";
       if(!agrupado.containsKey(nome)){
         agrupado[nome] = {};
@@ -57,7 +57,7 @@ class ReportController {
       if(!agrupado[nome]!.containsKey(mesAno)){
         agrupado[nome]![mesAno] = [];
       }
-      agrupado[nome]![mesAno]!.add(items.price ?? 0.0);
+      agrupado[nome]![mesAno]!.add(item.price ?? 0.0);
     }
 
     final Map<String, List<double>> resultado = {};
