@@ -1,43 +1,75 @@
 
 import 'package:flutter/material.dart';
+import 'package:lista_facil/controllers/report_controller.dart';
 import 'package:lista_facil/utils_colors/utils_style.dart';
 
-class PriceVariationScreen extends StatelessWidget {
-  final Map<String, List<double>> data;
+class PriceVariationScreen extends StatefulWidget {
+  const PriceVariationScreen({super.key});
 
-  const PriceVariationScreen({super.key, required this.data});
+  @override
+  State<PriceVariationScreen> createState() => _PriceVariationScreenState();
+}
+
+class _PriceVariationScreenState extends State<PriceVariationScreen> {
+  final ReportController _reportController = ReportController();
+  Map<String, double> _difVariacao = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    final result = await _reportController.getVariacaoPrecoUltimaCompra();
+    setState(() {
+      _difVariacao = result;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final items = data.entries.toList();
+    final entries = _difVariacao.entries.toList();
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Variação de preços", style: TextStyle(
+        title: const Text("Variação de Preços",
+        style: TextStyle(
           color: ThemeColor.colorWhite
         ),),
       ),
       body: ListView.builder(
-        itemCount: items.length,
+        itemCount: entries.length,
         itemBuilder: (context, index) {
-          final entry = items[index];
-          final nomeItem = "Item ${entry.key.toLowerCase()}";
-          final precosMesAMes = entry.value;
+          final e = entries[index];
+          final nomeItem = e.key;
+          final diff = e.value; 
+
+          String mensagem;
+          var diferenca = diff > 0;
+          if (diff > 0) {
+            mensagem = "Teve um aumento no preço de R\$ ${diff.toStringAsFixed(2)}";
+          } else if (diff < 0) {
+            mensagem = "Teve uma queda no preço de R\$ ${diff.abs().toStringAsFixed(2)}";
+          } else {
+            mensagem = "Preço se manteve o mesmo";
+          }
 
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Card(
-              child: ListTile(
-                tileColor: ThemeColor.colorWhite70,
-                title: Text(nomeItem, style: TextStyle(
-                  color: ThemeColor.colorBlueTema
-                ),),
-                subtitle: Text(
-                  "Preço no último mês: ${precosMesAMes.join(", ")}",
-                  style: TextStyle(
-                    color: ThemeColor.colorGreenTotal
-                  ),
-                ),
+            padding: const EdgeInsets.symmetric(horizontal: 9.0, vertical: 3.0),
+            child: ListTile(
+              dense: true,
+              tileColor: ThemeColor.colorWhite70,
+              title: Text(
+                "Item $nomeItem",
+                style: TextStyle(color: ThemeColor.colorBlue),
+              ),
+              subtitle: Text(
+                mensagem,
+                style: TextStyle(
+                    color: diferenca
+                        ? ThemeColor.colorRed800
+                        : ThemeColor.colorGreenTotal),
               ),
             ),
           );
