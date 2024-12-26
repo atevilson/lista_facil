@@ -59,20 +59,15 @@ class _ReportScreenState extends State<ReportScreen> {
                 minimumSize: const Size(double.infinity, 50),
               ),
               onPressed: () async {
-                // Carrega variação de preços
-                final variacao = await _controller.getVariacaoPrecoItemMesAMes();
-
                 if(!context.mounted) return;
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => PriceVariationScreen(
-                      data: variacao,
-                    ),
+                    builder: (context) => PriceVariationScreen(),
                   ),
                 );
               },
-              child: Text("Variação de preço entre itens no último mês",
+              child: Text("Variação de preço entre itens",
                 style: TextStyle(color: ThemeColor.colorBlueTema),
               ),
             ),
