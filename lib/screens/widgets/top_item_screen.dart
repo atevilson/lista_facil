@@ -25,14 +25,15 @@ class TopItemsScreen extends StatelessWidget {
         itemBuilder: (context, index) {
           final entry = data[index];
           return Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 9.0, vertical: 3.0),
             child: ListTile(
+              dense: true,
               tileColor: ThemeColor.colorWhite70,
               title: Text(entry.key, style: TextStyle(
                 color: ThemeColor.colorBlueTema
               ),),
               subtitle: Text("Quantidade: ${entry.value}", style: TextStyle(
-                color: ThemeColor.colorBlueTema
+                color: ThemeColor.colorGreenTotal
               ),),
             ),
           );
