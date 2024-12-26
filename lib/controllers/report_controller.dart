@@ -38,44 +38,50 @@ class ReportController {
     return media;
   }
 
-  // variação de preços entre itens (comparativo mês a mês)
-  Future<Map<String, List<double>>> getVariacaoPrecoItemMesAMes() async{
+  // variação de preços entre itens (comparativo em relação a ultima compra)
+  Future<Map<String, double>> getVariacaoPrecoUltimaCompra() async{
     List<NewItems> allItems = await _itemsDao.findAll(); 
 
-    final Map<String, Map<String, List<double>>> agrupado = {};
+    final Map<String, List<NewItems>> agrupado = {};
 
     for (var item in allItems) {
       if(item.createdAt == null) continue;
-      final createdDate = DateTime.tryParse(item.createdAt!);
-      if(createdDate == null) continue;
 
       final nome = item.items;
-      final mesAno = "${createdDate.year.toString().padLeft(4, '0')}-${createdDate.month.toString().padLeft(2, '0')}";
       if(!agrupado.containsKey(nome)){
-        agrupado[nome] = {};
+        agrupado[nome] = [];
       }
-      if(!agrupado[nome]!.containsKey(mesAno)){
-        agrupado[nome]![mesAno] = [];
-      }
-      agrupado[nome]![mesAno]!.add(item.price ?? 0.0);
+      agrupado[nome]!.add(item);
     }
 
-    final Map<String, List<double>> resultado = {};
-
-    agrupado.forEach((nomeItem, mapMeses) {
-      final chavesOrdenada = mapMeses.keys.toList()..sort((a, b) => a.compareTo(b));
-
-      List<double> precoPorMes = [];
-      for(var mes in chavesOrdenada) {
-        List<double> listaPrecos = mapMeses[mes]!;
-        if(listaPrecos.isEmpty) continue;
-        double media = listaPrecos.reduce((a,b) => a +  b) / listaPrecos.length;
-        precoPorMes.add(media);
-      }
-      resultado[nomeItem] = precoPorMes;
+    agrupado.forEach((nomeItem, lista) {
+      lista.sort((a,b) {
+        final dateA = DateTime.tryParse(a.createdAt!);
+        final dateB = DateTime.tryParse(b.createdAt!);
+        if(dateA == null && dateB == null) return 0;
+        return dateA!.compareTo(dateB!);
+      });
     });
 
-    return resultado;
+    final Map<String, double> diferenca = {};
+
+    agrupado.forEach((nomeItem, listaOrdenada) {
+      if(listaOrdenada.length < 2){
+        diferenca[nomeItem] = 0.0;
+        return;
+      }
+
+      final penultimo = listaOrdenada[listaOrdenada.length - 2];
+      final ultimo = listaOrdenada[listaOrdenada.length - 1];
+
+      final double precoPenultimo = penultimo.price ?? 0.0;
+      final double precoUltimo = ultimo.price ?? 0.0;
+
+      double diff = precoUltimo - precoPenultimo;
+      diferenca[nomeItem] = diff;
+    });
+
+    return diferenca;
   }
 
   Future<List<MapEntry<String, int>>> getTopItemsMaisComprados() async{
