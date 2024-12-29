@@ -28,7 +28,7 @@ class TopItemsScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 9.0, vertical: 3.0),
             child: ListTile(
               dense: true,
-              tileColor: ThemeColor.colorWhite70,
+              tileColor: ThemeColor.colorWhite,
               title: Text(entry.key, style: TextStyle(
                 color: ThemeColor.colorBlueTema
               ),),
