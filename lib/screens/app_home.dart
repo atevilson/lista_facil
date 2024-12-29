@@ -149,30 +149,30 @@ class _AppHomeState extends State<AppHome> with SingleTickerProviderStateMixin {
                     double height = minHeight +
                         (maxHeight - minHeight) * _animationController.value;
 
-                    return Container( // Esse container expande ao clicar
-                      height: height,
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('images/base_bottom.png'),
-                          fit: BoxFit.fitHeight,
+                    return GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                            onVerticalDragUpdate: (details) {
+                                    if (details.delta.dy < 0 && !_isExpanded) {
+                                      _toggleExpand();
+                                    } else if (details.delta.dy > 0 &&
+                                      _isExpanded) {
+                                    _toggleExpand();
+                                    }
+                                  },
+                            onTap: _isExpanded ? _handlerTapDownOrTapCancel : _toggleExpand,
+                      child: Container( // container expande ao clicar
+                        height: height,
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage('images/base_bottom.png'),
+                            fit: BoxFit.fitHeight,
+                          ),
                         ),
-                      ),
-                      child: Center(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            GestureDetector(
-                              behavior: HitTestBehavior.opaque,
-                              onVerticalDragUpdate: (details) {
-                                if (details.delta.dy < 0 && !_isExpanded) {
-                                  _toggleExpand();
-                                } else if (details.delta.dy > 0 &&
-                                    _isExpanded) {
-                                  _toggleExpand();
-                                }
-                              },
-                              onTap: _toggleExpand,
-                              child: Column(
+                        child: Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   if (!_isExpanded)
