@@ -122,6 +122,22 @@ class _AppHomeState extends State<AppHome> with SingleTickerProviderStateMixin {
                   ],
                 ),
               ),
+              if (_isExpanded)
+                Positioned.fill(
+                  child: GestureDetector(
+                    onTap: _handlerTapDownOrTapCancel,
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(
+                        sigmaX: 2.5, 
+                        sigmaY: 2.5,
+                      ),
+                      child: Container(
+                        color: ThemeColor.colorBlueTema.withOpacity(0.3),
+                      ),
+                    ),
+                  ),
+                ),
+
               Align(
                 alignment: Alignment.bottomCenter,
                 child: AnimatedBuilder(
