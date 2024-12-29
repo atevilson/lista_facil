@@ -59,10 +59,23 @@ class _PriceVariationScreenState extends State<PriceVariationScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 9.0, vertical: 3.0),
             child: ListTile(
               dense: true,
-              tileColor: ThemeColor.colorWhite70,
-              title: Text(
-                "Item $nomeItem",
-                style: TextStyle(color: ThemeColor.colorBlue),
+              tileColor: ThemeColor.colorWhite,
+              title: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Item $nomeItem",
+                    style: TextStyle(color: ThemeColor.colorBlue),
+                  ),
+                  diferenca ? Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: Icon(Icons.arrow_upward_rounded,color: ThemeColor.colorRed800,),
+                  ) : Padding(
+                    padding: const EdgeInsets.only(top:  10.0),
+                    child: Icon(Icons.arrow_downward, color: ThemeColor.colorGreenTotal,),
+                  )
+                ],
               ),
               subtitle: Text(
                 mensagem,
