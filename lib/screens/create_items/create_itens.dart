@@ -80,14 +80,14 @@ class _CreatedItensState extends State<CreatedItens> with SingleTickerProviderSt
             controller: _controller,
           ),
           Expanded(
-  child: _filteredItems.isEmpty
+        child: _filteredItems.isEmpty
       ? ValueListenableBuilder<List<NewItems>>(
           valueListenable: _controller.quantityItems,
           builder: (context, items, _) {
             bool showNoItems = _isSearchActive
                 ? _filteredItems.isEmpty && _searchQuery.isNotEmpty
                 : items.isEmpty;
-
+      
             if (showNoItems) {
               return Center(
                 child: Column(
@@ -114,13 +114,13 @@ class _CreatedItensState extends State<CreatedItens> with SingleTickerProviderSt
                 ),
               );
             }
-
+      
             // lista de itens filtrados se houver itens
             List<NewItems> listToShow = _isSearchActive && _filteredItems.isNotEmpty ? _filteredItems : items;
-
+      
             return ListView.builder(
               padding: const EdgeInsets.symmetric(
-                  horizontal: 16.0, vertical: 8.0),
+                  horizontal: 25.0, vertical: 8.0),
               itemCount: listToShow.length,
               itemBuilder: (context, index) {
                 final NewItems item = listToShow[index];
@@ -136,7 +136,7 @@ class _CreatedItensState extends State<CreatedItens> with SingleTickerProviderSt
         )
       : ListView.builder(
           padding: const EdgeInsets.symmetric(
-              horizontal: 16.0, vertical: 8.0),
+              horizontal: 25.0, vertical: 8.0),
           itemCount: _filteredItems.length,
           itemBuilder: (context, index) {
             final NewItems item = _filteredItems[index];
@@ -148,31 +148,32 @@ class _CreatedItensState extends State<CreatedItens> with SingleTickerProviderSt
             );
           },
         ),
-),
+      ),
           if (_showCreateForm)
-            Expanded(
-              child: Container(
-                color: ThemeColor.colorWhite,
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: _isDelete
-                    ? SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            const SizedBox(height: 150),
-                            Text(
-                              "Deseja excluir o item \"${_itemEdit?.items}\" ?",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                color: ThemeColor.colorBlueTema,
-                                fontSize: 20,
-                              ),
-                              textAlign: TextAlign.center,
+            Container(
+              color: ThemeColor.colorWhite,
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: _isDelete
+                  ? SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 40),
+                          Text(
+                            "Deseja excluir o item \"${_itemEdit?.items}\" ?",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              color: ThemeColor.colorBlueTema,
+                              fontSize: 20,
                             ),
-                            const SizedBox(height: 30),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                ElevatedButton(
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 40),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 10.0),
+                                child: ElevatedButton(
                                   onPressed: () => _deleteItem(),
                                   style: ElevatedButton.styleFrom(
                                     shape: RoundedRectangleBorder(
@@ -180,15 +181,18 @@ class _CreatedItensState extends State<CreatedItens> with SingleTickerProviderSt
                                     ),
                                     padding: const EdgeInsets.all(16),
                                     backgroundColor: ThemeColor.colorBlueTema, 
-                                    minimumSize: const Size(140, 50)
+                                    minimumSize: const Size(140, 0)
                                   ),
                                   child: const Icon(
                                     Icons.check,
                                     color: ThemeColor.colorWhite,
                                   ),
                                 ),
-                                const SizedBox(width: 40),
-                                ElevatedButton(
+                              ),
+                              const SizedBox(width: 40),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 10.0),
+                                child: ElevatedButton(
                                   onPressed: () => setState(() {
                                     _showCreateForm = false;
                                     _isDelete = false; 
@@ -199,165 +203,165 @@ class _CreatedItensState extends State<CreatedItens> with SingleTickerProviderSt
                                     ),
                                     padding: const EdgeInsets.all(16),
                                     backgroundColor: ThemeColor.colorWhite,
-                                    minimumSize: const Size(140, 50),
+                                    minimumSize: const Size(140, 0),
                                     side: const BorderSide(color: ThemeColor.colorBlue, width: 2)
                                   ), 
                                   child: const Icon(Icons.close, color: ThemeColor.colorBlue)
                                 ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      )
-                    : SingleChildScrollView(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const SizedBox(height: 40),
-                            Text(
-                              _isEditing ? "Editar item" : "Novo item",
-                              style: TextStyle(
-                                letterSpacing: 3.0,
-                                fontWeight: FontWeight.w800,
-                                color: ThemeColor.colorBlueTema,
-                                fontSize: 18,
                               ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(top: screenHeight * 0.015),
-                              width: screenWidth * 0.88,
-                              height: screenHeight * 0.002,
-                              decoration: BoxDecoration(
-                                color: ThemeColor.colorBlueTema,
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-                            TextField(
-                              controller: _itemNameController,
-                              cursorColor: ThemeColor.colorBlue,
-                              decoration: InputDecoration(
-                                labelText: "Nome do Item",
-                                labelStyle: TextStyle(
-                                  color: ThemeColor.blueShade700,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(25.0),
-                                  borderSide: BorderSide(color: ThemeColor.blueShade700, width: 1.5),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(25.0),
-                                  borderSide: BorderSide(color: ThemeColor.blueShade200, width: 1.5),
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(25.0),
-                                ),
-                              ),
-                              keyboardType: TextInputType.text,
-                              style: TextStyle(
-                                fontSize: 18.0,
-                                color: ThemeColor.blueShade700,
-                              ),
-                            ),
-                            const SizedBox(height: 8.0),
-                            TextField(
-                              controller: _itemQuantityController,
-                              cursorColor: ThemeColor.colorBlue,
-                              decoration: InputDecoration(
-                                labelText: "Quantidade",
-                                labelStyle: TextStyle(
-                                  color: ThemeColor.blueShade700,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(25.0),
-                                  borderSide: BorderSide(color: ThemeColor.blueShade700, width: 1.5),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(25.0),
-                                  borderSide: BorderSide(color: ThemeColor.blueShade200, width: 1.5),
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(25.0),
-                                ),
-                              ),
-                              keyboardType: TextInputType.number,
-                              style: TextStyle(
-                                fontSize: 18.0,
-                                color: ThemeColor.blueShade700,
-                              ),
-                            ),
-                            const SizedBox(height: 8.0),
-                            TextField(
-                              controller: _itemPriceController,
-                              cursorColor: ThemeColor.colorBlue,
-                              decoration: InputDecoration(
-                                labelText: "Preço (opcional)",
-                                labelStyle: TextStyle(
-                                  color: ThemeColor.blueShade700,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(25.0),
-                                  borderSide: BorderSide(color: ThemeColor.blueShade700, width: 1.5),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(25.0),
-                                  borderSide: BorderSide(color: ThemeColor.blueShade200, width: 1.5),
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(25.0),
-                                ),
-                              ),
-                              keyboardType: TextInputType.number,
-                              style: TextStyle(
-                                fontSize: 18.0,
-                                color: ThemeColor.blueShade700,
-                              ),
-                            ),
-                            const SizedBox(height: 15),
-                            SizedBox(
-                              width: double.infinity,
-                              child: ElevatedButton(
-                                onPressed: _isEditing ? () => _saveEditItem(context) : () => _createNewItem(context),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: ThemeColor.colorBlueTema,
-                                ),
-                                child: Text(
-                                  _isEditing ? "Salvar" : "Criar novo item",
-                                  style: const TextStyle(fontSize: 18.0, color: ThemeColor.colorWhite),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 15),
-                            SizedBox(
-                              width: double.infinity,
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  setState(() {
-                                    _showCreateForm = !_showCreateForm; 
-                                    _clearFields();
-                                  });
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(25.0),
-                                  ),
-                                  backgroundColor: ThemeColor.colorBlueTema,
-                                ),
-                                child: const Text(
-                                  "Cancelar",
-                                  style: TextStyle(
-                                      fontSize: 18.0,
-                                      color: ThemeColor.colorWhite),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                            ],
+                          ),
+                        ],
                       ),
-              ),
+                    )
+                  : SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const SizedBox(height: 40),
+                          Text(
+                            _isEditing ? "Editar item" : "Novo item",
+                            style: TextStyle(
+                              letterSpacing: 3.0,
+                              fontWeight: FontWeight.w800,
+                              color: ThemeColor.colorBlueTema,
+                              fontSize: 18,
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(top: screenHeight * 0.015),
+                            width: screenWidth * 0.88,
+                            height: screenHeight * 0.002,
+                            decoration: BoxDecoration(
+                              color: ThemeColor.colorBlueTema,
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          TextField(
+                            controller: _itemNameController,
+                            cursorColor: ThemeColor.colorBlue,
+                            decoration: InputDecoration(
+                              labelText: "Nome do Item",
+                              labelStyle: TextStyle(
+                                color: ThemeColor.blueShade700,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(25.0),
+                                borderSide: BorderSide(color: ThemeColor.blueShade700, width: 1.5),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(25.0),
+                                borderSide: BorderSide(color: ThemeColor.blueShade200, width: 1.5),
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(25.0),
+                              ),
+                            ),
+                            keyboardType: TextInputType.text,
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              color: ThemeColor.blueShade700,
+                            ),
+                          ),
+                          const SizedBox(height: 8.0),
+                          TextField(
+                            controller: _itemQuantityController,
+                            cursorColor: ThemeColor.colorBlue,
+                            decoration: InputDecoration(
+                              labelText: "Quantidade",
+                              labelStyle: TextStyle(
+                                color: ThemeColor.blueShade700,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(25.0),
+                                borderSide: BorderSide(color: ThemeColor.blueShade700, width: 1.5),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(25.0),
+                                borderSide: BorderSide(color: ThemeColor.blueShade200, width: 1.5),
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(25.0),
+                              ),
+                            ),
+                            keyboardType: TextInputType.number,
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              color: ThemeColor.blueShade700,
+                            ),
+                          ),
+                          const SizedBox(height: 8.0),
+                          TextField(
+                            controller: _itemPriceController,
+                            cursorColor: ThemeColor.colorBlue,
+                            decoration: InputDecoration(
+                              labelText: "Preço (opcional)",
+                              labelStyle: TextStyle(
+                                color: ThemeColor.blueShade700,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(25.0),
+                                borderSide: BorderSide(color: ThemeColor.blueShade700, width: 1.5),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(25.0),
+                                borderSide: BorderSide(color: ThemeColor.blueShade200, width: 1.5),
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(25.0),
+                              ),
+                            ),
+                            keyboardType: TextInputType.number,
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              color: ThemeColor.blueShade700,
+                            ),
+                          ),
+                          const SizedBox(height: 15),
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: _isEditing ? () => _saveEditItem(context) : () => _createNewItem(context),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: ThemeColor.colorBlueTema,
+                              ),
+                              child: Text(
+                                _isEditing ? "Salvar" : "Criar novo item",
+                                style: const TextStyle(fontSize: 18.0, color: ThemeColor.colorWhite),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 15),
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  _showCreateForm = !_showCreateForm; 
+                                  _clearFormState();
+                                });
+                              },
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25.0),
+                                ),
+                                backgroundColor: ThemeColor.colorBlueTema,
+                              ),
+                              child: const Text(
+                                "Cancelar",
+                                style: TextStyle(
+                                    fontSize: 18.0,
+                                    color: ThemeColor.colorWhite),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
             ),
           SingleChildScrollView(
             child: Container(
@@ -463,7 +467,7 @@ class _CreatedItensState extends State<CreatedItens> with SingleTickerProviderSt
           backgroundColor: ThemeColor.colorBlueTema,
           title: Center(child: const Text("Atenção", style: TextStyle(fontSize: 30.0))),
           content: Text(
-              "O item \"$itemName\" já possui \"${existingItem.quantity}\" unidades na dispensa.",
+              "O item \"$itemName\" já possui \"${existingItem.quantity}\" ${existingItem.quantity > 1 ? "unidades" : "unidade"} na dispensa.",
               style: TextStyle(fontWeight: FontWeight.w400)),
           actions: [
             TextButton(
@@ -522,7 +526,7 @@ class _CreatedItensState extends State<CreatedItens> with SingleTickerProviderSt
           backgroundColor: ThemeColor.colorBlueTema,
           title: const Text("Atenção", style: TextStyle(fontSize: 30.0)),
           content: Text(
-              "O item \"$newName\" já possui \"${existingItem.quantity}\" unidades na dispensa.",
+              "O item \"$newName\" já possui \"${existingItem.quantity}\" ${existingItem.quantity > 1 ? "unidades" : "unidade"} na dispensa.",
               style: TextStyle(fontWeight: FontWeight.w400)),
           actions: [
             TextButton(
@@ -600,162 +604,172 @@ class _CollectionItems extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Slidable(
-      key: Key(item.id.toString()),
-      startActionPane: ActionPane(
-        motion: const ScrollMotion(),
-        extentRatio: 0.25,
-        children: [
-          SlidableAction(
-            onPressed: (context) => onEdit(),
-            backgroundColor: ThemeColor.colorWhite,
-            foregroundColor: ThemeColor.colorBlueTema,
-            icon: Icons.edit,
-          ),
-        ],
-      ),
-      endActionPane: ActionPane(
-        motion: const ScrollMotion(),
-        extentRatio: 0.25,
-        children: [
-          SlidableAction(
-            onPressed: (context) => onDelete(),
-            backgroundColor: ThemeColor.colorWhite,
-            foregroundColor: ThemeColor.colorBlueTema,
-            icon: Icons.delete,
-          ),
-        ],
-      ),
-      child: Card(
-        elevation: 5,
-        child: ListTile(
-          tileColor: item.isChecked ? ThemeColor.colorBlueTema : ThemeColor.colorBlueItemNaoSel,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 14.0),
-          title: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
+    return Container(
+      margin: const EdgeInsets.all(5),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(30),
+        child: Slidable(
+          key: Key(item.id.toString()),
+          startActionPane: ActionPane(
+            motion: const BehindMotion(),
+            extentRatio: 0.25,
             children: [
-              Checkbox(
-                fillColor: WidgetStatePropertyAll(
-                  item.isChecked ? ThemeColor.colorWhite : ThemeColor.colorBlueScafold,
-                ),
-                value: item.isChecked, // Nunca será null
-                onChanged: (bool? value) async {
-                  bool isChecked = value ?? false;
-
-                  if (isChecked) {
-                    if (item.price! > 0.0) {
-                      await controller.priceCheckerAndUpdater(item.id!, true, item.price!);
-                    } else {
-                      String valor = "";
-                      final double? price = await showDialog<double>(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          backgroundColor: ThemeColor.colorBlueTema,
-                          title: Text(
-                            "Insira o preço do ${item.items}",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w300,
-                              color: ThemeColor.colorWhite,
-                            ),
-                          ),
-                          content: TextField(
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(labelText: "Valor (R\$)"),
-                            onChanged: (input) {
-                              valor = input.trim().replaceAll(",", ".");
-                            },
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text(
-                                "Cancelar",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w300,
-                                  color: ThemeColor.colorBlue,
-                                ),
-                              ),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                final formatPrices = RegExp(r'^\d+(\.\d{0,2})?$');
-
-                                if (formatPrices.hasMatch(valor) && valor.isNotEmpty) {
-                                  Navigator.of(context).pop(double.tryParse(valor));
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      backgroundColor: ThemeColor.colorRed800,
-                                      content: const Text(
-                                        'Insira um preço válido!',
-                                        style: TextStyle(color: ThemeColor.colorWhite),
-                                      ),
-                                    ),
-                                  );
-                                }
-                              },
-                              child: Text(
-                                'Ok',
-                                style: TextStyle(
-                                  color: ThemeColor.colorBlueTema,
-                                  fontWeight: FontWeight.w300,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-
-                      if (price != null) {
-                        await controller.priceCheckerAndUpdater(item.id!, true, price);
-                      } else {
-                        await controller.priceCheckerAndUpdater(item.id!, false, 0.0);
-                      }
-                    }
-                  } else {
-                    await controller.priceCheckerAndUpdater(
-                      item.id!,
-                      false,
-                      item.price!,
-                    );
-                  }
-                },
-                activeColor: ThemeColor.colorWhite,
-                checkColor: ThemeColor.colorBlueTema,
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                visualDensity: VisualDensity.compact,
-              ),
-              const SizedBox(width: 10),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    item.items,
-                    style: const TextStyle(
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                      color: ThemeColor.colorWhite,
-                    ),
-                  ),
-                  Text(
-                    "Quantidade: ${item.quantity}",
-                    style: const TextStyle(
-                      fontSize: 16.0,
-                      color: ThemeColor.colorWhite,
-                    ),
-                  ),
-                ],
+              SlidableAction(
+                onPressed: (context) => onEdit(),
+                backgroundColor: ThemeColor.colorWhite,
+                foregroundColor: ThemeColor.colorBlueTema,
+                icon: Icons.edit,
               ),
             ],
           ),
-          trailing: Text(
-            'R\$ ${item.price!.toStringAsFixed(2)}',
-            style: const TextStyle(
-              fontSize: 15.0,
-              color: ThemeColor.colorWhite,
-              fontWeight: FontWeight.w600,
+          endActionPane: ActionPane(
+            motion: const BehindMotion(),
+            extentRatio: 0.25,
+            children: [
+              SlidableAction(
+                onPressed: (context) => onDelete(),
+                backgroundColor: ThemeColor.colorWhite,
+                foregroundColor: ThemeColor.colorBlueTema,
+                icon: Icons.delete,
+              ),
+            ],
+          ),
+          child: Card(
+            margin: EdgeInsets.zero,
+            shape: RoundedRectangleBorder(
+              //borderRadius: BorderRadius.circular(30)
+            ),
+            elevation: 5,
+            child: ListTile(
+              tileColor: item.isChecked ? ThemeColor.colorBlueTema : ThemeColor.colorBlueItemNaoSel,
+              //contentPadding: const EdgeInsets.symmetric(horizontal: 14.0),
+              title: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Checkbox(
+                    fillColor: WidgetStatePropertyAll(
+                      item.isChecked ? ThemeColor.colorWhite : ThemeColor.colorBlueScafold,
+                    ),
+                    value: item.isChecked, // Nunca será null
+                    onChanged: (bool? value) async {
+                      bool isChecked = value ?? false;
+        
+                      if (isChecked) {
+                        if (item.price! > 0.0) {
+                          await controller.priceCheckerAndUpdater(item.id!, true, item.price!);
+                        } else {
+                          String valor = "";
+                          final double? price = await showDialog<double>(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              backgroundColor: ThemeColor.colorBlueTema,
+                              title: Text(
+                                "Insira o preço do ${item.items}",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w300,
+                                  color: ThemeColor.colorWhite,
+                                ),
+                              ),
+                              content: TextField(
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(labelText: "Valor (R\$)"),
+                                onChanged: (input) {
+                                  valor = input.trim().replaceAll(",", ".");
+                                },
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text(
+                                    "Cancelar",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w300,
+                                      color: ThemeColor.colorBlue,
+                                    ),
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    final formatPrices = RegExp(r'^\d+(\.\d{0,2})?$');
+        
+                                    if (formatPrices.hasMatch(valor) && valor.isNotEmpty) {
+                                      Navigator.of(context).pop(double.tryParse(valor));
+                                    } else {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          backgroundColor: ThemeColor.colorRed800,
+                                          content: const Text(
+                                            'Insira um preço válido!',
+                                            style: TextStyle(color: ThemeColor.colorWhite),
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                  child: Text(
+                                    'Ok',
+                                    style: TextStyle(
+                                      color: ThemeColor.colorBlueTema,
+                                      fontWeight: FontWeight.w300,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+        
+                          if (price != null) {
+                            await controller.priceCheckerAndUpdater(item.id!, true, price);
+                          } else {
+                            await controller.priceCheckerAndUpdater(item.id!, false, 0.0);
+                          }
+                        }
+                      } else {
+                        await controller.priceCheckerAndUpdater(
+                          item.id!,
+                          false,
+                          item.price!,
+                        );
+                      }
+                    },
+                    activeColor: ThemeColor.colorWhite,
+                    checkColor: ThemeColor.colorBlueTema,
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    visualDensity: VisualDensity.compact,
+                  ),
+                  const SizedBox(width: 10),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        item.items,
+                        style: const TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                          color: ThemeColor.colorWhite,
+                        ),
+                      ),
+                      Text(
+                        "Quantidade: ${item.quantity}",
+                        style: const TextStyle(
+                          fontSize: 16.0,
+                          color: ThemeColor.colorWhite,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              trailing: Text(
+                'R\$ ${item.price!.toStringAsFixed(2)}',
+                style: const TextStyle(
+                  fontSize: 15.0,
+                  color: ThemeColor.colorWhite,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             ),
           ),
         ),

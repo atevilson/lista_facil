@@ -8,11 +8,13 @@ class ListsDao {
   static const String id = 'id';
   static const String name = 'name';
   static const String budget = 'budget';
+  static const String createdAt = 'createdAt';
 
   static const String tableSQL = 'CREATE TABLE $nameTable('
       '$id INTEGER PRIMARY KEY, '
       '$name TEXT, '
-      '$budget REAL)';
+      '$budget REAL, '
+      '$createdAt TEXT)';
 
   Future<int> save(NewLists listas) async {
     final Database db = await getDataBase();
@@ -53,6 +55,7 @@ class ListsDao {
     final Map<String, dynamic> newLists = {};
     newLists[name] = listas.nameList;
     newLists[budget] = listas.budget;
+    newLists[createdAt] = listas.createdAt ?? DateTime.now().toIso8601String();
     return db.insert(nameTable, newLists);
   }
 
@@ -64,7 +67,8 @@ class ListsDao {
       final NewLists listNew = NewLists(
         row[id],
         row[name],
-        row[budget]
+        row[budget],
+        row[createdAt],
       );
       lists.add(listNew);
     }
