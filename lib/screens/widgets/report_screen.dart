@@ -50,10 +50,6 @@ class _ReportScreenState extends State<ReportScreen> {
               color: ThemeColor.colorWhite),
             ),
             const SizedBox(height: 170),
-
-            // 2) Botões para cada relatório
-            //    Você pode usar Row, Column, ou Grid...
-            //    Aqui vou usar Column + SizedBox para espaçar
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 50),
@@ -78,7 +74,6 @@ class _ReportScreenState extends State<ReportScreen> {
                 minimumSize: const Size(double.infinity, 50),
               ),
               onPressed: () async {
-                // Vamos buscar o top 10 mais comprados e abrir a tela
                 final topMais = await _controller.getTopItemsMaisComprados();
                 if(!context.mounted) return;
                 Navigator.push(
@@ -87,8 +82,6 @@ class _ReportScreenState extends State<ReportScreen> {
                     builder: (context) => TopItemsScreen(
                       title: "Top 10 mais comprados",
                       data: topMais,
-                      // false indica que é "mais comprados" (ordem decrescente)
-                      // se quiser reusar a mesma tela para 'menos comprados', passaremos true
                     ),
                   ),
                 );
@@ -104,11 +97,7 @@ class _ReportScreenState extends State<ReportScreen> {
                 minimumSize: const Size(double.infinity, 50),
               ),
               onPressed: () async {
-                // Exemplo: reutilizar o getTopItemsMaisComprados() invertendo a ordenação
-                // ou, se você preferir, cria um getTopItemsMenosComprados().
-                // Abaixo vou fazer invertendo:
                 final topMais = await _controller.getTopItemsMaisComprados();
-                // Inverte a lista para pegar "menos comprados" primeiro
                 final topMenos = topMais.reversed.toList();
 
                 if(!context.mounted) return;
@@ -118,7 +107,6 @@ class _ReportScreenState extends State<ReportScreen> {
                     builder: (context) => TopItemsScreen(
                       title: "Top 10 menos comprados",
                       data: topMenos,
-                      // true indica que é "menos comprados"
                     ),
                   ),
                 );
