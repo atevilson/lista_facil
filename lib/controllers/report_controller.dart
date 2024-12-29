@@ -1,64 +1,73 @@
-
+import 'package:diacritic/diacritic.dart';
 import 'package:lista_facil/database/dao/create_itens_dao.dart';
 import 'package:lista_facil/models/new_items.dart';
+import 'package:string_similarity/string_similarity.dart';
 
 class ReportController {
-
   final ItemsDao _itemsDao = ItemsDao();
-  //final ListsDao _listsDao = ListsDao();
 
-  ReportController() {
-    //
-  }
+  ReportController();
 
-  // gasto médio mensal com base nos últimos 3 meses
-  Future<double> getGastosTrimestraisAlimentacao() async{
+  Future<double> getGastosTrimestraisAlimentacao() async {
     final dateNow = DateTime.now();
-
-    DateTime treeMonthsAgo = DateTime(dateNow.year, dateNow.month - 3, dateNow.day);
+    final threeMonthsAgo = DateTime(dateNow.year, dateNow.month - 3, dateNow.day);
 
     List<NewItems> allItems = await _itemsDao.findAll();
 
-    List<NewItems> itemsThreeMonths = allItems.where((item) {
-      if(item.createdAt == null) return false;
+    final itemsThreeMonths = allItems.where((item) {
+      if (item.createdAt == null) return false;
       final created = DateTime.tryParse(item.createdAt!);
-      if(created == null) return false;
-      return created.isAfter(treeMonthsAgo);
+      if (created == null) return false;
+      return created.isAfter(threeMonthsAgo);
     }).toList();
 
     double totalGasto = 0.0;
 
-    for(var items in itemsThreeMonths) {
-      final double price = items.price ?? 0.0;
-      final int qtd = items.quantity;
+    for (var item in itemsThreeMonths) {
+      final double price = item.price ?? 0.0;
+      final int qtd = item.quantity;
       totalGasto += (price * qtd);
     }
 
-    double media = totalGasto / 3;
+    final double media = totalGasto / 3;
     return media;
   }
 
-  // variação de preços entre itens (comparativo em relação a ultima compra)
-  Future<Map<String, double>> getVariacaoPrecoUltimaCompra() async{
-    List<NewItems> allItems = await _itemsDao.findAll(); 
+  Future<Map<String, double>> getVariacaoPrecoUltimaCompra() async {
+    final List<NewItems> allItems = await _itemsDao.findAll();
 
     final Map<String, List<NewItems>> agrupado = {};
 
     for (var item in allItems) {
-      if(item.createdAt == null) continue;
+      if (item.createdAt == null) continue;
 
-      final nome = item.items;
-      if(!agrupado.containsKey(nome)){
-        agrupado[nome] = [];
+      final nomeOriginal = item.items; 
+      final nomeNormalizado = _normalize(nomeOriginal); 
+
+      String? chaveEncontrada;
+      double bestScore = 0.0;
+
+      for (var chaveExistente in agrupado.keys) {
+        final double score = nomeNormalizado.similarityTo(_normalize(chaveExistente));
+        if (score > bestScore) {
+          bestScore = score;
+          chaveEncontrada = chaveExistente;
+        }
       }
-      agrupado[nome]!.add(item);
+
+      if (chaveEncontrada == null || bestScore < 0.5) {
+        agrupado[nomeOriginal] = [];
+        agrupado[nomeOriginal]!.add(item);
+      } else {
+        agrupado[chaveEncontrada]!.add(item);
+      }
     }
 
     agrupado.forEach((nomeItem, lista) {
-      lista.sort((a,b) {
+      lista.sort((a, b) {
         final dateA = DateTime.tryParse(a.createdAt!);
         final dateB = DateTime.tryParse(b.createdAt!);
-        if(dateA == null && dateB == null) return 0;
+        if (dateA == null && dateB == null) return 0;
         return dateA!.compareTo(dateB!);
       });
     });
@@ -66,50 +75,53 @@ class ReportController {
     final Map<String, double> diferenca = {};
 
     agrupado.forEach((nomeItem, listaOrdenada) {
-      if(listaOrdenada.length < 2){
+      if (listaOrdenada.length < 2) {
         diferenca[nomeItem] = 0.0;
-        return;
+      } else {
+        final penultimo = listaOrdenada[listaOrdenada.length - 2];
+        final ultimo = listaOrdenada[listaOrdenada.length - 1];
+
+        final double precoPenultimo = penultimo.price ?? 0.0;
+        final double precoUltimo = ultimo.price ?? 0.0;
+
+        final double diff = precoUltimo - precoPenultimo;
+        diferenca[nomeItem] = diff;
       }
-
-      final penultimo = listaOrdenada[listaOrdenada.length - 2];
-      final ultimo = listaOrdenada[listaOrdenada.length - 1];
-
-      final double precoPenultimo = penultimo.price ?? 0.0;
-      final double precoUltimo = ultimo.price ?? 0.0;
-
-      double diff = precoUltimo - precoPenultimo;
-      diferenca[nomeItem] = diff;
     });
 
     return diferenca;
   }
 
-  Future<List<MapEntry<String, int>>> getTopItemsMaisComprados() async{
+  Future<List<MapEntry<String, int>>> getTopItemsMaisComprados() async {
     final dateNow = DateTime.now();
-    DateTime threeMonthsAgo = DateTime(dateNow.year, dateNow.month -3, dateNow.day);
+    final threeMonthsAgo = DateTime(dateNow.year, dateNow.month - 3, dateNow.day);
 
-    List<NewItems> allItems = await _itemsDao.findAll();
+    final List<NewItems> allItems = await _itemsDao.findAll();
 
-    List<NewItems> itemTresMeses = allItems.where((item) {
-      if(item.createdAt == null) return false;
+    final itemTresMeses = allItems.where((item) {
+      if (item.createdAt == null) return false;
       final created = DateTime.tryParse(item.createdAt!);
       if (created == null) return false;
       return created.isAfter(threeMonthsAgo);
     }).toList();
 
-    Map<String, int> quantidadePorNome = {};
+    final Map<String, int> quantidadePorNome = {};
 
-    for(var item in itemTresMeses) {
+    for (var item in itemTresMeses) {
       final nome = item.items;
       quantidadePorNome[nome] = (quantidadePorNome[nome] ?? 0) + item.quantity;
     }
 
     List<MapEntry<String, int>> ordenado = quantidadePorNome.entries.toList();
-    ordenado.sort((a,b) => b.value.compareTo(a.value));
+    ordenado.sort((a, b) => b.value.compareTo(a.value));
 
-    if(ordenado.length > 10){
+    if (ordenado.length > 10) {
       ordenado = ordenado.sublist(0, 10);
     }
     return ordenado;
+  }
+
+  String _normalize(String text) { // método de normalização remove acentos e deixa texto em minúsculo
+    return removeDiacritics(text).toLowerCase();
   }
 }
