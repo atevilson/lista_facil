@@ -20,6 +20,7 @@ class ListController extends ChangeNotifier {
 
   Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
+    _ascendingOrder = _prefs.getBool('ascendingOrder') ?? true;
     await findAll();
   }
 
@@ -28,6 +29,8 @@ class ListController extends ChangeNotifier {
     for(NewLists list in lists) {
       list.bookMarked = _prefs.getBool('bookmark_${list.id}') ?? false;
     }
+    _sortItemsInternal(lists);
+
     listaValores.value = lists;
   }
 
@@ -89,8 +92,8 @@ class ListController extends ChangeNotifier {
       String firstCharA = a.nameList.isNotEmpty ? a.nameList[0].toLowerCase() : '';
       String firstCharB = b.nameList.isNotEmpty ? b.nameList[0].toLowerCase() : '';
 
-      int comparison = firstCharA.compareTo(firstCharB);
-      return _ascendingOrder ? comparison : -comparison;
+      //int comparison = firstCharA.compareTo(firstCharB);
+      return _ascendingOrder ? firstCharA.compareTo(firstCharB) : firstCharB.compareTo(firstCharA);
       },
     );
   }
