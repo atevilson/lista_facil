@@ -96,7 +96,7 @@ Widget build(BuildContext context) {
                       }
                       return ListView.builder(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 16.0, vertical: 8.0),
+                            horizontal: 25.0, vertical: 8.0),
                         itemBuilder: (context, index) {
                           final NewLists lists = snapshot[index];
                           return _CollectionsLists(
@@ -112,7 +112,7 @@ Widget build(BuildContext context) {
                   )
                 : ListView.builder(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 8.0),
+                        horizontal: 25.0, vertical: 8.0),
                     itemCount: _filteredLists.length,
                     itemBuilder: (context, index) {
                       final NewLists lists = _filteredLists[index];
@@ -132,7 +132,7 @@ Widget build(BuildContext context) {
               child: _isDelete ? SingleChildScrollView(
                 child: Column(
                   children: [
-                    const SizedBox(height: 110),
+                    const SizedBox(height: 40),
                     Text("Deseja excluir a lista \"${_listEdit?.nameList}\" ?",
                     style: TextStyle(
                       fontWeight: FontWeight.w400,
@@ -141,13 +141,13 @@ Widget build(BuildContext context) {
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    SizedBox(height: 30),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 18.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                                ElevatedButton(
+                    SizedBox(height: 40),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 10.0),
+                                child: ElevatedButton(
                                   onPressed: () => _deleteList(),
                                   style: ElevatedButton.styleFrom(
                                       shape: RoundedRectangleBorder(
@@ -155,14 +155,17 @@ Widget build(BuildContext context) {
                                       ),
                                       padding: EdgeInsets.all(16),
                                       backgroundColor:
-                                          ThemeColor.colorBlueTema, minimumSize: Size(140, 50)),
+                                          ThemeColor.colorBlueTema, minimumSize: Size(140, 0)),
                                   child: Icon(
                                     Icons.check,
                                     color: ThemeColor.colorWhite,
                                   ),
                                 ),
-                                const SizedBox(width: 40),
-                                ElevatedButton(onPressed: () => setState(() {
+                              ),
+                              const SizedBox(width: 40),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 10.0),
+                                child: ElevatedButton(onPressed: () => setState(() {
                                   _showCreateForm = false;
                                   _isDelete = false; 
                                 }),style: ElevatedButton.styleFrom(
@@ -174,9 +177,9 @@ Widget build(BuildContext context) {
                                   minimumSize: Size(140, 50),
                                   side: BorderSide(color: ThemeColor.colorBlue, width: 2)
                                 ), 
-                                child: Icon(Icons.close, color: ThemeColor.colorBlueTema,))
-                        ],
-                      ),
+                                child: Icon(Icons.close, color: ThemeColor.colorBlueTema,)),
+                              )
+                      ],
                     ),
                   ], 
                 ),
@@ -504,81 +507,100 @@ class _CollectionsListsState extends State<_CollectionsLists> {
 
   @override
   Widget build(BuildContext context) {
-    return Slidable(
-      key: Key(widget.list.id.toString()),
-      startActionPane: ActionPane(
-        motion: const ScrollMotion(),
-        extentRatio: 0.25,
-        children: [
-          SlidableAction(
-            onPressed: (context) {
-              widget.onEdit();
-            },
-            backgroundColor: ThemeColor.colorBlueTema,
-            foregroundColor: Colors.white,
-            icon: Icons.edit,
-          ),
-        ],
-      ),
-      endActionPane: ActionPane(
-        motion: const ScrollMotion(),
-        extentRatio: 0.25,
-        children: [
-          SlidableAction(
-            onPressed: (context) {
-              widget.onDelete();
-            },
-            backgroundColor: ThemeColor.colorBlueTema,
-            foregroundColor: Colors.white,
-            icon: Icons.delete,
-          ),
-        ],
-      ),
-      child: Card(
-        elevation: 5,
-        child: ListTile(
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 5.0),
-          title: InkWell(
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return CreatedItens(widget.list, listController: widget.controller);
-              }));
-            },
-            child: Text(
-              widget.list.nameList,
-              style: const TextStyle(
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
-                color: ThemeColor.colorBlue,
-              ),
-            ),
-          ),
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.end,
+    return Container(
+      margin: EdgeInsets.all(5),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(30),
+        child: Slidable(
+          key: Key(widget.list.id.toString()),
+          startActionPane: ActionPane(
+            motion: const BehindMotion(),
+            extentRatio: 0.25,
             children: [
-              Text(
-                'R\$ ${widget.list.budget?.toStringAsFixed(2)}',
-                style: const TextStyle(
-                  fontSize: 15.0,
-                  color: ThemeColor.colorBlue,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(width: 5),
-              GestureDetector(
-                onTap: () async {
-                  setState(() {
-                    widget.list.bookMarked = !widget.list.bookMarked;
-                  });
-                  await widget.controller.setListMarked(widget.list.id, widget.list.bookMarked);
+              SlidableAction(
+                // borderRadius: const BorderRadius.only(
+                //   topLeft: Radius.circular(30),
+                //   bottomLeft: Radius.circular(30)
+                // ),
+                onPressed: (context) {
+                  widget.onEdit();
                 },
-                child: Icon(
-                  widget.list.bookMarked ? Icons.bookmark : Icons.bookmark_border,
-                  color: widget.list.bookMarked ? ThemeColor.colorAmber : ThemeColor.colorBlue,
-                ),
+                backgroundColor: ThemeColor.colorBlueTema,
+                foregroundColor: Colors.white,
+                icon: Icons.edit,
+                
               ),
             ],
+          ),
+          endActionPane: ActionPane(
+            motion: const BehindMotion(),
+            extentRatio: 0.25,
+            children: [
+              SlidableAction(
+                // borderRadius: const BorderRadius.only(
+                //   topRight: Radius.circular(30),
+                //   bottomRight: Radius.circular(30)
+                // ),
+                onPressed: (context) {
+                  widget.onDelete();
+                },
+                backgroundColor: ThemeColor.colorBlueTema,
+                foregroundColor: Colors.white,
+                icon: Icons.delete,
+              ),
+            ],
+          ),
+          child: Card(
+            shape: RoundedRectangleBorder(
+              //borderRadius: BorderRadius.circular(30)
+            ),
+            margin: EdgeInsets.zero,
+            elevation: 5,
+            child: ListTile(
+              contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 5.0),
+              title: InkWell(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return CreatedItens(widget.list, listController: widget.controller);
+                  }));
+                },
+                child: Text(
+                  widget.list.nameList,
+                  style: const TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    color: ThemeColor.colorBlue,
+                  ),
+                ),
+              ),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    'R\$ ${widget.list.budget?.toStringAsFixed(2)}',
+                    style: const TextStyle(
+                      fontSize: 15.0,
+                      color: ThemeColor.colorBlue,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(width: 5),
+                  GestureDetector(
+                    onTap: () async {
+                      setState(() {
+                        widget.list.bookMarked = !widget.list.bookMarked;
+                      });
+                      await widget.controller.setListMarked(widget.list.id, widget.list.bookMarked);
+                    },
+                    child: Icon(
+                      widget.list.bookMarked ? Icons.bookmark : Icons.bookmark_border,
+                      color: widget.list.bookMarked ? ThemeColor.colorAmber : ThemeColor.colorBlue,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       ),
