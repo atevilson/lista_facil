@@ -38,6 +38,12 @@ class _AppHomeState extends State<AppHome> with SingleTickerProviderStateMixin {
     });
   }
 
+  void _handlerTapDownOrTapCancel(){
+    if(_isExpanded){
+      _toggleExpand();
+    }
+  }
+
   @override
   void dispose() {
     _animationController.dispose();
