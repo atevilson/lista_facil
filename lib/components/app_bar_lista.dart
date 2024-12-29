@@ -27,7 +27,7 @@ class AppBarCustom extends StatelessWidget {
     required this.hintText,
     this.child,
     this.color,
-    required this.controller
+    required this.controller,
   });
 
   @override
@@ -115,7 +115,7 @@ class AppBarCustom extends StatelessWidget {
                             controller.sortItems(!controller.isAscending);
                             break;
                           case 2:
-                            controller.sortItems(controller.isAscending);
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => ReportScreen()));
                             break;
                           default:
                             break;
@@ -132,36 +132,24 @@ class AppBarCustom extends StatelessWidget {
                                 style: TextStyle(
                                   color: ThemeColor.colorBlueTema
                                 ),),
-                                IconButton(
-                                    iconSize: 28,
-                                    onPressed: () => controller
-                                        .sortItems(!controller.isAscending),
-                                    icon: Icon(CustomIcons.alphabetic),
-                                    color: ThemeColor.colorBlueTema),
+                                Icon(CustomIcons.alphabetic, size: 28, color: ThemeColor.colorBlueTema),
                               ],
                             )),
                         PopupMenuItem(
                             value: 2,
                             child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                GestureDetector(
-                                  behavior: HitTestBehavior.opaque,
-                                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ReportScreen())),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        "Relatórios",
-                                        style: TextStyle(
-                                            color: ThemeColor.colorBlueTema),
-                                      ),
-                                      SizedBox(width: 40),
-                                      Icon(
-                                        Icons.report,
-                                        size: 28,
-                                        color: ThemeColor.colorBlueTema,
-                                      ),
-                                    ],
-                                  ),
+                                Text(
+                                  "Relatórios",
+                                  style: TextStyle(
+                                      color: ThemeColor.colorBlueTema),
+                                ),
+                                Icon(
+                                  Icons.report,
+                                  size: 28,
+                                  color: ThemeColor.colorBlueTema,
                                 ),
                               ],
                             ))
