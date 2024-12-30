@@ -90,27 +90,27 @@ class _CreatedItensState extends State<CreatedItens> with SingleTickerProviderSt
       
             if (showNoItems) {
               return Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(
-                      _isSearchActive ? Icons.search_off : Icons.warning,
-                      color: ThemeColor.colorBlue,
-                      size: 50.0,
-                    ),
-                    SizedBox(height: 8.0),
-                    Text(
-                      _isSearchActive
-                          ? 'Nenhum item encontrado'
-                          : 'Nenhum item adicionado',
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        color: ThemeColor.colorBlue,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        _isSearchActive ? Icons.search_off : Icons.warning,
+                        color: ThemeColor.colorBlueItemNaoSel,
+                        size: 50.0,
                       ),
-                    ),
-                  ],
+                      SizedBox(height: 8.0),
+                      Text(
+                        _isSearchActive
+                            ? 'Nenhum item encontrado'
+                            : 'Nenhum item adicionado',
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          color: ThemeColor.colorBlueItemNaoSel,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               );
             }
