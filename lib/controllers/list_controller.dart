@@ -37,8 +37,9 @@ class ListController extends ChangeNotifier {
   Future<void> deleteList(NewLists value) async {
     await _listsDao.deleteLists(value);
     await _prefs.remove('bookmark_${value.id}');
+    await _prefs.remove('total_spent_${value.id}');
     await findAll();
-  }
+  } 
 
   Future<bool> saveList(String value, double budget) async {
     if (value.isNotEmpty) {
