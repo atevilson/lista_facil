@@ -455,7 +455,7 @@ class _CreatedItensState extends State<CreatedItens> with SingleTickerProviderSt
   Future<void> _createNewItem(BuildContext context) async {
     final String itemName = _itemNameController.text.trim();
     final int? quantity = int.tryParse(_itemQuantityController.text.trim());
-    final double? price = double.tryParse(_itemPriceController.text.trim());
+    final double? price = double.tryParse(_itemPriceController.text.trim().replaceAll(",", "."));
 
     if (itemName.isNotEmpty && quantity != null){
       NewItems? existingItem = widget.listController.getLayoffItemByName(itemName);
@@ -515,7 +515,7 @@ class _CreatedItensState extends State<CreatedItens> with SingleTickerProviderSt
       int.tryParse(_itemQuantityController.text) != null) {
     final String newName = _itemNameController.text.trim();
     final int newQuantity = int.parse(_itemQuantityController.text);
-    final double newPrice = double.tryParse(_itemPriceController.text.trim()) ?? 0.0;
+    final double newPrice = double.tryParse(_itemPriceController.text.trim().replaceAll(",", ".")) ?? 0.0;
 
     NewItems? existingItem = widget.listController.getLayoffItemByName(newName);
     if (existingItem != null && existingItem.id != _itemEdit?.id) {
