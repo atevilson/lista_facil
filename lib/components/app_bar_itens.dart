@@ -186,9 +186,9 @@ class AppBarItens extends StatelessWidget {
                     children: [
                       Text(
                         budget != null ? "Orçamento " : "Orçamento não definido",
-                        style: const TextStyle(
-                          fontSize: 17.0,
-                          color: ThemeColor.colorBlue,
+                        style: TextStyle(
+                          fontSize: 19.0,
+                          color: ThemeColor.colorBlueTema,
                         ),
                       ),
                       Text(
@@ -223,11 +223,11 @@ class AppBarItens extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Expanded(
-                              child: const Text(
+                              child: Text(
                                 "Total gasto",
                                 style: TextStyle(
-                                  fontSize: 17.0,
-                                  color: ThemeColor.colorBlue,
+                                  fontSize: 19.0,
+                                  color: ThemeColor.colorGreenTotal,
                                 ),
                               ),
                             ),
