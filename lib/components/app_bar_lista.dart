@@ -37,7 +37,7 @@ class AppBarCustom extends StatelessWidget {
         color: color,
         boxShadow: [
           BoxShadow(
-            color: ThemeColor.colorBlueAccent.withOpacity(0.9),
+            color: ThemeColor.colorBlueAccent.withValues(alpha: 0.9),
             spreadRadius: 3,
             blurRadius: 8,
             offset: const Offset(0, 4)
