@@ -41,7 +41,7 @@ class AppBarItens extends StatelessWidget {
         color: color ?? ThemeColor.colorWhite,
         boxShadow: [
           BoxShadow(
-            color: ThemeColor.colorBlueGradient.withOpacity(0.9),
+            color: ThemeColor.colorBlueGradient.withValues(alpha: 0.9),
             spreadRadius: 3,
             blurRadius: 15,
             offset: const Offset(0, 4),

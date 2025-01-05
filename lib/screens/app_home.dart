@@ -135,7 +135,7 @@ class _AppHomeState extends State<AppHome> with SingleTickerProviderStateMixin {
                         sigmaY: 2.5,
                       ),
                       child: Container(
-                        color: ThemeColor.colorBlueTema.withOpacity(0.3),
+                        color: ThemeColor.colorBlueTema.withValues(alpha: 0.3),
                       ),
                     ),
                   ),
