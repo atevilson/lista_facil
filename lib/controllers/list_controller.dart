@@ -126,7 +126,7 @@ class ListController extends ChangeNotifier {
 
     String normalizedInput = _normalize(name);
 
-    double bestScore = 0;
+    double bestScore = 0.0;
     NewItems? bestMatch;
 
     for (var item in _layoffList){
