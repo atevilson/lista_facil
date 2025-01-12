@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lista_facil/screens/splash_screen.dart';
-import 'package:lista_facil/utils_colors/utils_style.dart';
+import 'package:lista_facil/ui/core/ui/splash_screen.dart';
+import 'package:lista_facil/ui/core/themes/colors.dart';
 
 void main() {
   runApp(const MyApplication());
@@ -95,7 +95,7 @@ class MyApplication extends StatelessWidget {
             selectionColor: ThemeColor.colorWhite,
             selectionHandleColor: ThemeColor.colorWhite,
           ),
-        useMaterial3: true,
+        useMaterial3: false,
         dialogTheme: DialogTheme(
           titleTextStyle: const TextStyle(
             color: ThemeColor.colorWhite,
@@ -128,9 +128,6 @@ class MyApplication extends StatelessWidget {
           popupMenuTheme: const PopupMenuThemeData(
             color: ThemeColor.colorGray
           ),
-          iconTheme:  const IconThemeData(
-            color: ThemeColor.colorWhite,
-          )
       ),
     );
   }
