@@ -1,6 +1,9 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:lista_facil/controllers/list_controller.dart';
 import 'package:lista_facil/screens/create_list/create_list.dart';
+import 'package:lista_facil/utils_colors/utils_style.dart';
 class AppHome extends StatefulWidget {
   const AppHome({super.key});
 
@@ -36,6 +39,12 @@ class _AppHomeState extends State<AppHome> with SingleTickerProviderStateMixin {
         _animationController.reverse();
       }
     });
+  }
+
+  void _handlerTapDownOrTapCancel(){
+    if(_isExpanded){
+      _toggleExpand();
+    }
   }
 
   @override
@@ -116,6 +125,22 @@ class _AppHomeState extends State<AppHome> with SingleTickerProviderStateMixin {
                   ],
                 ),
               ),
+              if (_isExpanded)
+                Positioned.fill(
+                  child: GestureDetector(
+                    onTap: _handlerTapDownOrTapCancel,
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(
+                        sigmaX: 2.5, 
+                        sigmaY: 2.5,
+                      ),
+                      child: Container(
+                        color: ThemeColor.colorBlueTema.withValues(alpha: 0.3),
+                      ),
+                    ),
+                  ),
+                ),
+
               Align(
                 alignment: Alignment.bottomCenter,
                 child: AnimatedBuilder(
@@ -127,30 +152,30 @@ class _AppHomeState extends State<AppHome> with SingleTickerProviderStateMixin {
                     double height = minHeight +
                         (maxHeight - minHeight) * _animationController.value;
 
-                    return Container( // Esse container expande ao clicar
-                      height: height,
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('images/base_bottom.png'),
-                          fit: BoxFit.fitHeight,
+                    return GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                            onVerticalDragUpdate: (details) {
+                                    if (details.delta.dy < 0 && !_isExpanded) {
+                                      _toggleExpand();
+                                    } else if (details.delta.dy > 0 &&
+                                      _isExpanded) {
+                                    _toggleExpand();
+                                    }
+                                  },
+                            onTap: _isExpanded ? _handlerTapDownOrTapCancel : _toggleExpand,
+                      child: Container( // container expande ao clicar
+                        height: height,
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage('images/base_bottom.png'),
+                            fit: BoxFit.fitHeight,
+                          ),
                         ),
-                      ),
-                      child: Center(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            GestureDetector(
-                              behavior: HitTestBehavior.opaque,
-                              onVerticalDragUpdate: (details) {
-                                if (details.delta.dy < 0 && !_isExpanded) {
-                                  _toggleExpand();
-                                } else if (details.delta.dy > 0 &&
-                                    _isExpanded) {
-                                  _toggleExpand();
-                                }
-                              },
-                              onTap: _toggleExpand,
-                              child: Column(
+                        child: Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   if (!_isExpanded)
@@ -180,171 +205,171 @@ class _AppHomeState extends State<AppHome> with SingleTickerProviderStateMixin {
                                     ),
                                 ],
                               ),
-                            ),
-                            if (_isExpanded)
-                              Expanded(
-                                child: Container(
-                                  decoration: const BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(25.0),
+                              if (_isExpanded)
+                                Expanded(
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.vertical(
+                                        top: Radius.circular(25.0),
+                                      ),
                                     ),
-                                  ),
-                                  child: SingleChildScrollView(
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: screenWidth * 0.1,
-                                          vertical: screenHeight * 0.05),
-                                      child: Column(
-                                        children: [
-                                          GestureDetector(
-                                            onVerticalDragUpdate: (details) {
-                                              if (details.delta.dy > 0 &&
-                                                  _isExpanded) {
-                                                _toggleExpand();
-                                              }
-                                            },
-                                            onVerticalDragEnd: (details) {
-                                              if (_isExpanded) {
-                                                _toggleExpand();
-                                              }
-                                            },
-                                            onTap: () {
-                                              _toggleExpand(); 
-                                            },
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Container(
-                                                  margin: EdgeInsets.only(
-                                                      bottom:
-                                                          screenHeight * 0.015),
-                                                  width: screenWidth * 0.15,
-                                                  height: screenHeight * 0.008,
-                                                  decoration: BoxDecoration(
-                                                    color:
-                                                        const Color(0xFF0377FD),
+                                    child: SingleChildScrollView(
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: screenWidth * 0.1,
+                                            vertical: screenHeight * 0.05),
+                                        child: Column(
+                                          children: [
+                                            GestureDetector(
+                                              onVerticalDragUpdate: (details) {
+                                                if (details.delta.dy > 0 &&
+                                                    _isExpanded) {
+                                                  _toggleExpand();
+                                                }
+                                              },
+                                              onVerticalDragEnd: (details) {
+                                                if (_isExpanded) {
+                                                  _toggleExpand();
+                                                }
+                                              },
+                                              onTap: () {
+                                                _toggleExpand(); 
+                                              },
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Container(
+                                                    margin: EdgeInsets.only(
+                                                        bottom:
+                                                            screenHeight * 0.015),
+                                                    width: screenWidth * 0.15,
+                                                    height: screenHeight * 0.008,
+                                                    decoration: BoxDecoration(
+                                                      color:
+                                                          const Color(0xFF0377FD),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10.0),
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    'Nova lista',
+                                                    style: TextStyle(
+                                                      fontWeight: FontWeight.w500,
+                                                      color:
+                                                          const Color(0xFF0377FD),
+                                                      fontSize:
+                                                          screenWidth * 0.045,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            SizedBox(height: screenHeight * 0.03),
+                                            TextField(
+                                              controller: _newListController,
+                                              cursorColor: Colors.blue,
+                                              decoration: InputDecoration(
+                                                labelText: 'Nome da Lista',
+                                                labelStyle: TextStyle(
+                                                  color: Colors.blue.shade700,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                                focusedBorder: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(25.0),
+                                                  borderSide: BorderSide(
+                                                      color: Colors.blue.shade700,
+                                                      width: 1.5),
+                                                ),
+                                                enabledBorder: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(25.0),
+                                                  borderSide: BorderSide(
+                                                      color: Colors.blue.shade200,
+                                                      width: 1.5),
+                                                ),
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(25.0),
+                                                ),
+                                              ),
+                                              keyboardType: TextInputType.text,
+                                              style: TextStyle(
+                                                fontSize: screenWidth * 0.05,
+                                                color: Colors.blue.shade700,
+                                              ),
+                                            ),
+                                            SizedBox(height: screenHeight * 0.01),
+                                            TextField(
+                                              controller: _budgetController,
+                                              cursorColor: Colors.blue,
+                                              decoration: InputDecoration(
+                                                labelText: 'Orçamento - R\$',
+                                                labelStyle: TextStyle(
+                                                  color: Colors.blue.shade700,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                                focusedBorder: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(25.0),
+                                                  borderSide: BorderSide(
+                                                      color: Colors.blue.shade700,
+                                                      width: 1.5),
+                                                ),
+                                                enabledBorder: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(25.0),
+                                                  borderSide: BorderSide(
+                                                      color: Colors.blue.shade200,
+                                                      width: 1.5),
+                                                ),
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(25.0),
+                                                ),
+                                              ),
+                                              keyboardType: TextInputType.number,
+                                              style: TextStyle(
+                                                fontSize: screenWidth * 0.05,
+                                                color: Colors.blue.shade700,
+                                              ),
+                                            ),
+                                            SizedBox(height: screenHeight * 0.01),
+                                            SizedBox(
+                                              width: screenWidth * 0.9,
+                                              height: screenHeight * 0.08,
+                                              child: ElevatedButton(
+                                                onPressed: () =>
+                                                    _createNewList(context),
+                                                style: ElevatedButton.styleFrom(
+                                                  shape: RoundedRectangleBorder(
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            10.0),
+                                                            25.0),
                                                   ),
+                                                  backgroundColor:
+                                                      const Color(0xFF0377FD),
                                                 ),
-                                                Text(
-                                                  'Nova lista',
+                                                child: Text(
+                                                  'Criar nova lista',
                                                   style: TextStyle(
-                                                    fontWeight: FontWeight.w500,
-                                                    color:
-                                                        const Color(0xFF0377FD),
-                                                    fontSize:
-                                                        screenWidth * 0.045,
+                                                    fontSize: screenWidth * 0.05,
+                                                    //fontWeight: FontWeight.bold,
+                                                    color: Colors.white,
                                                   ),
                                                 ),
-                                              ],
-                                            ),
-                                          ),
-                                          SizedBox(height: screenHeight * 0.03),
-                                          TextField(
-                                            controller: _newListController,
-                                            cursorColor: Colors.blue,
-                                            decoration: InputDecoration(
-                                              labelText: 'Nome da Lista',
-                                              labelStyle: TextStyle(
-                                                color: Colors.blue.shade700,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                              focusedBorder: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(25.0),
-                                                borderSide: BorderSide(
-                                                    color: Colors.blue.shade700,
-                                                    width: 1.5),
-                                              ),
-                                              enabledBorder: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(25.0),
-                                                borderSide: BorderSide(
-                                                    color: Colors.blue.shade200,
-                                                    width: 1.5),
-                                              ),
-                                              border: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(25.0),
                                               ),
                                             ),
-                                            keyboardType: TextInputType.text,
-                                            style: TextStyle(
-                                              fontSize: screenWidth * 0.05,
-                                              color: Colors.blue.shade700,
-                                            ),
-                                          ),
-                                          SizedBox(height: screenHeight * 0.01),
-                                          TextField(
-                                            controller: _budgetController,
-                                            cursorColor: Colors.blue,
-                                            decoration: InputDecoration(
-                                              labelText: 'Orçamento',
-                                              labelStyle: TextStyle(
-                                                color: Colors.blue.shade700,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                              focusedBorder: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(25.0),
-                                                borderSide: BorderSide(
-                                                    color: Colors.blue.shade700,
-                                                    width: 1.5),
-                                              ),
-                                              enabledBorder: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(25.0),
-                                                borderSide: BorderSide(
-                                                    color: Colors.blue.shade200,
-                                                    width: 1.5),
-                                              ),
-                                              border: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(25.0),
-                                              ),
-                                            ),
-                                            keyboardType: TextInputType.number,
-                                            style: TextStyle(
-                                              fontSize: screenWidth * 0.05,
-                                              color: Colors.blue.shade700,
-                                            ),
-                                          ),
-                                          SizedBox(height: screenHeight * 0.01),
-                                          SizedBox(
-                                            width: screenWidth * 0.9,
-                                            height: screenHeight * 0.08,
-                                            child: ElevatedButton(
-                                              onPressed: () =>
-                                                  _createNewList(context),
-                                              style: ElevatedButton.styleFrom(
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          25.0),
-                                                ),
-                                                backgroundColor:
-                                                    const Color(0xFF0377FD),
-                                              ),
-                                              child: Text(
-                                                'Criar nova lista',
-                                                style: TextStyle(
-                                                  fontSize: screenWidth * 0.05,
-                                                  //fontWeight: FontWeight.bold,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              )
-                          ],
+                                )
+                            ],
+                          ),
                         ),
                       ),
                     );

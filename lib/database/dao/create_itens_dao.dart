@@ -10,13 +10,15 @@ class ItemsDao {
   static const String quantity = 'quantity';
   static const String listId = 'list_id';
   static const String price = 'price';
+  static const String createAt = 'createdAt';
 
   static const String tableSQLitens = 'CREATE TABLE $nameTable('
       '$id INTEGER PRIMARY KEY AUTOINCREMENT, '
-      '$item TEXT,'
-      '$quantity INTEGER,'
-      '$price REAL,'
-      '$listId INTEGER,'
+      '$item TEXT, '
+      '$quantity INTEGER, '
+      '$price REAL, '
+      '$listId INTEGER, '
+      '$createAt TEXT, '
       'FOREIGN KEY ($listId) REFERENCES ${ListsDao.nameTable} (${ListsDao.id}))';
 
   Future<int> save(NewItems items) async {
@@ -44,6 +46,7 @@ class ItemsDao {
     newItem[quantity] = items.quantity;
     newItem[price] = items.price;
     newItem[listId] = items.listId;
+    newItem[createAt] = items.createdAt ?? DateTime.now().toIso8601String();
     return db.insert(nameTable, newItem);
   }
 
@@ -65,7 +68,8 @@ class ItemsDao {
           items: row[item],
           quantity: row[quantity],
           price: row[price],
-          listId: row[listId]);
+          listId: row[listId],
+          createdAt: row[createAt]);
       items.add(newItem);
     }
     return items;

@@ -40,10 +40,10 @@ class _PantryItemsScreenState extends State<PantryItemsScreen> {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          backgroundColor: ThemeColor.colorRed800,
+          backgroundColor: ThemeColor.colorBlueTema,
           content: const Text(
             "Por favor, preencha todos os campos corretamente.",
-            style: TextStyle(color: Colors.black),
+            style: TextStyle(color: ThemeColor.colorWhite),
           ),
         ),
       );
@@ -73,40 +73,50 @@ class _PantryItemsScreenState extends State<PantryItemsScreen> {
         child: Column(
           children: [
             TextField(
+              cursorColor: ThemeColor.colorBlue,
               style: TextStyle(
                 color: ThemeColor.colorBlueTema
               ),
               controller: _itemNameController,
               decoration: InputDecoration(   
                 focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(25.0),
                   borderSide: BorderSide(
                     color: ThemeColor.colorBlueTema
                   )
                 ),
                 enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(25.0),
                   borderSide: BorderSide(
                     color: ThemeColor.colorBlueTema
                   )
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(45.0)
                 ),            
                 labelStyle: TextStyle(
                   color: ThemeColor.colorBlueTema
                 ),
-                labelText: "Nome do Item",
+                labelText: "Nome do item",
               ),
+              keyboardType: TextInputType.text,
             ),
             const SizedBox(height: 10),
             TextField(
+              cursorColor: ThemeColor.colorBlue,
               style: TextStyle(
                 color: ThemeColor.colorBlueTema
               ),
               controller: _itemQuantityController,
               decoration: InputDecoration(
                 focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(25.0),
                   borderSide: BorderSide(
                     color: ThemeColor.colorBlueTema
                   )
                 ),
                 enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(25.0),
                   borderSide: BorderSide(
                     color: ThemeColor.colorBlueTema
                   )
@@ -115,7 +125,9 @@ class _PantryItemsScreenState extends State<PantryItemsScreen> {
                   color: ThemeColor.colorBlueTema
                 ),
                 labelText: "Quantidade",
-                border: OutlineInputBorder(),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(25.0)
+                ),
               ),
               keyboardType: TextInputType.number,
             ),

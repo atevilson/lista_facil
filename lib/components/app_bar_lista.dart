@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:lista_facil/components/custom_icons.dart';
 import 'package:lista_facil/controllers/list_controller.dart';
+import 'package:lista_facil/screens/widgets/report_screen.dart';
 import 'package:lista_facil/utils_colors/utils_style.dart';
 
 class AppBarCustom extends StatelessWidget {
@@ -26,7 +27,7 @@ class AppBarCustom extends StatelessWidget {
     required this.hintText,
     this.child,
     this.color,
-    required this.controller
+    required this.controller,
   });
 
   @override
@@ -36,7 +37,7 @@ class AppBarCustom extends StatelessWidget {
         color: color,
         boxShadow: [
           BoxShadow(
-            color: ThemeColor.colorBlueAccent.withOpacity(0.9),
+            color: ThemeColor.colorBlueAccent.withValues(alpha: 0.9),
             spreadRadius: 3,
             blurRadius: 8,
             offset: const Offset(0, 4)
@@ -101,10 +102,59 @@ class AppBarCustom extends StatelessWidget {
                   ),
                   onPressed: onSearch,
                 ),
-                IconButton(
-                      onPressed: () => controller.sortItems(!controller.isAscending), 
-                      icon: Icon(CustomIcons.alphabetic), 
-                      color: ThemeColor.colorWhite60),
+                PopupMenuButton<int>(
+                      position: PopupMenuPosition.over,
+                      color: ThemeColor.colorBlueScafold,
+                      icon: Icon(
+                        Icons.more_vert,
+                        color: ThemeColor.colorWhite,
+                      ),
+                      onSelected: (value) {
+                        switch (value) {
+                          case 1:
+                            controller.sortItems(!controller.isAscending);
+                            break;
+                          case 2:
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => ReportScreen()));
+                            break;
+                          default:
+                            break;
+                        }
+                      },
+                      itemBuilder: (context) => [
+                        PopupMenuItem(
+                            value: 1,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Ordenar",
+                                style: TextStyle(
+                                  color: ThemeColor.colorBlueTema
+                                ),),
+                                Icon(CustomIcons.alphabetic, size: 28, color: ThemeColor.colorBlueTema),
+                              ],
+                            )),
+                        PopupMenuItem(
+                            value: 2,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Relatórios",
+                                  style: TextStyle(
+                                      color: ThemeColor.colorBlueTema),
+                                ),
+                                Icon(
+                                  Icons.report,
+                                  size: 28,
+                                  color: ThemeColor.colorBlueTema,
+                                ),
+                              ],
+                            ))
+                      ],
+                    ),
               ],
             ),
           ],

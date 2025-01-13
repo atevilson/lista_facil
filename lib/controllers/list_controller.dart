@@ -1,8 +1,10 @@
+import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
 import 'package:lista_facil/database/dao/create_list_dao.dart';
 import 'package:lista_facil/models/new_items.dart';
 import 'package:lista_facil/models/new_lists.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:string_similarity/string_similarity.dart';
 
 class ListController extends ChangeNotifier {
   final ListsDao _listsDao = ListsDao();
@@ -18,6 +20,7 @@ class ListController extends ChangeNotifier {
 
   Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
+    _ascendingOrder = _prefs.getBool('ascendingOrder') ?? true;
     await findAll();
   }
 
@@ -26,18 +29,21 @@ class ListController extends ChangeNotifier {
     for(NewLists list in lists) {
       list.bookMarked = _prefs.getBool('bookmark_${list.id}') ?? false;
     }
+    _sortItemsInternal(lists);
+
     listaValores.value = lists;
   }
 
   Future<void> deleteList(NewLists value) async {
     await _listsDao.deleteLists(value);
     await _prefs.remove('bookmark_${value.id}');
+    await _prefs.remove('total_spent_${value.id}');
     await findAll();
-  }
+  } 
 
   Future<bool> saveList(String value, double budget) async {
     if (value.isNotEmpty) {
-      final NewLists newLists = NewLists(0, value, budget);
+      final NewLists newLists = NewLists(0, value, budget, "");
       await _listsDao.save(newLists);
       await _prefs.setBool('bookmark_${newLists.id}', false);
       await findAll();
@@ -87,8 +93,8 @@ class ListController extends ChangeNotifier {
       String firstCharA = a.nameList.isNotEmpty ? a.nameList[0].toLowerCase() : '';
       String firstCharB = b.nameList.isNotEmpty ? b.nameList[0].toLowerCase() : '';
 
-      int comparison = firstCharA.compareTo(firstCharB);
-      return _ascendingOrder ? comparison : -comparison;
+      //int comparison = firstCharA.compareTo(firstCharB);
+      return _ascendingOrder ? firstCharA.compareTo(firstCharB) : firstCharB.compareTo(firstCharA);
       },
     );
   }
@@ -98,16 +104,43 @@ class ListController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addLayoffItems(List<NewItems> list) { // adiciona múltiplos itens a dispensa
+  void addLayoffItems(List<NewItems> list) {
+    // adiciona múltiplos itens a dispensa
     _layoffList.addAll(list);
     notifyListeners();
   }
 
-  NewItems? getLayoffItemByName(String name) { // retorna um item com base na lista de dispensa ou null
-    try{
-      return _layoffList.firstWhere((item) => item.items.toLowerCase() == name.toLowerCase());
-    }catch(e){
-      return null;
+  String _normalize(String text) {
+    return removeDiacritics(text).toLowerCase();
+  }
+
+  NewItems? getLayoffItemByName(String name) {
+    // retorna um item com base na lista de dispensa ou null
+    // try{
+    //   return _layoffList.firstWhere((item) => item.items.toLowerCase() == name.toLowerCase());
+    // }catch(e){
+    //   return null;
+    // }
+
+    if (_layoffList.isEmpty) return null;
+
+    String normalizedInput = _normalize(name);
+
+    double bestScore = 0.0;
+    NewItems? bestMatch;
+
+    for (var item in _layoffList){
+      double score = normalizedInput.similarityTo(_normalize(item.items)); // normalização do item antes de comparar
+      if (score > bestScore) {
+        bestScore = score;
+        bestMatch = item;
+      }
     }
+
+    if (bestScore > 0.5){ // score min para considerar se na comparação são equivalentes
+      return bestMatch;
+    }
+
+    return null;
   }
 }

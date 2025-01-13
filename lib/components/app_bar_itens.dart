@@ -41,7 +41,7 @@ class AppBarItens extends StatelessWidget {
         color: color ?? ThemeColor.colorWhite,
         boxShadow: [
           BoxShadow(
-            color: ThemeColor.colorBlueGradient.withOpacity(0.9),
+            color: ThemeColor.colorBlueGradient.withValues(alpha: 0.9),
             spreadRadius: 3,
             blurRadius: 15,
             offset: const Offset(0, 4),
@@ -49,7 +49,7 @@ class AppBarItens extends StatelessWidget {
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 18),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
         child: Column(
           children: [
             Row(
@@ -125,7 +125,8 @@ class AppBarItens extends StatelessWidget {
                             controller.sortItems(!controller.isAscending);
                             break;
                           case 2:
-                            controller.sortItems(controller.isAscending);
+                            controller.shareItems(
+                                      controller.quantityItems.value);
                             break;
                           default:
                             break;
@@ -142,36 +143,25 @@ class AppBarItens extends StatelessWidget {
                                 style: TextStyle(
                                   color: ThemeColor.colorWhite
                                 ),),
-                                IconButton(
-                                    iconSize: 28,
-                                    onPressed: () => controller
-                                        .sortItems(!controller.isAscending),
-                                    icon: Icon(CustomIcons.alphabetic),
-                                    color: ThemeColor.colorWhite),
+                                Icon(CustomIcons.alphabetic, size: 28),
+                                    
                               ],
                             )),
                         PopupMenuItem(
                             value: 2,
                             child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                GestureDetector(
-                                  behavior: HitTestBehavior.opaque,
-                                  onTap: () => controller.shareItems(
-                                      controller.quantityItems.value),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        "Compartilhar",
-                                        style: TextStyle(
-                                            color: ThemeColor.colorWhite),
-                                      ),
-                                      SizedBox(width: 20,),
-                                      Icon(
-                                        Icons.share,
-                                        size: 28,
-                                      ),
-                                    ],
-                                  ),
+                                Text(
+                                  "Compartilhar",
+                                  style: TextStyle(
+                                      color: ThemeColor.colorWhite),
+                                ),
+                                SizedBox(width: 20,),
+                                Icon(
+                                  Icons.share,
+                                  size: 28,
                                 ),
                               ],
                             ))
@@ -196,9 +186,9 @@ class AppBarItens extends StatelessWidget {
                     children: [
                       Text(
                         budget != null ? "Orçamento " : "Orçamento não definido",
-                        style: const TextStyle(
-                          fontSize: 17.0,
-                          color: ThemeColor.colorBlue,
+                        style: TextStyle(
+                          fontSize: 19.0,
+                          color: ThemeColor.colorBlueTema,
                         ),
                       ),
                       Text(
@@ -233,11 +223,11 @@ class AppBarItens extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Expanded(
-                              child: const Text(
+                              child: Text(
                                 "Total gasto",
                                 style: TextStyle(
-                                  fontSize: 17.0,
-                                  color: ThemeColor.colorBlue,
+                                  fontSize: 19.0,
+                                  color: ThemeColor.colorGreenTotal,
                                 ),
                               ),
                             ),
