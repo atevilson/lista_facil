@@ -25,16 +25,6 @@ class MyApplication extends StatelessWidget {
           iconSize: 32.0,
           backgroundColor: ThemeColor.colorWhite70, 
           foregroundColor: ThemeColor.colorBlack),
-        // elevatedButtonTheme: const ElevatedButtonThemeData(
-        //   style: ButtonStyle(minimumSize: WidgetStatePropertyAll(Size(200, 200)),
-        //     backgroundColor: WidgetStatePropertyAll(
-        //       Color(0xFF0377FD),
-        //     ),
-        //     foregroundColor: WidgetStatePropertyAll(
-        //       UtilColors.colorWhite70,
-        //     ),
-        //   ),
-        // ),
         appBarTheme: const AppBarTheme(
           backgroundColor: Color(0xFF0377FD),
           foregroundColor: ThemeColor.colorWhite70,
@@ -60,8 +50,6 @@ class MyApplication extends StatelessWidget {
             //selectedTileColor: Colors.blue),
         checkboxTheme: CheckboxThemeData(
           splashRadius: 2.0,
-          //fillColor: WidgetStatePropertyAll(ThemeColor.colorGreyCheckBox),
-          //checkColor: const WidgetStatePropertyAll(ThemeColor.colorWhite),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(11.0)
           ),
