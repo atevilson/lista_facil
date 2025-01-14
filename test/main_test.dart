@@ -17,7 +17,7 @@ void main() {
       final fakeList = Lists(1, "Lista teste", 100.0, null);
       final fakeRepo = FakeItemsRepository();
 
-      final viewModel = CreateItemsViewModel(fakeList, fakeRepo);
+      final viewModel = CreateItemsViewModel(lists: fakeList, iItemsRepository: fakeRepo);
 
       await viewModel.init();
 
@@ -32,7 +32,7 @@ void main() {
     final fakeList = Lists(1, "Lista teste", 100.0, null);
     final fakeRepo = FakeItemsRepository();
 
-    final viewModel = CreateItemsViewModel(fakeList, fakeRepo);
+    final viewModel = CreateItemsViewModel(lists: fakeList, iItemsRepository: fakeRepo);
     await viewModel.init();
 
     await viewModel.saveItem(Items(items: "Arroz", quantity: 2, listId: 1));
@@ -47,7 +47,7 @@ void main() {
     final fakeList = Lists(1, "Lista teste", 100.0, null);
     final fakeRepo = FakeItemsRepository();
 
-    final viewModel = CreateItemsViewModel(fakeList, fakeRepo);
+    final viewModel = CreateItemsViewModel(lists: fakeList, iItemsRepository: fakeRepo);
     await viewModel.init();
 
     await viewModel.saveItem(Items(items: "Arroz", quantity: 2, listId: 1));
@@ -74,8 +74,8 @@ void main() {
     final fakeList2 = Lists(2, "Lista teste2", 100.0, null);
     final fakeRepo = FakeItemsRepository();
 
-    final viewModel1 = CreateItemsViewModel(fakeList1, fakeRepo);
-    final viewModel2 = CreateItemsViewModel(fakeList2, fakeRepo);
+    final viewModel1 = CreateItemsViewModel(lists: fakeList1, iItemsRepository: fakeRepo);
+    final viewModel2 = CreateItemsViewModel(lists: fakeList2, iItemsRepository: fakeRepo);
     await viewModel1.init();
     await viewModel2.init();
 

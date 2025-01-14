@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:lista_facil/config/injection_dep.dart';
 import 'package:lista_facil/ui/core/ui/splash_screen.dart';
 import 'package:lista_facil/ui/core/themes/colors.dart';
 
 void main() {
+  injectionDep();
   runApp(const MyApplication());
 }
 
@@ -12,7 +14,7 @@ class MyApplication extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: const SplashScreen(),
+      home: SplashScreen(),
       theme: ThemeData(
         textTheme: const TextTheme(
           bodyLarge: TextStyle(color: ThemeColor.colorWhite)
