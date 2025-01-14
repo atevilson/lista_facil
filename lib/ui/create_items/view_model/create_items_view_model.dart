@@ -6,7 +6,13 @@ import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateItemsViewModel extends ChangeNotifier {
-  final Lists newLists;
+  CreateItemsViewModel({
+    required IItemsRepository iItemsRepository,
+    required Lists lists,
+  }) : _itemsRepository = iItemsRepository, _newLists = lists {
+    //
+  }
+
   final IItemsRepository _itemsRepository;
   //final ItemsDao _itemDao = ItemsDao();
   final ValueNotifier<List<Items>> quantityItems = ValueNotifier<List<Items>>([]);
@@ -16,9 +22,7 @@ class CreateItemsViewModel extends ChangeNotifier {
 
   late SharedPreferences _prefs;
 
-  CreateItemsViewModel(this.newLists, this._itemsRepository) {
-    //
-  }
+  final Lists _newLists;
 
   Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
@@ -28,7 +32,7 @@ class CreateItemsViewModel extends ChangeNotifier {
   }
 
   Future<void> _loadListItems() async {
-    List<Items> items = await _itemsRepository.getItemsByListId(newLists.id);
+    List<Items> items = await _itemsRepository.getItemsByListId(_newLists.id);
     _sortItemsInternal(items);
 
     for (Items item in items) {
@@ -39,11 +43,11 @@ class CreateItemsViewModel extends ChangeNotifier {
   }
 
   Future<void> _saveTotal() async {
-  await _prefs.setDouble('total_spent_${newLists.id}', total.value);
+  await _prefs.setDouble('total_spent_${_newLists.id}', total.value);
 }
 
 Future<void> _loadTotalSpent() async{
-  total.value = _prefs.getDouble('total_spent_${newLists.id}') ?? 0.0;
+  total.value = _prefs.getDouble('total_spent_${_newLists.id}') ?? 0.0;
   notifyListeners();
 }
 
@@ -53,7 +57,7 @@ Future<void> _loadTotalSpent() async{
 
   Future<bool> saveItem(Items value) async {
     final Items newItens = Items(
-        listId: newLists.id, items: value.items, quantity: value.quantity, price: value.price);
+        listId: _newLists.id, items: value.items, quantity: value.quantity, price: value.price);
     await _itemsRepository.saveItem(newItens);
     await _loadListItems();
     return true;
@@ -125,7 +129,7 @@ Future<void> _loadTotalSpent() async{
   }
 
   void shareItems(List<Items> items) {
-  String message = "${newLists.nameList}\n";
+  String message = "${_newLists.nameList}\n";
   for (Items item in items) {
     message += "${item.items} - ${item.quantity}\n";
     }

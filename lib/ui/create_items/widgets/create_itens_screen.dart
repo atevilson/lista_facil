@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:lista_facil/data/repositories/items_repository.dart';
-import 'package:lista_facil/data/services/local_db/items_dao.dart';
 import 'package:lista_facil/ui/create_items/widgets/app_bar_itens.dart';
 import 'package:lista_facil/ui/create_items/view_model/create_items_view_model.dart';
-import 'package:lista_facil/ui/create_lists/view_model/create_list_view_model.dart';
 import 'package:lista_facil/domain/models/items.dart';
 import 'package:lista_facil/domain/models/lists.dart';
 import 'package:lista_facil/ui/core/themes/colors.dart';
+import 'package:lista_facil/ui/create_lists/view_model/create_list_view_model.dart';
 
 const titleAppBar = 'Itens';
 
 class CreateItemsScreen extends StatefulWidget {
   final Lists list;
+  const CreateItemsScreen( 
+      {super.key, required this.list, 
+      required this.viewModel,
+      required this.viewModelList});
+
+  final CreateItemsViewModel viewModel;
   final CreateListViewModel viewModelList;
-  const CreateItemsScreen(this.list, {super.key, required this.viewModelList});
 
   @override
   State<CreateItemsScreen> createState() => _CreateItemsScreenState();
@@ -23,19 +26,15 @@ class CreateItemsScreen extends StatefulWidget {
 class _CreateItemsScreenState extends State<CreateItemsScreen> with SingleTickerProviderStateMixin {
   final TextEditingController _searchController = TextEditingController();
   bool _isSearchActive = false; 
-  late CreateItemsViewModel viewModel;
-  late ItemsRepository _itemsRepository; 
-  final _itemDao = ItemsDao();
   List<Items> _filteredItems = [];
-  
-  // Variáveis para controle do formulário
+  // variáveis para controle do formulário
   bool _showCreateForm = false;
   bool _isEditing = false;
   bool _isDelete = false;
   Items? _itemEdit;
   String _searchQuery = "";
 
-  // Controladores dos campos do formulário de itens
+  // controladores dos campos do formulário de itens
   final TextEditingController _itemNameController = TextEditingController();
   final TextEditingController _itemQuantityController = TextEditingController();
   final TextEditingController _itemPriceController = TextEditingController();
@@ -43,9 +42,7 @@ class _CreateItemsScreenState extends State<CreateItemsScreen> with SingleTicker
   @override
   void initState() {
     super.initState();
-    _itemsRepository = ItemsRepository(_itemDao);
-    viewModel = CreateItemsViewModel(widget.list, _itemsRepository);
-    viewModel.init();
+    widget.viewModel.init();
   }
 
   @override
@@ -81,13 +78,13 @@ class _CreateItemsScreenState extends State<CreateItemsScreen> with SingleTicker
             hintText: "Buscar item",
             color: ThemeColor.colorWhite,
             budget: widget.list.budget,
-            totalNotifier: viewModel.total, 
-            controller: viewModel,
+            totalNotifier: widget.viewModel.total, 
+            controller: widget.viewModel,
           ),
           Expanded(
         child: _filteredItems.isEmpty
       ? ValueListenableBuilder<List<Items>>(
-          valueListenable: viewModel.quantityItems,
+          valueListenable: widget.viewModel.quantityItems,
           builder: (context, items, _) {
             bool showNoItems = _isSearchActive
                 ? _filteredItems.isEmpty && _searchQuery.isNotEmpty
@@ -130,10 +127,10 @@ class _CreateItemsScreenState extends State<CreateItemsScreen> with SingleTicker
               itemBuilder: (context, index) {
                 final Items item = listToShow[index];
                 return _CollectionItems(
+                  viewModel: widget.viewModel,
                   item: item,
                   onEdit: () => _showEditForm(item),
                   onDelete: () => _showDeleteConfirmation(item),
-                  controller: viewModel,
                 );
               },
             );
@@ -146,10 +143,10 @@ class _CreateItemsScreenState extends State<CreateItemsScreen> with SingleTicker
           itemBuilder: (context, index) {
             final Items item = _filteredItems[index];
             return _CollectionItems(
+              viewModel: widget.viewModel,
               item: item,
               onEdit: () => _showEditForm(item),
               onDelete: () => _showDeleteConfirmation(item),
-              controller: viewModel,
             );
           },
         ),
@@ -417,12 +414,12 @@ class _CreateItemsScreenState extends State<CreateItemsScreen> with SingleTicker
   }
 
   void _searchList(String query) {
-    if(query.isEmpty){
+    if(query.isEmpty) {
       setState(() {
         _filteredItems.clear();
       });
     }
-    viewModel.searchItemByName(query).then((filteredItems) {
+    widget.viewModel.searchItemByName(query).then((filteredItems) {
       setState(() {
         _filteredItems = filteredItems;
       });
@@ -450,7 +447,7 @@ class _CreateItemsScreenState extends State<CreateItemsScreen> with SingleTicker
 
   Future<void> _deleteItem() async {
     if (_isDelete && _itemEdit != null && _itemEdit!.id != null) {
-      await viewModel.deleteItem(_itemEdit!);
+      await widget.viewModel.deleteItem(_itemEdit!);
       setState(() {
         _clearFormState();
       });
@@ -465,7 +462,6 @@ class _CreateItemsScreenState extends State<CreateItemsScreen> with SingleTicker
     if (itemName.isNotEmpty && quantity != null){
       Items? existingItem = widget.viewModelList.getLayoffItemByName(itemName);
       if (existingItem != null) {
-
       bool? userChoice = await showDialog<bool>(
         context: context,
         builder: (context) => AlertDialog(
@@ -498,7 +494,7 @@ class _CreateItemsScreenState extends State<CreateItemsScreen> with SingleTicker
       price: price ?? 0.0,
       listId: widget.list.id,
     );
-    await viewModel.saveItem(newItem);
+    await widget.viewModel.saveItem(newItem);
     setState(() {
       _clearFormState();
     });
@@ -559,7 +555,7 @@ class _CreateItemsScreenState extends State<CreateItemsScreen> with SingleTicker
       listId: widget.list.id,
       isChecked: _itemEdit?.isChecked ?? false,
     );
-    await viewModel.updateItem(updateItem);
+    await widget.viewModel.updateItem(updateItem);
     setState(() {
       _clearFormState();
     });
@@ -598,13 +594,13 @@ class _CollectionItems extends StatelessWidget {
   final Items item;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
-  final CreateItemsViewModel controller;
+  final CreateItemsViewModel viewModel;
 
   const _CollectionItems({
     required this.item,
     required this.onEdit,
     required this.onDelete,
-    required this.controller,
+    required this.viewModel
   });
 
   @override
@@ -660,7 +656,7 @@ class _CollectionItems extends StatelessWidget {
         
                       if (isChecked) {
                         if (item.price! > 0.0) {
-                          await controller.priceCheckerAndUpdater(item.id!, true, item.price!);
+                          await viewModel.priceCheckerAndUpdater(item.id!, true, item.price!);
                         } else {
                           String valor = "";
                           final double? price = await showDialog<double>(
@@ -725,13 +721,13 @@ class _CollectionItems extends StatelessWidget {
                           );
         
                           if (price != null) {
-                            await controller.priceCheckerAndUpdater(item.id!, true, price);
+                            await viewModel.priceCheckerAndUpdater(item.id!, true, price);
                           } else {
-                            await controller.priceCheckerAndUpdater(item.id!, false, 0.0);
+                            await viewModel.priceCheckerAndUpdater(item.id!, false, 0.0);
                           }
                         }
                       } else {
-                        await controller.priceCheckerAndUpdater(
+                        await viewModel.priceCheckerAndUpdater(
                           item.id!,
                           false,
                           item.price!,
