@@ -2,14 +2,15 @@
 // add_layoff_items.dart
 
 import 'package:flutter/material.dart';
-import 'package:lista_facil/ui/create_lists/view_model/create_list_view_model.dart';
 import 'package:lista_facil/domain/models/items.dart';
 import 'package:lista_facil/ui/core/themes/colors.dart';
+import 'package:lista_facil/ui/create_lists/view_model/create_list_view_model.dart';
 
 class CupboardItemsScreen extends StatefulWidget {
-  final CreateListViewModel listController;
 
-  const CupboardItemsScreen({required this.listController, super.key});
+  const CupboardItemsScreen({super.key, required this.viewModelList});
+
+  final CreateListViewModel viewModelList;
 
   @override
   State<CupboardItemsScreen> createState() => _CupboardItemsScreenState();
@@ -19,6 +20,8 @@ class _CupboardItemsScreenState extends State<CupboardItemsScreen> {
   final TextEditingController _itemNameController = TextEditingController();
   final TextEditingController _itemQuantityController = TextEditingController();
   final List<Items> _layoffItems = [];
+
+
 
   @override
   void dispose() {
@@ -52,7 +55,7 @@ class _CupboardItemsScreenState extends State<CupboardItemsScreen> {
 
   void _saveLayoffItems() {
     if (_layoffItems.isNotEmpty) {
-      widget.listController.addLayoffItems(_layoffItems);
+      widget.viewModelList.addLayoffItems(_layoffItems);
     }
     Navigator.of(context).pop(); // Retorna para a tela anterior
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:lista_facil/ui/create_items/view_model/create_items_view_model.dart';
 import 'package:lista_facil/ui/create_lists/widgets/app_bar_lista.dart';
 import 'package:lista_facil/domain/models/lists.dart';
 import 'package:lista_facil/ui/create_lists/view_model/create_list_view_model.dart';
@@ -9,14 +10,16 @@ import 'package:lista_facil/ui/core/themes/colors.dart';
 import 'package:lista_facil/ui/cupboard_items/widgets/cupboard_items_screen.dart';
 
 class CreatedListsScreen extends StatefulWidget {
-  const CreatedListsScreen({super.key});
+  const CreatedListsScreen({super.key, required this.viewModelList, required this.viewModel});
+
+  final CreateListViewModel viewModelList;
+  final CreateItemsViewModel viewModel;
 
   @override
   State<CreatedListsScreen> createState() => _CreatedListsScreenState();
 }
 
 class _CreatedListsScreenState extends State<CreatedListsScreen> with SingleTickerProviderStateMixin {
-  final CreateListViewModel _controller = CreateListViewModel();
   final TextEditingController _searchController = TextEditingController();
   final TextEditingController _newListController = TextEditingController();
   final TextEditingController _budgetController = TextEditingController();
@@ -31,8 +34,8 @@ class _CreatedListsScreenState extends State<CreatedListsScreen> with SingleTick
   @override
   void initState() {
     super.initState();
-    _controller.init();
-    _controller.findAll();
+    widget.viewModelList.init();
+    widget.viewModelList.findAll();
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 500),
       vsync: this,
@@ -66,12 +69,12 @@ Widget build(BuildContext context) {
           onSearchChanged: _searchList,
           hintText: "Buscar lista",
           color: ThemeColor.colorBlueTema, 
-          controller: _controller,
+          controller: widget.viewModelList,
           ),
           Expanded(
             child: _filteredLists.isEmpty
                 ? ValueListenableBuilder<List<Lists>>(
-                    valueListenable: _controller.listaValores,
+                    valueListenable: widget.viewModelList.listaValores,
                     builder: (context, snapshot, _) {
                       if (snapshot.isEmpty) {
                         return Center(
@@ -100,10 +103,11 @@ Widget build(BuildContext context) {
                         itemBuilder: (context, index) {
                           final Lists lists = snapshot[index];
                           return _CollectionsLists(
-                            controller: _controller,
-                            lists,
+                            list: lists,
                             onDelete: () => _showDeleteConfirmation(lists),
                             onEdit: () => _showEditForm(lists),
+                            viewModel: widget.viewModel,
+                            viewModelList: widget.viewModelList,
                           );
                         },
                         itemCount: snapshot.length,
@@ -117,10 +121,11 @@ Widget build(BuildContext context) {
                     itemBuilder: (context, index) {
                       final Lists lists = _filteredLists[index];
                       return _CollectionsLists(
-                        controller: _controller,
-                        lists,
+                        list: lists,
                         onDelete: () => _deleteList(),
                         onEdit: () => _showEditForm(lists),
+                        viewModel: widget.viewModel,
+                        viewModelList: widget.viewModelList,
                       );
                     },
                   ),
@@ -356,7 +361,7 @@ Widget build(BuildContext context) {
   }
 
   void _searchList(String query) {
-    _controller.searchListsByName(query).then((filterLists) {
+    widget.viewModelList.searchListsByName(query).then((filterLists) {
       setState(() {
         _filteredLists = filterLists;
       });
@@ -375,7 +380,7 @@ Widget build(BuildContext context) {
 
   void _deleteList() async {
     if(_isDelete && _listEdit != null) {
-      await _controller.deleteList(_listEdit!);
+      await widget.viewModelList.deleteList(_listEdit!);
     setState(() {
       _showCreateForm = false;
       _isEditing = false;
@@ -399,7 +404,7 @@ Future<void> _createNewList(BuildContext context) async {
   final String nameList = _newListController.text;
   final double? budget = double.tryParse(_budgetController.text);
   if (nameList.isNotEmpty && budget != null) {
-    await _controller.saveList(nameList, budget);
+    await widget.viewModelList.saveList(nameList, budget);
     setState(() {
       _showCreateForm = false;
       _newListController.clear();
@@ -441,7 +446,7 @@ Future<void> _createNewList(BuildContext context) async {
         context,
         MaterialPageRoute(
           /* pantry items screen é tela onde o usuário adiciona os itens de dispensa */
-          builder: (context) => CupboardItemsScreen(listController: _controller),
+          builder: (context) => CupboardItemsScreen(viewModelList: widget.viewModelList,),
         ),
       );
     }
@@ -468,7 +473,7 @@ Future<void> _createNewList(BuildContext context) async {
         newBudget,
         ""
       );
-      await _controller.updateList(updateList);
+      await widget.viewModelList.updateList(updateList);
       setState(() {
         _showCreateForm = false;
         _isEditing = false;
@@ -495,9 +500,11 @@ class _CollectionsLists extends StatefulWidget {
   final Lists list;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
-  final CreateListViewModel controller;
+  final CreateListViewModel viewModelList;
+  final CreateItemsViewModel viewModel;
 
-  const _CollectionsLists(this.list, {required this.onEdit, required this.onDelete, required this.controller});
+  const _CollectionsLists({required this.list, required this.onEdit, required this.onDelete, 
+  required this.viewModelList, required this.viewModel});
 
   @override
   State<_CollectionsLists> createState() => _CollectionsListsState();
@@ -546,7 +553,7 @@ class _CollectionsListsState extends State<_CollectionsLists> {
               title: InkWell(
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return CreateItemsScreen(widget.list, viewModelList: widget.controller);
+                    return CreateItemsScreen(list: widget.list, viewModel: widget.viewModel, viewModelList: widget.viewModelList,);
                   }));
                 },
                 child: Text(
@@ -576,7 +583,7 @@ class _CollectionsListsState extends State<_CollectionsLists> {
                       setState(() {
                         widget.list.bookMarked = !widget.list.bookMarked;
                       });
-                      await widget.controller.setListMarked(widget.list.id, widget.list.bookMarked);
+                      await widget.viewModelList.setListMarked(widget.list.id, widget.list.bookMarked);
                     },
                     child: Icon(
                       widget.list.bookMarked ? Icons.bookmark : Icons.bookmark_border,
