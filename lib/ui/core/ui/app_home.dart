@@ -1,28 +1,35 @@
+
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:lista_facil/domain/models/lists.dart';
+import 'package:lista_facil/ui/create_items/view_model/create_items_view_model.dart';
 import 'package:lista_facil/ui/create_lists/view_model/create_list_view_model.dart';
 import 'package:lista_facil/ui/create_lists/widgets/create_lists_screen.dart';
 import 'package:lista_facil/ui/core/themes/colors.dart';
+
+
+var list = Lists(0, '', 0.0, null);
+final viewModelList = GetIt.I<CreateListViewModel>();
+final viewModelItems = GetIt.I<CreateItemsViewModel>(
+  param1: list
+);
 class AppHome extends StatefulWidget {
   const AppHome({super.key});
-
   @override
   State<AppHome> createState() => _AppHomeState();
 }
 
 class _AppHomeState extends State<AppHome> with SingleTickerProviderStateMixin {
-
   late final AnimationController _animationController;
   final TextEditingController _newListController = TextEditingController();
   final TextEditingController _budgetController = TextEditingController();
-  final CreateListViewModel _listController = CreateListViewModel();
   late bool _isExpanded;
 
   @override
   void initState() {
     super.initState();
-    _listController.init();
     _isExpanded = false;
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 100),
@@ -387,11 +394,11 @@ class _AppHomeState extends State<AppHome> with SingleTickerProviderStateMixin {
     final String nameList = _newListController.text;
     final double? budget = double.tryParse(_budgetController.text);
     if (nameList.isNotEmpty && budget != null) {
-      await _listController.saveList(nameList, budget);
+      await viewModelList.saveList(nameList, budget);
       if (!context.mounted) return;
       await Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => const CreatedListsScreen(),
+          builder: (context) => CreatedListsScreen(viewModelList: viewModelList, viewModel: viewModelItems),
         ),
       );
     }
@@ -408,7 +415,7 @@ class _AppHomeState extends State<AppHome> with SingleTickerProviderStateMixin {
   void _pageCreatedLists(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => const CreatedListsScreen(),
+        builder: (context) => CreatedListsScreen(viewModelList: viewModelList, viewModel: viewModelItems),
       ),
     );
   }
