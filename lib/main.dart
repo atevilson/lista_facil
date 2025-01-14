@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:lista_facil/screens/splash_screen.dart';
-import 'package:lista_facil/utils_colors/utils_style.dart';
+import 'package:lista_facil/config/injection_dep.dart';
+import 'package:lista_facil/ui/core/ui/splash_screen.dart';
+import 'package:lista_facil/ui/core/themes/colors.dart';
 
 void main() {
+  injectionDep();
   runApp(const MyApplication());
 }
 
@@ -12,7 +14,7 @@ class MyApplication extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: const SplashScreen(),
+      home: SplashScreen(),
       theme: ThemeData(
         textTheme: const TextTheme(
           bodyLarge: TextStyle(color: ThemeColor.colorWhite)
@@ -23,16 +25,6 @@ class MyApplication extends StatelessWidget {
           iconSize: 32.0,
           backgroundColor: ThemeColor.colorWhite70, 
           foregroundColor: ThemeColor.colorBlack),
-        // elevatedButtonTheme: const ElevatedButtonThemeData(
-        //   style: ButtonStyle(minimumSize: WidgetStatePropertyAll(Size(200, 200)),
-        //     backgroundColor: WidgetStatePropertyAll(
-        //       Color(0xFF0377FD),
-        //     ),
-        //     foregroundColor: WidgetStatePropertyAll(
-        //       UtilColors.colorWhite70,
-        //     ),
-        //   ),
-        // ),
         appBarTheme: const AppBarTheme(
           backgroundColor: Color(0xFF0377FD),
           foregroundColor: ThemeColor.colorWhite70,
@@ -58,8 +50,6 @@ class MyApplication extends StatelessWidget {
             //selectedTileColor: Colors.blue),
         checkboxTheme: CheckboxThemeData(
           splashRadius: 2.0,
-          //fillColor: WidgetStatePropertyAll(ThemeColor.colorGreyCheckBox),
-          //checkColor: const WidgetStatePropertyAll(ThemeColor.colorWhite),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(11.0)
           ),
@@ -95,7 +85,7 @@ class MyApplication extends StatelessWidget {
             selectionColor: ThemeColor.colorWhite,
             selectionHandleColor: ThemeColor.colorWhite,
           ),
-        useMaterial3: true,
+        useMaterial3: false,
         dialogTheme: DialogTheme(
           titleTextStyle: const TextStyle(
             color: ThemeColor.colorWhite,
@@ -128,9 +118,6 @@ class MyApplication extends StatelessWidget {
           popupMenuTheme: const PopupMenuThemeData(
             color: ThemeColor.colorGray
           ),
-          iconTheme:  const IconThemeData(
-            color: ThemeColor.colorWhite,
-          )
       ),
     );
   }
