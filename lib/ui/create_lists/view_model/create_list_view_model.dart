@@ -1,22 +1,30 @@
+
 import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
-import 'package:lista_facil/data/services/local_db/lists_dao.dart';
+import 'package:lista_facil/data/repositories/i_list_repository.dart';
 import 'package:lista_facil/domain/models/items.dart';
 import 'package:lista_facil/domain/models/lists.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:string_similarity/string_similarity.dart';
 
+
 class CreateListViewModel extends ChangeNotifier {
-  final ListsDao _listsDao = ListsDao();
+  //final ListsDao _listsDao = ListsDao(); 
+  final IListRepository _listRepository;
   final ValueNotifier<List<Lists>> listaValores =
       ValueNotifier<List<Lists>>([]);
+  final List<Items> _layoffList = [];
 
   bool _ascendingOrder = true; // ordenação default
-  bool get isAscending => _ascendingOrder;
-  final List<Items> _layoffList = [];
-  List<Items> get layoffList => _layoffList; // lista da dispensa
+  bool get isAscending => _ascendingOrder;// lista da dispensa
 
   late SharedPreferences _prefs;
+
+  CreateListViewModel({
+    required IListRepository listRepository,
+  }) : _listRepository = listRepository {
+    //
+  }
 
   Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
@@ -25,7 +33,7 @@ class CreateListViewModel extends ChangeNotifier {
   }
 
   Future<void> findAll() async {
-    List<Lists> lists = await _listsDao.findAll();
+    List<Lists> lists = await _listRepository.findAll();
     for(Lists list in lists) {
       list.bookMarked = _prefs.getBool('bookmark_${list.id}') ?? false;
     }
@@ -35,7 +43,7 @@ class CreateListViewModel extends ChangeNotifier {
   }
 
   Future<void> deleteList(Lists value) async {
-    await _listsDao.deleteLists(value);
+    await _listRepository.deleteLists(value);
     await _prefs.remove('bookmark_${value.id}');
     await _prefs.remove('total_spent_${value.id}');
     await findAll();
@@ -44,7 +52,7 @@ class CreateListViewModel extends ChangeNotifier {
   Future<bool> saveList(String value, double budget) async {
     if (value.isNotEmpty) {
       final Lists newLists = Lists(0, value, budget, "");
-      await _listsDao.save(newLists);
+      await _listRepository.save(newLists);
       await _prefs.setBool('bookmark_${newLists.id}', false);
       await findAll();
       return true;
@@ -61,7 +69,7 @@ class CreateListViewModel extends ChangeNotifier {
   }
 
   Future<void> updateList(Lists list) async {
-    await _listsDao.updateList(list);
+    await _listRepository.updateList(list);
     await _prefs.setBool('bookmark_${list.id}', list.bookMarked);
     await findAll();
   }
@@ -98,8 +106,8 @@ class CreateListViewModel extends ChangeNotifier {
       },
     );
   }
-  
-  void addLayoffItem(Items item) { // adiciona um unico item a dispensa
+
+   void addLayoffItem(Items item) { // adiciona um unico item a dispensa
     _layoffList.add(item);
     notifyListeners();
   }
