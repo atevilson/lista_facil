@@ -46,7 +46,8 @@ class ItemsDao {
     newItem[quantity] = items.quantity;
     newItem[price] = items.price;
     newItem[listId] = items.listId;
-    newItem[createAt] = items.createdAt ?? DateTime.now().toIso8601String();
+    newItem[createAt] = (items.createdAt == null || items.createdAt!.isEmpty) ? DateTime.now().toIso8601String() :
+    items.createdAt;
     return db.insert(nameTable, newItem);
   }
 
@@ -86,7 +87,8 @@ class ItemsDao {
           items: row[item],
           quantity: row[quantity],
           price: row[price],
-          listId: row[listId]);
+          listId: row[listId],
+          createdAt: row[createAt]);
       items.add(newItem);
     }
     return items;

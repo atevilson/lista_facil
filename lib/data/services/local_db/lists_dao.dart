@@ -11,7 +11,7 @@ class ListsDao {
   static const String createdAt = 'createdAt';
 
   static const String tableSQL = 'CREATE TABLE $nameTable('
-      '$id INTEGER PRIMARY KEY, '
+      '$id INTEGER PRIMARY KEY AUTOINCREMENT, '
       '$name TEXT, '
       '$budget REAL, '
       '$createdAt TEXT)';
@@ -55,7 +55,8 @@ class ListsDao {
     final Map<String, dynamic> newLists = {};
     newLists[name] = listas.nameList;
     newLists[budget] = listas.budget;
-    newLists[createdAt] = listas.createdAt ?? DateTime.now().toIso8601String();
+    newLists[createdAt] = (listas.createdAt == null || listas.createdAt!.isEmpty) ? DateTime.now().toIso8601String() :
+    listas.createdAt;
     return db.insert(nameTable, newLists);
   }
 
