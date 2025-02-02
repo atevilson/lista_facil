@@ -4,17 +4,12 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:lista_facil/domain/models/lists.dart';
-import 'package:lista_facil/ui/create_items/view_model/create_items_view_model.dart';
 import 'package:lista_facil/ui/create_lists/view_model/create_list_view_model.dart';
 import 'package:lista_facil/ui/create_lists/widgets/create_lists_screen.dart';
 import 'package:lista_facil/ui/core/themes/colors.dart';
 
-
-var list = Lists(0, '', 0.0, null);
 final viewModelList = GetIt.I<CreateListViewModel>();
-final viewModelItems = GetIt.I<CreateItemsViewModel>(
-  param1: list
-);
+
 class AppHome extends StatefulWidget {
   const AppHome({super.key});
   @override
@@ -278,6 +273,10 @@ class _AppHomeState extends State<AppHome> with SingleTickerProviderStateMixin {
                                               controller: _newListController,
                                               cursorColor: Colors.blue,
                                               decoration: InputDecoration(
+                                                contentPadding: EdgeInsets.symmetric(
+                                                  vertical: 12.0,
+                                                  horizontal: 12.0
+                                                ),
                                                 labelText: 'Nome da Lista',
                                                 labelStyle: TextStyle(
                                                   color: Colors.blue.shade700,
@@ -313,6 +312,10 @@ class _AppHomeState extends State<AppHome> with SingleTickerProviderStateMixin {
                                               controller: _budgetController,
                                               cursorColor: Colors.blue,
                                               decoration: InputDecoration(
+                                                contentPadding: EdgeInsets.symmetric(
+                                                  vertical: 12.0,
+                                                  horizontal: 12.0
+                                                ),
                                                 labelText: 'Orçamento - R\$',
                                                 labelStyle: TextStyle(
                                                   color: Colors.blue.shade700,
@@ -343,28 +346,32 @@ class _AppHomeState extends State<AppHome> with SingleTickerProviderStateMixin {
                                                 color: Colors.blue.shade700,
                                               ),
                                             ),
-                                            SizedBox(height: screenHeight * 0.01),
                                             SizedBox(
                                               width: screenWidth * 0.9,
                                               height: screenHeight * 0.08,
-                                              child: ElevatedButton(
-                                                onPressed: () =>
-                                                    _createNewList(context),
-                                                style: ElevatedButton.styleFrom(
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            25.0),
-                                                  ),
-                                                  backgroundColor:
-                                                      const Color(0xFF0377FD),
+                                              child: Padding(
+                                                padding: const EdgeInsets.symmetric(
+                                                  vertical: 12.0,
                                                 ),
-                                                child: Text(
-                                                  'Criar nova lista',
-                                                  style: TextStyle(
-                                                    fontSize: screenWidth * 0.05,
-                                                    //fontWeight: FontWeight.bold,
-                                                    color: Colors.white,
+                                                child: ElevatedButton(
+                                                  onPressed: () =>
+                                                      _createNewList(context),
+                                                  style: ElevatedButton.styleFrom(
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              25.0),
+                                                    ),
+                                                    backgroundColor:
+                                                        const Color(0xFF0377FD),
+                                                  ),
+                                                  child: Text(
+                                                    'Criar nova lista',
+                                                    style: TextStyle(
+                                                      fontSize: screenWidth * 0.05,
+                                                      //fontWeight: FontWeight.bold,
+                                                      color: Colors.white,
+                                                    ),
                                                   ),
                                                 ),
                                               ),
@@ -393,12 +400,13 @@ class _AppHomeState extends State<AppHome> with SingleTickerProviderStateMixin {
   Future<void> _createNewList(BuildContext context) async {
     final String nameList = _newListController.text;
     final double? budget = double.tryParse(_budgetController.text);
+    final newList = Lists(0, nameList, budget, "");
     if (nameList.isNotEmpty && budget != null) {
-      await viewModelList.saveList(nameList, budget);
+      await viewModelList.saveList.execute(newList);
       if (!context.mounted) return;
       await Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => CreatedListsScreen(viewModelList: viewModelList, viewModel: viewModelItems),
+          builder: (context) => CreatedListsScreen(viewModelList: viewModelList)
         ),
       );
     }
@@ -415,7 +423,7 @@ class _AppHomeState extends State<AppHome> with SingleTickerProviderStateMixin {
   void _pageCreatedLists(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => CreatedListsScreen(viewModelList: viewModelList, viewModel: viewModelItems),
+        builder: (context) => CreatedListsScreen(viewModelList: viewModelList)
       ),
     );
   }
