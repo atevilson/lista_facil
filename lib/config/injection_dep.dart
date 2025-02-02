@@ -12,10 +12,7 @@ import 'package:lista_facil/ui/create_items/view_model/create_items_view_model.d
 import 'package:lista_facil/ui/create_lists/view_model/create_list_view_model.dart';
 
 
-
 final getIt = GetIt.instance;
-
-var defaultList = Lists(0, '', 0.0, null);
 
 void injectionDep() {
   getIt.registerLazySingleton<ItemsDao>(() => ItemsDao());
@@ -29,9 +26,9 @@ void injectionDep() {
   );
 
   getIt.registerFactoryParam<CreateItemsViewModel, Lists, void>(
-    (lists, _) => CreateItemsViewModel(
+    (listParam, _) => CreateItemsViewModel(
       iItemsRepository: getIt<IItemsRepository>(),
-      lists: defaultList,
+      lists: listParam,
     ),
   );
   getIt.registerFactory<CreateListViewModel>(
