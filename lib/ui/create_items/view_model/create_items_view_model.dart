@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:lista_facil/data/repositories/i_items_repository.dart';
 import 'package:lista_facil/domain/models/items.dart';
 import 'package:lista_facil/domain/models/lists.dart';
+import 'package:lista_facil/utils/command.dart';
+import 'package:lista_facil/utils/result.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -10,7 +12,10 @@ class CreateItemsViewModel extends ChangeNotifier {
     required IItemsRepository iItemsRepository,
     required Lists lists,
   }) : _itemsRepository = iItemsRepository, _newLists = lists {
-    //
+    loadItems = Command0(_loadListItems);
+    saveItem = Command1(_saveItem);
+    deleteItem = Command1(_deleteItem);
+    updateItem = Command1(_updateItem);
   }
 
   final IItemsRepository _itemsRepository;
@@ -21,6 +26,10 @@ class CreateItemsViewModel extends ChangeNotifier {
   final ValueNotifier<double> total = ValueNotifier<double>(0.0);
 
   late SharedPreferences _prefs;
+  late Command0 loadItems;
+  late Command1<bool, Items> saveItem;
+  late Command1<bool, Items> deleteItem;
+  late Command1<bool, Items> updateItem;
 
   final Lists _newLists;
 
@@ -31,8 +40,9 @@ class CreateItemsViewModel extends ChangeNotifier {
     _loadTotalSpent();
   }
 
-  Future<void> _loadListItems() async {
-    List<Items> items = await _itemsRepository.getItemsByListId(_newLists.id);
+  Future<Result<List>> _loadListItems() async {
+    try{
+      List<Items> items = await _itemsRepository.getItemsByListId(_newLists.id);
     _sortItemsInternal(items);
 
     for (Items item in items) {
@@ -40,13 +50,19 @@ class CreateItemsViewModel extends ChangeNotifier {
   }   
     quantityItems.value = items;
     notifyListeners();
+
+    return Result.ok(items);
+    
+    }catch(e){
+      return Result.error(Exception(e.toString()));
+    }
   }
 
   Future<void> _saveTotal() async {
   await _prefs.setDouble('total_spent_${_newLists.id}', total.value);
 }
 
-Future<void> _loadTotalSpent() async{
+  Future<void> _loadTotalSpent() async {
   total.value = _prefs.getDouble('total_spent_${_newLists.id}') ?? 0.0;
   notifyListeners();
 }
@@ -55,16 +71,22 @@ Future<void> _loadTotalSpent() async{
     await _loadListItems();
   }
 
-  Future<bool> saveItem(Items value) async {
-    final Items newItens = Items(
+  Future<Result<bool>> _saveItem(Items value) async {
+    try{
+      final Items newItens = Items(
         listId: _newLists.id, items: value.items, quantity: value.quantity, price: value.price);
-    await _itemsRepository.saveItem(newItens);
-    await _loadListItems();
-    return true;
+      await _itemsRepository.saveItem(newItens);
+      await _loadListItems();
+      return Result.ok(true);
+    } catch(e){
+      Result.error(Exception(e.toString()));
+    }
+     return Result.ok(false);
   }
 
-  Future<bool> deleteItem(Items value) async {
-    if(value.id != null && await loadCheckboxState(value.id!)) { // valida se o item está marcado antes de deletar
+  Future<Result<bool>> _deleteItem(Items value) async {
+    try{
+      if(value.id != null && await loadCheckboxState(value.id!)) { // valida se o item está marcado antes de deletar
       total.value -= (value.price! * value.quantity);
       total.value = double.parse(total.value.toStringAsFixed(2));
 
@@ -75,7 +97,11 @@ Future<void> _loadTotalSpent() async{
     await _itemsRepository.deleteItem(value);
     await _loadListItems();
 
-    return true;
+    return Result.ok(true);
+    }catch(e){
+      Result.error(Exception(e.toString()));
+    }
+    return Result.ok(false);
   }
 
   void sortItems(bool ascending) async {
@@ -147,22 +173,30 @@ Future<void> _loadTotalSpent() async{
 
   }
 
-  Future<void> updateItem(Items updatedItem) async {
-     Items? oldItem = quantityItems.value.firstWhere((item) => item.id == updatedItem.id);
+  Future<Result<bool>> _updateItem(Items updatedItem) async {
+    try {
+      Items? oldItem =
+          quantityItems.value.firstWhere((item) => item.id == updatedItem.id);
 
-    if (oldItem.id != null) {
-      if (oldItem.isChecked) {
-        double oldTotal = (oldItem.price ?? 0.0) * oldItem.quantity; // subtrai o valor antigo do total
-        double newTotal = (updatedItem.price ?? 0.0) * updatedItem.quantity; // add o novo valor ao total
-        total.value = total.value - oldTotal + newTotal;
-        total.value = double.parse(total.value.toStringAsFixed(2));
-        await _saveTotal();
+      if (oldItem.id != null) {
+        if (oldItem.isChecked) {
+          double oldTotal = (oldItem.price ?? 0.0) *
+              oldItem.quantity; // subtrai o valor antigo do total
+          double newTotal = (updatedItem.price ?? 0.0) *
+              updatedItem.quantity; // add o novo valor ao total
+          total.value = total.value - oldTotal + newTotal;
+          total.value = double.parse(total.value.toStringAsFixed(2));
+          await _saveTotal();
+        }
       }
-    }
 
-    await _itemsRepository.updateItem(updatedItem);
-    await _loadListItems();
+      await _itemsRepository.updateItem(updatedItem);
+      await _loadListItems();
+
+      Result.ok(true);
+    } catch (e) {
+      Result.error(Exception(e.toString()));
+    }
+    return Result.ok(false);
   }
 }
-
-
