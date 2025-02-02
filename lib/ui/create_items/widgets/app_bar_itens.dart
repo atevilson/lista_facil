@@ -135,7 +135,7 @@ class AppBarItens extends StatelessWidget {
                       itemBuilder: (context) => [
                         PopupMenuItem(
                             value: 1,
-                            child: Row(
+                            child: Row( 
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -158,7 +158,6 @@ class AppBarItens extends StatelessWidget {
                                   style: TextStyle(
                                       color: ThemeColor.colorWhite),
                                 ),
-                                SizedBox(width: 20,),
                                 Icon(
                                   Icons.share,
                                   size: 28,

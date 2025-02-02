@@ -21,7 +21,7 @@ void main() {
 
       await viewModel.init();
 
-      await viewModel.saveItem(Items(items: "Arroz", quantity: 2, listId: 1));
+      await viewModel.saveItem.execute(Items(items: "Arroz", quantity: 2, listId: 1));
 
       final items = await fakeRepo.getAllItems();
       expect(items.length, 1);
@@ -35,9 +35,9 @@ void main() {
     final viewModel = CreateItemsViewModel(lists: fakeList, iItemsRepository: fakeRepo);
     await viewModel.init();
 
-    await viewModel.saveItem(Items(items: "Arroz", quantity: 2, listId: 1));
+    await viewModel.saveItem.execute(Items(items: "Arroz", quantity: 2, listId: 1));
 
-    await viewModel.deleteItem(Items(items: "Arroz", quantity: 2, listId: 1));
+    await viewModel.deleteItem.execute(Items(items: "Arroz", quantity: 2, listId: 1));
 
     final items = await fakeRepo.getAllItems();
     expect(items.length, 0, reason: "Após deletar o item a lista deve ficar vazia");
@@ -50,7 +50,7 @@ void main() {
     final viewModel = CreateItemsViewModel(lists: fakeList, iItemsRepository: fakeRepo);
     await viewModel.init();
 
-    await viewModel.saveItem(Items(items: "Arroz", quantity: 2, listId: 1));
+    await viewModel.saveItem.execute(Items(items: "Arroz", quantity: 2, listId: 1));
 
     var items = await fakeRepo.getAllItems();
     expect(items.length, 1);
@@ -60,7 +60,7 @@ void main() {
     expect(oldItem.quantity, 2);
 
     final updateItem = Items(items: "Arroz integral", quantity: 5, listId: 1);
-    await viewModel.updateItem(updateItem);
+    await viewModel.updateItem.execute(updateItem);
     items  = await fakeRepo.getAllItems();
     expect(items.length, 1, reason: "Continua apenas um item salvo");
     final updated = items.first;
@@ -79,8 +79,8 @@ void main() {
     await viewModel1.init();
     await viewModel2.init();
 
-    await viewModel1.saveItem(Items(items: "Arroz", quantity: 2, listId: 1));
-    await viewModel2.saveItem(Items(items: "Feijao", quantity: 5, listId: 2));
+    await viewModel1.saveItem.execute(Items(items: "Arroz", quantity: 2, listId: 1));
+    await viewModel2.saveItem.execute(Items(items: "Feijao", quantity: 5, listId: 2));
 
     final itemsLista1 = await fakeRepo.getItemsByListId(1);
     expect(itemsLista1.length, 1, reason: "Deve ter apenas um item na lista 1");
