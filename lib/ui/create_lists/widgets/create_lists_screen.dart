@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:lista_facil/config/injection_dep.dart';
 import 'package:lista_facil/ui/create_items/view_model/create_items_view_model.dart';
 import 'package:lista_facil/ui/create_lists/widgets/app_bar_lista.dart';
 import 'package:lista_facil/domain/models/lists.dart';
@@ -10,10 +11,9 @@ import 'package:lista_facil/ui/core/themes/colors.dart';
 import 'package:lista_facil/ui/cupboard_items/widgets/cupboard_items_screen.dart';
 
 class CreatedListsScreen extends StatefulWidget {
-  const CreatedListsScreen({super.key, required this.viewModelList, required this.viewModel});
+  const CreatedListsScreen({super.key, required this.viewModelList});
 
   final CreateListViewModel viewModelList;
-  final CreateItemsViewModel viewModel;
 
   @override
   State<CreatedListsScreen> createState() => _CreatedListsScreenState();
@@ -35,7 +35,6 @@ class _CreatedListsScreenState extends State<CreatedListsScreen> with SingleTick
   void initState() {
     super.initState();
     widget.viewModelList.init();
-    widget.viewModelList.findAll();
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 500),
       vsync: this,
@@ -106,7 +105,6 @@ Widget build(BuildContext context) {
                             list: lists,
                             onDelete: () => _showDeleteConfirmation(lists),
                             onEdit: () => _showEditForm(lists),
-                            viewModel: widget.viewModel,
                             viewModelList: widget.viewModelList,
                           );
                         },
@@ -124,7 +122,6 @@ Widget build(BuildContext context) {
                         list: lists,
                         onDelete: () => _deleteList(),
                         onEdit: () => _showEditForm(lists),
-                        viewModel: widget.viewModel,
                         viewModelList: widget.viewModelList,
                       );
                     },
@@ -213,10 +210,14 @@ Widget build(BuildContext context) {
                       ),
                     ),
                     const SizedBox(height: 20,),
-                    TextField(
+                    TextFormField(
                       controller: _newListController,
                       cursorColor: ThemeColor.colorBlue,
                       decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(
+                        vertical: 8.0,  
+                        horizontal: 12.0,
+                        ),
                         labelText: "Nome da Lista",
                         labelStyle: TextStyle(
                           color: ThemeColor.blueShade700,
@@ -245,6 +246,10 @@ Widget build(BuildContext context) {
                       controller: _budgetController,
                       cursorColor: ThemeColor.colorBlue,
                       decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(
+                        vertical: 8.0,  // Ajusta a altura
+                        horizontal: 12.0,
+                        ),
                         labelText: "Orçamento",
                         labelStyle: TextStyle(
                           color: ThemeColor.blueShade700,
@@ -274,6 +279,9 @@ Widget build(BuildContext context) {
                       child: ElevatedButton(
                         onPressed: _isEditing ? () => _saveEditList(context) : () => _createNewList(context),
                         style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25.0),
+                                ),
                           backgroundColor: ThemeColor.colorBlueTema,
                         ),
                         child: Text(
@@ -282,22 +290,22 @@ Widget build(BuildContext context) {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 15),
-                    SizedBox(
-                                width: double.infinity,
-                                child: ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    _showCreateForm = !_showCreateForm; 
-                    _newListController.clear();
-                    _budgetController.clear();
-                    _isEditing = false;
-                  });
-                },
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25.0),
-                  ),
+                    const SizedBox(height: 5),
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  _showCreateForm = !_showCreateForm;
+                                  _newListController.clear();
+                                  _budgetController.clear();
+                                  _isEditing = false;
+                                });
+                              },
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25.0),
+                                ),
                                 backgroundColor: ThemeColor.colorBlueTema,
                               ),
                               child: Text(
@@ -321,24 +329,30 @@ Widget build(BuildContext context) {
                 child: SizedBox(
                   height: 50,
                   width: double.infinity,
-                  child: !_showCreateForm ? ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        _showCreateForm = !_showCreateForm; 
-                        _newListController.clear();
-                        _budgetController.clear();
-                        _isEditing = false;
-                      });
-                    },
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25.0),
-                      ),
-                      backgroundColor: ThemeColor.colorBlueTema,
+                  child: !_showCreateForm ? Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 5.0,
+                      horizontal: 12.0
                     ),
-                    child: Text(
-                      "Criar nova lista",
-                      style: const TextStyle(fontSize: 18.0, color: ThemeColor.colorWhite),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          _showCreateForm = !_showCreateForm; 
+                          _newListController.clear();
+                          _budgetController.clear();
+                          _isEditing = false;
+                        });
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                        ),
+                        backgroundColor: ThemeColor.colorBlueTema,
+                      ),
+                      child: Text(
+                        "Criar nova lista",
+                        style: const TextStyle(fontSize: 18.0, color: ThemeColor.colorWhite),
+                      ),
                     ),
                   ) : null
                 ),
@@ -380,7 +394,7 @@ Widget build(BuildContext context) {
 
   void _deleteList() async {
     if(_isDelete && _listEdit != null) {
-      await widget.viewModelList.deleteList(_listEdit!);
+      await widget.viewModelList.deleteList.execute(_listEdit!);
     setState(() {
       _showCreateForm = false;
       _isEditing = false;
@@ -403,8 +417,9 @@ Widget build(BuildContext context) {
 Future<void> _createNewList(BuildContext context) async {
   final String nameList = _newListController.text;
   final double? budget = double.tryParse(_budgetController.text);
+  final newList = Lists(0, nameList, budget, "");
   if (nameList.isNotEmpty && budget != null) {
-    await widget.viewModelList.saveList(nameList, budget);
+    await widget.viewModelList.saveList.execute(newList);
     setState(() {
       _showCreateForm = false;
       _newListController.clear();
@@ -445,7 +460,7 @@ Future<void> _createNewList(BuildContext context) async {
       await Navigator.push(
         context,
         MaterialPageRoute(
-          /* pantry items screen é tela onde o usuário adiciona os itens de dispensa */
+          /* redireciona para tela onde o usuário adiciona os itens de dispensa */
           builder: (context) => CupboardItemsScreen(viewModelList: widget.viewModelList,),
         ),
       );
@@ -473,7 +488,7 @@ Future<void> _createNewList(BuildContext context) async {
         newBudget,
         ""
       );
-      await widget.viewModelList.updateList(updateList);
+      await widget.viewModelList.updateList.execute(updateList);
       setState(() {
         _showCreateForm = false;
         _isEditing = false;
@@ -501,10 +516,9 @@ class _CollectionsLists extends StatefulWidget {
   final VoidCallback onEdit;
   final VoidCallback onDelete;
   final CreateListViewModel viewModelList;
-  final CreateItemsViewModel viewModel;
 
   const _CollectionsLists({required this.list, required this.onEdit, required this.onDelete, 
-  required this.viewModelList, required this.viewModel});
+  required this.viewModelList});
 
   @override
   State<_CollectionsLists> createState() => _CollectionsListsState();
@@ -553,7 +567,11 @@ class _CollectionsListsState extends State<_CollectionsLists> {
               title: InkWell(
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return CreateItemsScreen(list: widget.list, viewModel: widget.viewModel, viewModelList: widget.viewModelList,);
+                    final createItemsVm = getIt<CreateItemsViewModel>(param1: widget.list);
+                    return CreateItemsScreen(
+                      list: widget.list, 
+                      viewModel: createItemsVm, 
+                      viewModelList: widget.viewModelList,);
                   }));
                 },
                 child: Text(

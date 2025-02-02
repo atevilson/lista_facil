@@ -244,6 +244,10 @@ class _CreateItemsScreenState extends State<CreateItemsScreen> with SingleTicker
                             controller: _itemNameController,
                             cursorColor: ThemeColor.colorBlue,
                             decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 8.0,
+                                horizontal: 12.0
+                              ),
                               labelText: "Nome do Item",
                               labelStyle: TextStyle(
                                 color: ThemeColor.blueShade700,
@@ -272,6 +276,10 @@ class _CreateItemsScreenState extends State<CreateItemsScreen> with SingleTicker
                             controller: _itemQuantityController,
                             cursorColor: ThemeColor.colorBlue,
                             decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 8.0,
+                                horizontal: 12.0
+                              ),
                               labelText: "Quantidade",
                               labelStyle: TextStyle(
                                 color: ThemeColor.blueShade700,
@@ -300,6 +308,10 @@ class _CreateItemsScreenState extends State<CreateItemsScreen> with SingleTicker
                             controller: _itemPriceController,
                             cursorColor: ThemeColor.colorBlue,
                             decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 8.0,
+                                horizontal: 12.0
+                              ),
                               labelText: "Preço (opcional)",
                               labelStyle: TextStyle(
                                 color: ThemeColor.blueShade700,
@@ -329,6 +341,9 @@ class _CreateItemsScreenState extends State<CreateItemsScreen> with SingleTicker
                             child: ElevatedButton(
                               onPressed: _isEditing ? () => _saveEditItem(context) : () => _createNewItem(context),
                               style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25.0),
+                                ),
                                 backgroundColor: ThemeColor.colorBlueTema,
                               ),
                               child: Text(
@@ -337,7 +352,7 @@ class _CreateItemsScreenState extends State<CreateItemsScreen> with SingleTicker
                               ),
                             ),
                           ),
-                          const SizedBox(height: 15),
+                          const SizedBox(height: 5),
                           SizedBox(
                             width: double.infinity,
                             child: ElevatedButton(
@@ -375,24 +390,30 @@ class _CreateItemsScreenState extends State<CreateItemsScreen> with SingleTicker
                   height: 50,
                   width: double.infinity,
                   child: !_showCreateForm
-                      ? ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              _showCreateForm = !_showCreateForm; 
-                              _clearFields();
-                            });
-                          },
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(25.0),
+                      ? Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 5.0,
+                          horizontal: 12.0
+                        ),
+                        child: ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                _showCreateForm = !_showCreateForm; 
+                                _clearFields();
+                              });
+                            },
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25.0),
+                              ),
+                              backgroundColor: ThemeColor.colorBlueTema,
                             ),
-                            backgroundColor: ThemeColor.colorBlueTema,
+                            child: const Text(
+                              "Criar novo item",
+                              style: TextStyle(fontSize: 18.0, color: ThemeColor.colorWhite),
+                            ),
                           ),
-                          child: const Text(
-                            "Criar novo item",
-                            style: TextStyle(fontSize: 18.0, color: ThemeColor.colorWhite),
-                          ),
-                        )
+                      )
                       : null
                 ),
               ),
@@ -447,7 +468,7 @@ class _CreateItemsScreenState extends State<CreateItemsScreen> with SingleTicker
 
   Future<void> _deleteItem() async {
     if (_isDelete && _itemEdit != null && _itemEdit!.id != null) {
-      await widget.viewModel.deleteItem(_itemEdit!);
+      await widget.viewModel.deleteItem.execute(_itemEdit!);
       setState(() {
         _clearFormState();
       });
@@ -488,13 +509,13 @@ class _CreateItemsScreenState extends State<CreateItemsScreen> with SingleTicker
       }
     }
 
-    final newItem = Items(
+    final newItem = Items( 
       items: itemName,
       quantity: quantity,
       price: price ?? 0.0,
-      listId: widget.list.id,
+      listId: widget.list.id
     );
-    await widget.viewModel.saveItem(newItem);
+    await widget.viewModel.saveItem.execute(newItem);
     setState(() {
       _clearFormState();
     });
@@ -555,7 +576,7 @@ class _CreateItemsScreenState extends State<CreateItemsScreen> with SingleTicker
       listId: widget.list.id,
       isChecked: _itemEdit?.isChecked ?? false,
     );
-    await widget.viewModel.updateItem(updateItem);
+    await widget.viewModel.updateItem.execute(updateItem);
     setState(() {
       _clearFormState();
     });
