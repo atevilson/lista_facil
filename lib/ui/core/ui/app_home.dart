@@ -7,6 +7,7 @@ import 'package:lista_facil/domain/models/lists.dart';
 import 'package:lista_facil/ui/create_lists/view_model/create_list_view_model.dart';
 import 'package:lista_facil/ui/create_lists/widgets/create_lists_screen.dart';
 import 'package:lista_facil/ui/core/themes/colors.dart';
+import 'package:lista_facil/ui/cupboard_items/widgets/cupboard_items_screen.dart';
 
 final viewModelList = GetIt.I<CreateListViewModel>();
 
@@ -198,7 +199,7 @@ class _AppHomeState extends State<AppHome> with SingleTickerProviderStateMixin {
                                         Text(
                                           'Nova lista',
                                           style: TextStyle(
-                                            fontWeight: FontWeight.w500,
+                                            fontWeight: FontWeight.w400,
                                             color: const Color(0xFF0377FD),
                                             fontSize: screenWidth * 0.045,
                                           ),
@@ -258,7 +259,7 @@ class _AppHomeState extends State<AppHome> with SingleTickerProviderStateMixin {
                                                   Text(
                                                     'Nova lista',
                                                     style: TextStyle(
-                                                      fontWeight: FontWeight.w500,
+                                                      fontWeight: FontWeight.w400,
                                                       color:
                                                           const Color(0xFF0377FD),
                                                       fontSize:
@@ -271,30 +272,31 @@ class _AppHomeState extends State<AppHome> with SingleTickerProviderStateMixin {
                                             SizedBox(height: screenHeight * 0.03),
                                             TextField(
                                               controller: _newListController,
-                                              cursorColor: Colors.blue,
+                                              cursorColor: ThemeColor.colorBlueTema,
                                               decoration: InputDecoration(
                                                 contentPadding: EdgeInsets.symmetric(
                                                   vertical: 12.0,
                                                   horizontal: 12.0
                                                 ),
-                                                labelText: 'Nome da Lista',
+                                                labelText: 'Nome da lista',
                                                 labelStyle: TextStyle(
-                                                  color: Colors.blue.shade700,
-                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 17.0,
+                                                  color: ThemeColor.colorBlueTema,
+                                                  fontWeight: FontWeight.w300,
                                                 ),
                                                 focusedBorder: OutlineInputBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(25.0),
                                                   borderSide: BorderSide(
-                                                      color: Colors.blue.shade700,
+                                                      color: ThemeColor.colorBlueItemNaoSel,
                                                       width: 1.5),
                                                 ),
                                                 enabledBorder: OutlineInputBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(25.0),
                                                   borderSide: BorderSide(
-                                                      color: Colors.blue.shade200,
-                                                      width: 1.5),
+                                                      color: ThemeColor.colorBlueGradient,
+                                                      width: 1.0),
                                                 ),
                                                 border: OutlineInputBorder(
                                                   borderRadius:
@@ -310,7 +312,7 @@ class _AppHomeState extends State<AppHome> with SingleTickerProviderStateMixin {
                                             SizedBox(height: screenHeight * 0.01),
                                             TextField(
                                               controller: _budgetController,
-                                              cursorColor: Colors.blue,
+                                              cursorColor: ThemeColor.colorBlueTema,
                                               decoration: InputDecoration(
                                                 contentPadding: EdgeInsets.symmetric(
                                                   vertical: 12.0,
@@ -318,22 +320,23 @@ class _AppHomeState extends State<AppHome> with SingleTickerProviderStateMixin {
                                                 ),
                                                 labelText: 'Orçamento - R\$',
                                                 labelStyle: TextStyle(
-                                                  color: Colors.blue.shade700,
-                                                  fontWeight: FontWeight.w500,
+                                                  color: ThemeColor.colorBlueTema,
+                                                  fontWeight: FontWeight.w300,
+                                                  fontSize: 17.0
                                                 ),
                                                 focusedBorder: OutlineInputBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(25.0),
                                                   borderSide: BorderSide(
-                                                      color: Colors.blue.shade700,
+                                                      color: ThemeColor.colorBlueItemNaoSel,
                                                       width: 1.5),
                                                 ),
                                                 enabledBorder: OutlineInputBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(25.0),
                                                   borderSide: BorderSide(
-                                                      color: Colors.blue.shade200,
-                                                      width: 1.5),
+                                                      color: ThemeColor.colorBlueGradient,
+                                                      width: 1.0),
                                                 ),
                                                 border: OutlineInputBorder(
                                                   borderRadius:
@@ -368,6 +371,7 @@ class _AppHomeState extends State<AppHome> with SingleTickerProviderStateMixin {
                                                   child: Text(
                                                     'Criar nova lista',
                                                     style: TextStyle(
+                                                      fontWeight: FontWeight.w300,
                                                       fontSize: screenWidth * 0.05,
                                                       //fontWeight: FontWeight.bold,
                                                       color: Colors.white,
@@ -398,27 +402,72 @@ class _AppHomeState extends State<AppHome> with SingleTickerProviderStateMixin {
   }
 
   Future<void> _createNewList(BuildContext context) async {
-    final String nameList = _newListController.text;
-    final double? budget = double.tryParse(_budgetController.text);
-    final newList = Lists(0, nameList, budget, "");
-    if (nameList.isNotEmpty && budget != null) {
-      await viewModelList.saveList.execute(newList);
+  final String nameList = _newListController.text;
+  final double? budget = double.tryParse(_budgetController.text);
+  final newList = Lists(0, nameList, budget, "");
+  if (nameList.isNotEmpty && budget != null) {
+    await viewModelList.saveList.execute(newList);
+    setState(() {
+     _toggleExpand();
+      _newListController.clear();
+      _budgetController.clear();
+    });
+
+    if (!context.mounted) return;
+
+    bool? addLayoff = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: ThemeColor.colorBlueScafold,
+        title: Text("Deseja adicionar itens da dispensa?",
+        style: TextStyle(
+          color: ThemeColor.colorBlueTema
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text("Não", 
+            style: TextStyle(
+              fontWeight: FontWeight.w400,
+              color: ThemeColor.colorBlueGradient,
+            ),),
+          ),
+          SizedBox(width: 10),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text("Sim",
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              color: ThemeColor.colorBlueTema,
+            ),),
+          ),
+        ],
+      ),
+    );
+
+    if (addLayoff == true) {
       if (!context.mounted) return;
-      await Navigator.of(context).push(
+      await Navigator.push(
+        context,
         MaterialPageRoute(
-          builder: (context) => CreatedListsScreen(viewModelList: viewModelList)
+          /* redireciona para tela onde o usuário adiciona os itens de dispensa */
+          builder: (context) => CupboardItemsScreen(viewModelList: viewModelList,),
         ),
       );
     }
-    setState(() {
-      _budgetController.clear();
-      _newListController.clear();
-      _isExpanded = false;
-      _animationController.reverse().timeout(Duration(microseconds: 1));
-    });
-    if (!context.mounted) return;
-      FocusScope.of(context).unfocus();
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: ThemeColor.colorRed800,
+        content: const Text(
+          "Por favor, preencha todos os campos corretamente.",
+          style: TextStyle(color: ThemeColor.colorWhite, fontSize: 14.0),
+        ),
+      ),
+    );
   }
+}
 
   void _pageCreatedLists(BuildContext context) {
     Navigator.of(context).push(
