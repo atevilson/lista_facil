@@ -19,35 +19,7 @@ class MyApplication extends StatelessWidget {
         textTheme: const TextTheme(
           bodyLarge: TextStyle(color: ThemeColor.colorWhite)
         ),
-        scaffoldBackgroundColor: const Color.fromRGBO(3, 119, 253, 1),
-        canvasColor: ThemeColor.colorWhite12,
-        floatingActionButtonTheme:  const FloatingActionButtonThemeData(
-          iconSize: 32.0,
-          backgroundColor: ThemeColor.colorWhite70, 
-          foregroundColor: ThemeColor.colorBlack),
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Color(0xFF0377FD),
-          foregroundColor: ThemeColor.colorWhite70,
-          titleTextStyle: TextStyle(
-            color: ThemeColor.colorGray,
-            fontSize: 24.0,
-          ),
-        ),
-          cardTheme: CardTheme(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15.0),
-              side: const BorderSide(color: Colors.blue, width: 1.0),
-            ),
-            margin: const EdgeInsets.symmetric(vertical: 8.0),
-        ),
-        listTileTheme: ListTileThemeData(
-                  shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
-        ),
-            textColor: ThemeColor.colorWhite,
-            tileColor: ThemeColor.colorWhite,
-            selectedTileColor: ThemeColor.colorBlack),
-            //selectedTileColor: Colors.blue),
+        scaffoldBackgroundColor: ThemeColor.colorBlueTema,
         checkboxTheme: CheckboxThemeData(
           splashRadius: 2.0,
           shape: RoundedRectangleBorder(
@@ -65,45 +37,19 @@ class MyApplication extends StatelessWidget {
             );
           })
         ),
-        inputDecorationTheme: InputDecorationTheme(
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: ThemeColor.colorWhite),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: ThemeColor.colorWhite),
-          ),
-          border: OutlineInputBorder(
-            borderSide: BorderSide(color:ThemeColor.colorWhite),
-          ),
-          labelStyle: TextStyle(color: ThemeColor.colorWhite),
-          hintStyle: TextStyle(color: ThemeColor.colorWhite)
-          
-        ),
-        hoverColor: ThemeColor.colorWhite,
-        textSelectionTheme: TextSelectionThemeData(
-            cursorColor: ThemeColor.colorWhite,
-            selectionColor: ThemeColor.colorWhite,
-            selectionHandleColor: ThemeColor.colorWhite,
-          ),
         useMaterial3: false,
         dialogTheme: DialogTheme(
           titleTextStyle: const TextStyle(
             color: ThemeColor.colorWhite,
             fontSize: 26,
           ),
-          contentTextStyle: const TextStyle(
-              color: Colors.white70,
-              fontSize: 20.0,
-            ),
-            backgroundColor: Colors.black, 
+            backgroundColor: ThemeColor.colorBlueTema,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12.0),
             ),
           ),
           textButtonTheme: TextButtonThemeData(
             style: ButtonStyle(
-              foregroundColor: WidgetStatePropertyAll(ThemeColor.colorBlack),
-              backgroundColor: WidgetStatePropertyAll(ThemeColor.colorWhite),
               textStyle: const WidgetStatePropertyAll(
                 TextStyle(fontSize: 19.0,
                 fontWeight: FontWeight.w700)
@@ -117,6 +63,28 @@ class MyApplication extends StatelessWidget {
           ),
           popupMenuTheme: const PopupMenuThemeData(
             color: ThemeColor.colorGray
+          ),
+          inputDecorationTheme: InputDecorationTheme(
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: ThemeColor.colorWhite70),
+            borderRadius: BorderRadius.circular(25)
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: ThemeColor.colorWhite),
+            borderRadius: BorderRadius.circular(25)
+          ),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color:ThemeColor.colorWhite),
+          ),
+          labelStyle: TextStyle(color: ThemeColor.colorWhite),
+          hintStyle: TextStyle(color: ThemeColor.colorWhite)
+          
+        ),
+        hoverColor: ThemeColor.colorWhite,
+        textSelectionTheme: TextSelectionThemeData(
+            cursorColor: ThemeColor.colorWhite,
+            selectionColor: ThemeColor.colorWhite,
+            selectionHandleColor: ThemeColor.colorWhite,
           ),
       ),
     );

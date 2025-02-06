@@ -305,8 +305,8 @@ class _AppHomeState extends State<AppHome> with SingleTickerProviderStateMixin {
                                               ),
                                               keyboardType: TextInputType.text,
                                               style: TextStyle(
-                                                fontSize: screenWidth * 0.05,
-                                                color: Colors.blue.shade700,
+                                                fontSize: screenWidth * 0.04,
+                                                color: ThemeColor.colorBlueAccent,
                                               ),
                                             ),
                                             SizedBox(height: screenHeight * 0.01),
@@ -345,8 +345,8 @@ class _AppHomeState extends State<AppHome> with SingleTickerProviderStateMixin {
                                               ),
                                               keyboardType: TextInputType.number,
                                               style: TextStyle(
-                                                fontSize: screenWidth * 0.05,
-                                                color: Colors.blue.shade700,
+                                                fontSize: screenWidth * 0.04,
+                                                color: ThemeColor.colorBlueAccent,
                                               ),
                                             ),
                                             SizedBox(
@@ -426,20 +426,26 @@ class _AppHomeState extends State<AppHome> with SingleTickerProviderStateMixin {
         ),
         actions: [
           TextButton(
+            style: ButtonStyle(
+              backgroundColor: WidgetStatePropertyAll(ThemeColor.colorBlueItemNaoSel)
+            ),
             onPressed: () => Navigator.of(context).pop(false),
             child: Text("Não", 
             style: TextStyle(
-              fontWeight: FontWeight.w400,
-              color: ThemeColor.colorBlueGradient,
+              fontWeight: FontWeight.w300,
+              color: ThemeColor.colorWhite60,
             ),),
           ),
           SizedBox(width: 10),
           TextButton(
+            style: ButtonStyle(
+              backgroundColor: WidgetStatePropertyAll(ThemeColor.colorBlueTema)
+            ),
             onPressed: () => Navigator.of(context).pop(true),
             child: Text("Sim",
             style: TextStyle(
               fontWeight: FontWeight.w500,
-              color: ThemeColor.colorBlueTema,
+              color: ThemeColor.colorWhite,
             ),),
           ),
         ],
