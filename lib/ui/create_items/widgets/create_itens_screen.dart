@@ -692,26 +692,44 @@ class _CollectionItems extends StatelessWidget {
                                 ),
                               ),
                               content: TextField(
+                                style: TextStyle(color: ThemeColor.colorWhite),
                                 keyboardType: TextInputType.number,
-                                decoration: InputDecoration(labelText: "Valor (R\$)"),
+                                decoration: InputDecoration(
+                                  labelText: "Valor (R\$)",
+                                  contentPadding: EdgeInsets.symmetric(
+                                    vertical: 12.0,
+                                    horizontal: 17.0
+                                  ),
+                                labelStyle: TextStyle(
+                                    color: ThemeColor.colorWhite,
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: 17.0
+                                ),),
                                 onChanged: (input) {
                                   valor = input.trim().replaceAll(",", ".");
                                 },
                               ),
                               actions: [
                                 TextButton(
+                                  style: ButtonStyle(
+                                    backgroundColor: WidgetStatePropertyAll(ThemeColor.colorWhite60)
+                                  ),
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },
-                                  child: const Text(
+                                  child: Text(
                                     "Cancelar",
                                     style: TextStyle(
+                                      fontSize: 17.0,
                                       fontWeight: FontWeight.w300,
-                                      color: ThemeColor.colorBlue,
+                                      color: ThemeColor.colorBlueTema,
                                     ),
                                   ),
                                 ),
                                 TextButton(
+                                  style: ButtonStyle(
+                                    backgroundColor: WidgetStatePropertyAll(ThemeColor.colorWhite60)
+                                  ),
                                   onPressed: () {
                                     final formatPrices = RegExp(r'^\d+(\.\d{0,2})?$');
         
@@ -732,8 +750,9 @@ class _CollectionItems extends StatelessWidget {
                                   child: Text(
                                     'Ok',
                                     style: TextStyle(
-                                      color: ThemeColor.colorBlueTema,
-                                      fontWeight: FontWeight.w300,
+                                      fontSize: 17.0,
+                                      color: ThemeColor.colorWhite,
+                                      fontWeight: FontWeight.w500,
                                     ),
                                   ),
                                 ),

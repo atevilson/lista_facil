@@ -431,10 +431,12 @@ Future<void> _createNewList(BuildContext context) async {
     bool? addLayoff = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: ThemeColor.colorBlueTema,
         title: const Text("Deseja adicionar itens da dispensa?"),
         actions: [
           TextButton(
+            style: ButtonStyle(
+              backgroundColor: WidgetStatePropertyAll(ThemeColor.colorWhite60)
+            ),
             onPressed: () => Navigator.of(context).pop(false),
             child: Text("Não", 
             style: TextStyle(
@@ -444,11 +446,14 @@ Future<void> _createNewList(BuildContext context) async {
           ),
           SizedBox(width: 10),
           TextButton(
+            style: ButtonStyle(
+              backgroundColor: WidgetStatePropertyAll(ThemeColor.colorWhite60)
+            ),
             onPressed: () => Navigator.of(context).pop(true),
             child: Text("Sim",
             style: TextStyle(
-              fontWeight: FontWeight.w300,
-              color: ThemeColor.colorBlueTema,
+              fontWeight: FontWeight.w500,
+              color: ThemeColor.colorWhite,
             ),),
           ),
         ],
