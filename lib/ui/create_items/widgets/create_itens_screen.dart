@@ -352,7 +352,7 @@ class _CreateItemsScreenState extends State<CreateItemsScreen> with SingleTicker
                               ),
                             ),
                           ),
-                          const SizedBox(height: 5),
+                          const SizedBox(height: 10),
                           SizedBox(
                             width: double.infinity,
                             child: ElevatedButton(

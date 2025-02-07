@@ -290,7 +290,7 @@ Widget build(BuildContext context) {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 5),
+                    const SizedBox(height: 10),
                           SizedBox(
                             width: double.infinity,
                             child: ElevatedButton(
