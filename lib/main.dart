@@ -1,3 +1,4 @@
+import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:lista_facil/config/injection_dep.dart';
 import 'package:lista_facil/ui/core/ui/splash_screen.dart';
@@ -5,7 +6,11 @@ import 'package:lista_facil/ui/core/themes/colors.dart';
 
 void main() {
   injectionDep();
-  runApp(const MyApplication());
+   runApp(DevicePreview(builder: (context) => const MyApplication(),
+  enabled: true,
+    tools: const [
+      DeviceSection(),
+    ],));
 }
 
 class MyApplication extends StatelessWidget {
