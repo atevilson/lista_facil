@@ -44,7 +44,7 @@ class _ReportScreenState extends State<ReportScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            SizedBox(height: 150),
+            SizedBox(height: 160),
             Text(
               "Gasto médio (últimos 3 meses): \nR\$ ${_mediaMensal.toStringAsFixed(2)}",
               textAlign: TextAlign.center,
