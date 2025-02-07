@@ -1,0 +1,42 @@
+name: lista_facil
+description: "Lista de compras"
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.3 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.6
+  sqflite: ^2.4.1
+  shared_preferences: ^2.3.3
+  share_plus: ^10.1.2
+  path: ^1.9.0
+  flutter_slidable: ^3.1.1
+  string_similarity: ^2.1.1
+  diacritic: ^0.1.6
+  get_it: ^8.0.3
+  device_preview: ^1.2.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - images/carrinho_compras.jpg
+    - images/logo.png
+    - images/base_bottom.png
+
+  fonts:
+    - family: CustomIcons
+      fonts:
+        - asset: assets/icons/customicons.ttf
+
