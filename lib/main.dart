@@ -1,11 +1,18 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:lista_facil/config/injection_dep.dart';
+import 'package:lista_facil/data/services/i_database_service.dart';
 import 'package:lista_facil/ui/core/ui/splash_screen.dart';
 import 'package:lista_facil/ui/core/themes/colors.dart';
+import 'package:lista_facil/utils/database_factory.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   injectionDep();
+
+  final IDatabaseService databaseService = DatabaseFactory.getDatabaseService();
+  await databaseService.init();
+
    runApp(DevicePreview(builder: (context) => const MyApplication(),
   enabled: true,
     tools: const [
