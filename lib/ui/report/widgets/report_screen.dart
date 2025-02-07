@@ -33,6 +33,8 @@ class _ReportScreenState extends State<ReportScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: ThemeColor.colorBlueTema,
+        elevation: 15,
         title: const Text(
           "Relatórios",
           style: TextStyle(color: ThemeColor.colorWhite),
@@ -42,16 +44,17 @@ class _ReportScreenState extends State<ReportScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            SizedBox(height: 80),
+            SizedBox(height: 150),
             Text(
               "Gasto médio (últimos 3 meses): \nR\$ ${_mediaMensal.toStringAsFixed(2)}",
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 22,
               color: ThemeColor.colorWhite),
             ),
-            const SizedBox(height: 170),
+            const SizedBox(height: 120),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
+                backgroundColor: ThemeColor.colorWhite,
                 minimumSize: const Size(double.infinity, 50),
               ),
               onPressed: () async {
@@ -71,6 +74,7 @@ class _ReportScreenState extends State<ReportScreen> {
 
             ElevatedButton(
               style: ElevatedButton.styleFrom(
+                backgroundColor: ThemeColor.colorWhite,
                 minimumSize: const Size(double.infinity, 50),
               ),
               onPressed: () async {
@@ -94,6 +98,7 @@ class _ReportScreenState extends State<ReportScreen> {
 
             ElevatedButton(
               style: ElevatedButton.styleFrom(
+                backgroundColor: ThemeColor.colorWhite,
                 minimumSize: const Size(double.infinity, 50),
               ),
               onPressed: () async {
