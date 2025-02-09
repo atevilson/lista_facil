@@ -4,20 +4,22 @@ import 'package:lista_facil/config/injection_dep.dart';
 import 'package:lista_facil/data/services/i_database_service.dart';
 import 'package:lista_facil/ui/core/ui/splash_screen.dart';
 import 'package:lista_facil/ui/core/themes/colors.dart';
-import 'package:lista_facil/utils/database_factory.dart';
+import 'package:lista_facil/data/services/local_db/app_database_factory.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   injectionDep();
 
-  final IDatabaseService databaseService = DatabaseFactory.getDatabaseService();
+  final IDatabaseService databaseService = AppDatabaseFactory.getDatabaseService();
   await databaseService.init();
 
-   runApp(DevicePreview(builder: (context) => const MyApplication(),
-  enabled: true,
+  runApp(DevicePreview(
+    builder: (context) => const MyApplication(),
+    enabled: true,
     tools: const [
       DeviceSection(),
-    ],));
+    ],
+  ));
 }
 
 class MyApplication extends StatelessWidget {
