@@ -1,9 +1,11 @@
+import 'package:lista_facil/data/services/i_database_service.dart';
+import 'package:lista_facil/data/services/local_db/app_database_factory.dart';
 import 'package:lista_facil/data/services/local_db/lists_dao.dart';
-import 'package:lista_facil/data/services/local_db/app_database.dart';
 import 'package:lista_facil/domain/models/items.dart';
-import 'package:sqflite/sqflite.dart';
 
 class ItemsDao {
+  final IDatabaseService _dbService = AppDatabaseFactory.getDatabaseService();
+
   static const String nameTable = 'new_itens';
   static const String id = 'id';
   static const String item = 'item';
@@ -22,88 +24,49 @@ class ItemsDao {
       'FOREIGN KEY ($listId) REFERENCES ${ListsDao.nameTable} (${ListsDao.id}))';
 
   Future<int> save(Items items) async {
-    final Database db = await getDataBase();
-    return _toMap(items, db);
+    return await _dbService.insert(nameTable, {
+      id: items.id,
+      item: items.items,
+      quantity: items.quantity,
+      price: items.price,
+      listId: items.listId,
+      createAt: items.createdAt ?? DateTime.now().toIso8601String(),
+    });
   }
 
   Future<int> delete(Items items) async {
-    final Database db = await getDataBase();
-    return _toMapDelete(items, db);
-  }
-
-  Future<int> _toMap(Items items, Database db) {
-    return _toInsert(items, db);
-  }
-
-  Future<int> _toMapDelete(Items items, Database db) {
-    return _toDelete(items, db);
-  }
-
-  Future<int> _toInsert(Items items, Database db) {
-    final Map<String, dynamic> newItem = {};
-    newItem[id] = items.id;
-    newItem[item] = items.items;
-    newItem[quantity] = items.quantity;
-    newItem[price] = items.price;
-    newItem[listId] = items.listId;
-    newItem[createAt] = (items.createdAt == null || items.createdAt!.isEmpty) ? DateTime.now().toIso8601String() :
-    items.createdAt;
-    return db.insert(nameTable, newItem);
-  }
-
-  Future<int> _toDelete(Items items, Database db) {
-    return db.delete(
-      nameTable,
-      where: "$id = ?",
-      whereArgs: [items.id]
-    );
+    return await _dbService.delet(nameTable, id, items.id);
   }
 
   Future<List<Items>> findAll() async {
-    final Database db = await getDataBase();
-    final List<Map<String, dynamic>> result = await db.query(nameTable);
-    final List<Items> items = [];
-    for (Map<String, dynamic> row in result) {
-      final Items newItem = Items(
+    final List<Map<String, dynamic>> result = await _dbService.queryAll(nameTable);
+    return result.map((row) => Items(
           id: row[id],
           items: row[item],
           quantity: row[quantity],
           price: row[price],
           listId: row[listId],
-          createdAt: row[createAt]);
-      items.add(newItem);
-    }
-    return items;
+          createdAt: row[createAt],
+          )).toList();
   }
 
   Future<List<Items>> findByListId(int value) async {
-    final Database db = await getDataBase();
-    final List<Map<String, dynamic>> result =
-        await db.query(nameTable, where: " $listId = $value");
-    final List<Items> items = [];
-    for (Map<String, dynamic> row in result) {
-      final Items newItem = Items(
+    final List<Map<String, dynamic>> result = await _dbService.queryBy(nameTable, listId, value);
+      return result.map((row) => Items(
           id: row[id],
           items: row[item],
           quantity: row[quantity],
           price: row[price],
           listId: row[listId],
-          createdAt: row[createAt]);
-      items.add(newItem);
-    }
-    return items;
+          createdAt: row[createAt],
+    )).toList();
   }
 
   Future<int> updateItem(Items items) async {
-    final Database db = await getDataBase();
-    return db.update(
-      nameTable, {
-        item: items.items, 
-        quantity: items.quantity,
-        price: items.price,
-        },
-        where: "$id = ?",
-      whereArgs: [items.id],
-    );
+    return await _dbService.update(nameTable, {
+      item: items.items,
+      quantity: items.quantity,
+      price: items.price,
+    }, id, items.id);
   }
 }
