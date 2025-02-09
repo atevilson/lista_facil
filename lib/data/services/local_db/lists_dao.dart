@@ -1,9 +1,11 @@
+import 'package:lista_facil/data/services/i_database_service.dart';
 import 'package:lista_facil/data/services/local_db/items_dao.dart';
-import 'package:lista_facil/data/services/local_db/app_database.dart';
 import 'package:lista_facil/domain/models/lists.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:lista_facil/data/services/local_db/app_database_factory.dart';
 
 class ListsDao {
+  final IDatabaseService _dbService = AppDatabaseFactory.getDatabaseService();
+
   static const String nameTable = 'new_lists';
   static const String id = 'id';
   static const String name = 'name';
@@ -16,75 +18,37 @@ class ListsDao {
       '$budget REAL, '
       '$createdAt TEXT)';
 
-  Future<int> save(Lists listas) async {
-    final Database db = await getDataBase();
-    return _toMap(listas, db);
-  }
-
-  Future<int> deleteLists(Lists listas) async {
-    final Database db = await getDataBase();
-    return _toMapDelete(listas, db);
-  }
-
-  Future<int> _toMapDelete(Lists listas, Database db) {
-    return _toDelete(listas, db);
-  }
-
-
-  Future<int> _toMap(Lists listas, Database db) {
-    return _toList(listas, db);
-  }
-  // métdo ajustado para que ao excluir a lista remova primeiro seus itens.
-  Future<int> _toDelete(Lists listas, Database db) async {
-    return await db.transaction((transaction) async {
-      transaction.delete(
-        ItemsDao.nameTable,
-        where: "${ItemsDao.listId} = ?",
-        whereArgs: [listas.id]
-      );
-
-      return await transaction.delete(
-        nameTable,
-        where: "$id = ?",
-        whereArgs: [listas.id],
-      );    
+  Future<int> save(Lists lists) async {
+    return await _dbService.insert(nameTable, {
+      name: lists.nameList,
+      budget: lists.budget,
+      createdAt: (lists.createdAt == null || lists.createdAt!.isEmpty) ? DateTime.now().toIso8601String() :
+      lists.createdAt,
     });
   }
 
-  Future<int> _toList(Lists listas, Database db) {
-    final Map<String, dynamic> newLists = {};
-    newLists[name] = listas.nameList;
-    newLists[budget] = listas.budget;
-    newLists[createdAt] = (listas.createdAt == null || listas.createdAt!.isEmpty) ? DateTime.now().toIso8601String() :
-    listas.createdAt;
-    return db.insert(nameTable, newLists);
+  Future<int> deleteLists(Lists lists) async {
+    await _dbService.delet(ItemsDao.nameTable, ItemsDao.listId, lists.id);
+    return await _dbService.delet(nameTable, id, lists.id);
   }
 
+
   Future<List<Lists>> findAll() async {
-    final Database db = await getDataBase();
-    final List<Map<String, dynamic>> result = await db.query(nameTable);
-    final List<Lists> lists = [];
-    for (Map<String, dynamic> row in result) {
-      final Lists listNew = Lists(
+    final List<Map<String, dynamic>> result = await _dbService.queryAll(nameTable);
+      return result.map((row) => Lists(
         row[id],
         row[name],
         row[budget],
         row[createdAt],
-      );
-      lists.add(listNew);
-    }
-    return lists;
+      )).toList();
   }
 
-  Future<int> updateList(Lists list) async {
-    final Database db = await getDataBase();
-    return db.update(
+  Future<int> updateList(Lists lists) async {
+    return await _dbService.update(
       nameTable, {
-        name: list.nameList, 
-        budget: list.budget
-        },
-      where: "$id = ?",
-      whereArgs: [list.id],
+        name: lists.nameList, 
+        budget: lists.budget
+        },id, lists.id,
     );
   } 
 }
