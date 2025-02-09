@@ -1,5 +1,5 @@
 class Lists {
-  final int id;
+  int id;
   final String nameList;
   final double? budget;
   final String? createdAt;
