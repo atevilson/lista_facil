@@ -1,6 +1,4 @@
 {
-    "routes": [
-      { "src": "/(.*)", "dest": "/index.html" }
-    ]
-  }
-  
+  "version": 2,
+  "outputDirectory": "build/web"
+}
