@@ -490,14 +490,20 @@ class _CreateItemsScreenState extends State<CreateItemsScreen> with SingleTicker
           title: Center(child: const Text("Atenção", style: TextStyle(fontSize: 30.0))),
           content: Text(
               "O item \"$itemName\" já possui \"${existingItem.quantity}\" ${existingItem.quantity > 1 ? "unidades" : "unidade"} na dispensa.",
-              style: TextStyle(fontWeight: FontWeight.w400)),
+              style: TextStyle(fontWeight: FontWeight.w400, color: ThemeColor.colorWhite)),
           actions: [
             TextButton(
+              style: ButtonStyle(
+              backgroundColor: WidgetStatePropertyAll(ThemeColor.colorBlueItemNaoSel)
+            ),
               onPressed: () => Navigator.of(context).pop(false),  
-              child: Text("Confirmar", style: TextStyle(color: ThemeColor.colorBlueTema)),
+              child: Text("Confirmar", style: TextStyle(color: ThemeColor.colorWhite60)),
             ),
             SizedBox(width: 10,),
             TextButton(
+              style: ButtonStyle(
+              backgroundColor: WidgetStatePropertyAll(ThemeColor.colorBlueScafold)
+            ),
               onPressed: () => Navigator.of(context).pop(true),  
               child: Text("Editar", style: TextStyle(color: ThemeColor.colorBlueTema)),
             ),
