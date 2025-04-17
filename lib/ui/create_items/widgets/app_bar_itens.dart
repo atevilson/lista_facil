@@ -143,8 +143,8 @@ class AppBarItens extends StatelessWidget {
                                 style: TextStyle(
                                   color: ThemeColor.colorWhite
                                 ),),
-                                Icon(CustomIcons.alphabetic, size: 28),
-                                    
+                                Icon(CustomIcons.alphabetic,
+                                    size: 28, color: ThemeColor.colorWhite),
                               ],
                             )),
                         PopupMenuItem(
@@ -161,6 +161,7 @@ class AppBarItens extends StatelessWidget {
                                 Icon(
                                   Icons.share,
                                   size: 28,
+                                  color: ThemeColor.colorWhite,
                                 ),
                               ],
                             ))
