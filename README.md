@@ -6,7 +6,7 @@ A Lista Fácil é um aplicativo de gerenciamento de listas que permite aos usuá
 
 ### Apresentação do app
 
-[<img src="./lib/assets/app-home.jpg" width="250" alt="Demonstração do App">](https://lista-facil.vercel.app)
+[<img src="./lib/assets/lista-facil.gif" width="250" alt="Demonstração do App">](https://lista-facil.vercel.app)
 
 ### Funcionalidades do Aplicativo
 
